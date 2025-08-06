@@ -1,0 +1,3 @@
+# Configuration for QuantaGlia Pruner
+pruning:
+  age_threshold_days: 30
