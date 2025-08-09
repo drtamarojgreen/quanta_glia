@@ -1,17 +1,39 @@
 # QuantaGlia: Dynamic Knowledge Pruner
 
 > **Disclaimer:** This project is in an early, aspirational stage. Most features are not yet implemented.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Contributing](https://img.shields.io/badge/Contributing-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
 
-QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
+## Current Status
+
+QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories.
+
+> **Project State:** This project is in an early, functional stage. While the ambitious roadmap for intelligent pruning and spawning is still under development, the core components for workspace setup, information harvesting, and testing are operational.
+>
+> - **Implemented:**
+>   - A "knowledge harvester" script (`scripts/quanta_glia.py`) that clones repositories and extracts key files.
+>   - A multi-repository bootstrap script (`scripts/bootstrap.sh`) to set up the full PrismQuanta workspace.
+>   - A comprehensive test suite (`scripts/test_all.sh`) that validates the workspace and the harvester script.
+> - **Aspirational:**
+>   - Fully autonomous pruning, spawning, and semantic annotation.
+>   - Integration with other Quanta systems for learning and ethical governance.
 
 ---
 ## 🚀 Quickstart
 
 The only functional component is an information-harvesting script that clones repositories and extracts key files.
 
-1.  **Clone the repository:**
+
+### Workflow and Directory Structure
+
+1.  **Initial Clone**: First, clone the `quanta_glia` repository into a dedicated workspace directory.
     ```bash
     git clone https://github.com/drtamarojgreen/quanta_glia.git
+    ```
+
+2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This will clone all required PrismQuanta repositories into the parent directory.
+    ```bash
     cd quanta_glia
     ```
 
@@ -26,7 +48,27 @@ The only functional component is an information-harvesting script that clones re
     ```bash
     # The script will copy the local directory to its cache for processing
     python3 scripts/quanta_glia.py ../some_local_repo
+    
+    This sets up the following workspace structure:
+    ```text
+    workspace/
+    ├── prismquanta/
+    ├── quanta_alarma/
+    ├── quanta_cerebra/
+    # ... and all other PrismQuanta repositories
+    └── quanta_glia/     <-- You are here
     ```
+
+3.  **Run the Test Suite**: A master test script is provided to validate the entire workspace setup and the functionality of the `quanta_glia` scripts. To run all tests, execute:
+    ```bash
+    # From within the quanta_glia directory
+    bash scripts/test_all.sh
+    ```
+    This script will:
+    - Run the bootstrap script again (safely).
+    - Execute a self-contained integration test for the harvester.
+    - Run a workplace test against a sibling repository.
+    - Attempt to run tests within all other cloned repositories.
 
 ## Core Purpose
 
@@ -109,15 +151,33 @@ QuantaGlia simulates the behavior of biological glial cells: maintaining system 
 
 ## Sample Configuration (YAML)
 
-> **Note:** The configuration is not yet integrated into the main script. The `config.yaml` file contains the following placeholder values.
+The behavior of the `quanta_glia.py` script is controlled by `config.yaml`. The script reads this file at runtime to determine which directories to use, what files to look for, and whether to enable features like summarization.
+
+### Active Configuration
+
+The following keys in `config.yaml` are currently in use:
 
 ```yaml
-# Configuration for QuantaGlia Pruner
-pruning:
-  age_threshold_days: 30
+# Configuration for QuantaGlia System
+main:
+  knowledge_base: "./knowledge_base"
+  repo_cache: "./repo_cache"
+  target_topics:
+    - "README"
+    - "docs"
+    - "ethics"
+    - "usage"
+  max_repos: 10
+
+# Configuration for LLaMA.cpp integration
+llamacpp:
+  url: "http://localhost:8080/completion"
+  enabled: false
 ```
 
-### Future Configuration Example
+### Future Configuration
+
+The `pruning` section and other keys exist as placeholders for future development. An example of a more advanced future configuration is shown below:
 
 ```yaml
 pruning:

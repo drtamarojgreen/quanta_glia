@@ -9,3 +9,5 @@ To report a security vulnerability, please email us at `security@prismquanta.lab
 We will acknowledge your email within 48 hours and will send you a more detailed response within 72 hours indicating the next steps in handling your report. After the initial reply to your report, the security team will endeavor to keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.
 
 Please do not report security vulnerabilities through public GitHub issues.
+The PrismQuanta team takes security seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+
