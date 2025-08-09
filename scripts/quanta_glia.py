@@ -41,11 +41,71 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
-# Configuration
-KNOWLEDGE_BASE = Path("./knowledge_base")
-REPO_CACHE = Path("./repo_cache")
-TARGET_TOPICS = ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"]
-MAX_REPOS = 10  # limit to avoid resource exhaustion
+def load_config(config_path="config.yaml"):
+    """
+    A simple YAML parser for a specific key-value and list structure.
+    Does not support nested maps or complex structures.
+    """
+    config = {}
+    try:
+        with open(config_path, 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        logging.error(f"Configuration file not found at {config_path}")
+        return None
+
+    current_section = None
+    current_list_key = None
+
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+
+        indentation = len(line) - len(line.lstrip(' '))
+
+        if indentation == 0:
+            current_section = line.replace(':', '').strip()
+            config[current_section] = {}
+            current_list_key = None
+            continue
+
+        if current_section and indentation > 0:
+            if line.strip().startswith('-'):
+                if current_list_key:
+                    value = line.replace('-', '').strip().strip("'\"")
+                    config[current_section][current_list_key].append(value)
+            else:
+                try:
+                    key, value = line.split(':', 1)
+                    key = key.strip()
+                    value = value.strip()
+                except ValueError:
+                    logging.warning(f"Could not parse line: {line}")
+                    continue
+
+                if not value:
+                    current_list_key = key
+                    config[current_section][current_list_key] = []
+                else:
+                    current_list_key = None
+                    if value.isdigit():
+                        value = int(value)
+                    else:
+                        value = value.strip("'\"")
+                    config[current_section][key] = value
+    return config
+
+# Load configuration
+config_data = load_config()
+if config_data is None:
+    sys.exit(1)
+
+main_config = config_data.get('main', {})
+KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
+REPO_CACHE = Path(main_config.get("repo_cache", "./repo_cache"))
+TARGET_TOPICS = main_config.get("target_topics", ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"])
+MAX_REPOS = main_config.get("max_repos", 10)
 
 # Ensure directories exist
 KNOWLEDGE_BASE.mkdir(exist_ok=True)
@@ -82,7 +142,7 @@ def extract_key_info(repo_path):
     return extracted
 
 def store_to_knowledge_base(repo_name, extracted_data):
-    kb_dir = KNOWLEDGE_BASE / repo_.name
+    kb_dir = KNOWLEDGE_BASE / repo_name
     kb_dir.mkdir(parents=True, exist_ok=True)
     for fname, content in extracted_data.items():
         with open(kb_dir / fname, 'w', encoding='utf-8') as f:
@@ -110,14 +170,16 @@ def main(repo_urls):
 if __name__ == "__main__":
     try:
         if len(sys.argv) < 2:
-            print("Usage: python3 scripts/quanta_glia.py <repo_url_1> <repo_url_2> ...")
-            print("Example: python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git")
-            sys.exit(1)
+            # If no repo URLs are provided, run with the default for testing.
+            logging.info("No repository URLs provided. Running with default test repository.")
+            print("No repository URLs provided. Running with default test repository.")
+            repo_urls = ["../quanta_ethos"]
+        else:
+            repo_urls = sys.argv[1:]
 
-        repo_urls = sys.argv[1:]
         main(repo_urls)
-    except NameError as e:
-        if 'sys' in str(e):
-            print("Error: The 'sys' module is required but not imported.", file=sys.stderr)
-            sys.exit(1)
-        raise
+
+    except Exception as e:
+        logging.error(f"An unexpected error occurred in main execution: {e}")
+        print(f"An error occurred: {e}", file=sys.stderr)
+        sys.exit(1)

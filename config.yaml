@@ -1,3 +1,16 @@
+# Configuration for QuantaGlia System
+
+main:
+  knowledge_base: "./knowledge_base"
+  repo_cache: "./repo_cache"
+  target_topics:
+    - "README"
+    - "LICENSE"
+    - "CONTRIBUTING"
+    - "ethics"
+    - "usage"
+  max_repos: 10
+
 # Configuration for QuantaGlia Pruner
 pruning:
   age_threshold_days: 30
