@@ -186,3 +186,53 @@
 2025-08-09 22:26:22,654 [INFO] Extracted README.md from dummy_repo_max_test_10
 2025-08-09 22:26:22,655 [INFO] Stored extracted data from dummy_repo_max_test_10 to knowledge base.
 2025-08-09 22:26:22,666 [INFO] Pruned repo cache.
+2025-08-09 22:34:29,654 [INFO] Local directory detected at ./dummy_repo_no_targets. Copying to cache.
+2025-08-09 22:34:29,668 [INFO] Copied local directory: ./dummy_repo_no_targets to repo_cache/dummy_repo_no_targets
+2025-08-09 22:34:29,670 [INFO] Pruned repo cache.
+2025-08-09 22:34:30,343 [WARNING] Too many repositories. Truncating list.
+2025-08-09 22:34:30,343 [INFO] Local directory detected at ./dummy_repo_max_test_1. Copying to cache.
+2025-08-09 22:34:30,355 [INFO] Copied local directory: ./dummy_repo_max_test_1 to repo_cache/dummy_repo_max_test_1
+2025-08-09 22:34:30,355 [INFO] Extracted README.md from dummy_repo_max_test_1
+2025-08-09 22:34:30,356 [INFO] Stored extracted data from dummy_repo_max_test_1 to knowledge base.
+2025-08-09 22:34:30,357 [INFO] Local directory detected at ./dummy_repo_max_test_2. Copying to cache.
+2025-08-09 22:34:30,372 [INFO] Copied local directory: ./dummy_repo_max_test_2 to repo_cache/dummy_repo_max_test_2
+2025-08-09 22:34:30,372 [INFO] Extracted README.md from dummy_repo_max_test_2
+2025-08-09 22:34:30,373 [INFO] Stored extracted data from dummy_repo_max_test_2 to knowledge base.
+2025-08-09 22:34:30,373 [INFO] Local directory detected at ./dummy_repo_max_test_3. Copying to cache.
+2025-08-09 22:34:30,384 [INFO] Copied local directory: ./dummy_repo_max_test_3 to repo_cache/dummy_repo_max_test_3
+2025-08-09 22:34:30,384 [INFO] Extracted README.md from dummy_repo_max_test_3
+2025-08-09 22:34:30,385 [INFO] Stored extracted data from dummy_repo_max_test_3 to knowledge base.
+2025-08-09 22:34:30,385 [INFO] Local directory detected at ./dummy_repo_max_test_4. Copying to cache.
+2025-08-09 22:34:30,396 [INFO] Copied local directory: ./dummy_repo_max_test_4 to repo_cache/dummy_repo_max_test_4
+2025-08-09 22:34:30,396 [INFO] Extracted README.md from dummy_repo_max_test_4
+2025-08-09 22:34:30,397 [INFO] Stored extracted data from dummy_repo_max_test_4 to knowledge base.
+2025-08-09 22:34:30,397 [INFO] Local directory detected at ./dummy_repo_max_test_5. Copying to cache.
+2025-08-09 22:34:30,408 [INFO] Copied local directory: ./dummy_repo_max_test_5 to repo_cache/dummy_repo_max_test_5
+2025-08-09 22:34:30,408 [INFO] Extracted README.md from dummy_repo_max_test_5
+2025-08-09 22:34:30,409 [INFO] Stored extracted data from dummy_repo_max_test_5 to knowledge base.
+2025-08-09 22:34:30,409 [INFO] Local directory detected at ./dummy_repo_max_test_6. Copying to cache.
+2025-08-09 22:34:30,421 [INFO] Copied local directory: ./dummy_repo_max_test_6 to repo_cache/dummy_repo_max_test_6
+2025-08-09 22:34:30,421 [INFO] Extracted README.md from dummy_repo_max_test_6
+2025-08-09 22:34:30,422 [INFO] Stored extracted data from dummy_repo_max_test_6 to knowledge base.
+2025-08-09 22:34:30,422 [INFO] Local directory detected at ./dummy_repo_max_test_7. Copying to cache.
+2025-08-09 22:34:30,433 [INFO] Copied local directory: ./dummy_repo_max_test_7 to repo_cache/dummy_repo_max_test_7
+2025-08-09 22:34:30,433 [INFO] Extracted README.md from dummy_repo_max_test_7
+2025-08-09 22:34:30,434 [INFO] Stored extracted data from dummy_repo_max_test_7 to knowledge base.
+2025-08-09 22:34:30,434 [INFO] Local directory detected at ./dummy_repo_max_test_8. Copying to cache.
+2025-08-09 22:34:30,445 [INFO] Copied local directory: ./dummy_repo_max_test_8 to repo_cache/dummy_repo_max_test_8
+2025-08-09 22:34:30,445 [INFO] Extracted README.md from dummy_repo_max_test_8
+2025-08-09 22:34:30,446 [INFO] Stored extracted data from dummy_repo_max_test_8 to knowledge base.
+2025-08-09 22:34:30,446 [INFO] Local directory detected at ./dummy_repo_max_test_9. Copying to cache.
+2025-08-09 22:34:30,457 [INFO] Copied local directory: ./dummy_repo_max_test_9 to repo_cache/dummy_repo_max_test_9
+2025-08-09 22:34:30,457 [INFO] Extracted README.md from dummy_repo_max_test_9
+2025-08-09 22:34:30,458 [INFO] Stored extracted data from dummy_repo_max_test_9 to knowledge base.
+2025-08-09 22:34:30,458 [INFO] Local directory detected at ./dummy_repo_max_test_10. Copying to cache.
+2025-08-09 22:34:30,469 [INFO] Copied local directory: ./dummy_repo_max_test_10 to repo_cache/dummy_repo_max_test_10
+2025-08-09 22:34:30,469 [INFO] Extracted README.md from dummy_repo_max_test_10
+2025-08-09 22:34:30,470 [INFO] Stored extracted data from dummy_repo_max_test_10 to knowledge base.
+2025-08-09 22:34:30,484 [INFO] Pruned repo cache.
+2025-08-09 22:34:30,868 [INFO] Local directory detected at ./dummy_repo. Copying to cache.
+2025-08-09 22:34:30,874 [INFO] Copied local directory: ./dummy_repo to repo_cache/dummy_repo
+2025-08-09 22:34:30,875 [INFO] Extracted README.md from dummy_repo
+2025-08-09 22:34:30,875 [INFO] Stored extracted data from dummy_repo to knowledge base.
+2025-08-09 22:34:30,877 [INFO] Pruned repo cache.

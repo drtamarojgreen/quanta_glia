@@ -55,6 +55,24 @@
 
 ---
 
+# Proposed Enhancements for Reporting & Analytics
+
+## Deeper Code Insights
+- [ ] **Code Quality Metrics:** Integrate static analysis tools (e.g., `radon`, `lizard`) to report on metrics like cyclomatic complexity, code duplication, and maintainability index. This would provide a deeper understanding of the codebase's health.
+- [ ] **Dependency Analysis:** Scan for dependency files (`requirements.txt`, `package.json`, `pom.xml`, etc.) and report on the number and types of dependencies used. This could highlight outdated or insecure dependencies.
+- [ ] **Tech Stack Identification:** Analyze file extensions and content to automatically identify the primary programming languages and technologies used in a repository.
+
+## Activity & Collaboration Metrics
+- [ ] **Contributor Analysis:** Analyze the git history to report on metrics like the number of unique contributors, commit frequency, and recent commit activity. This can help gauge the project's level of activity and community engagement.
+- [ ] **Issue & PR Metrics:** If connected to a Git hosting service API (like GitHub), pull in metrics on open vs. closed issues, pull request merge times, and discussion volume.
+
+## Visualization & Usability
+- [ ] **Interactive Dashboards:** Instead of a static CSV, create an interactive web-based dashboard (e.g., using Plotly Dash, Streamlit, or a simple Flask app) to visualize the collected data with charts and graphs.
+- [ ] **Historical Data Analysis:** Store reporting data from multiple runs to track trends over time. This would allow for visualizing how repository size, code quality, or contributor activity changes.
+- [ ] **Email/Slack Summaries:** Add an option to send a summary of the report to a specified email address or Slack channel for easier consumption by teams.
+
+---
+
 # Comprehensive Feature Roadmap
 
 ## Core Harvester Functionality
