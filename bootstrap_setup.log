@@ -1,0 +1,126 @@
+🚀 Starting QuantaGlia workspace bootstrap...
+Full log will be saved to: /app/bootstrap_setup.log
+Navigating to parent directory...
+Cloning required repositories from GitHub...
+--------------------------------------------------
+Cloning 'prismquanta'...
+fatal: could not create work tree dir 'prismquanta': Permission denied
+❌ ERROR: Failed to clone 'prismquanta'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_dorsa'...
+fatal: could not create work tree dir 'quanta_dorsa': Permission denied
+❌ ERROR: Failed to clone 'quanta_dorsa'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_ethos'...
+fatal: could not create work tree dir 'quanta_ethos': Permission denied
+❌ ERROR: Failed to clone 'quanta_ethos'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_porto'...
+fatal: could not create work tree dir 'quanta_porto': Permission denied
+❌ ERROR: Failed to clone 'quanta_porto'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_sensa'...
+fatal: could not create work tree dir 'quanta_sensa': Permission denied
+❌ ERROR: Failed to clone 'quanta_sensa'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_synapse'...
+fatal: could not create work tree dir 'quanta_synapse': Permission denied
+❌ ERROR: Failed to clone 'quanta_synapse'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_tissu'...
+fatal: could not create work tree dir 'quanta_tissu': Permission denied
+❌ ERROR: Failed to clone 'quanta_tissu'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_memora'...
+fatal: could not create work tree dir 'quanta_memora': Permission denied
+❌ ERROR: Failed to clone 'quanta_memora'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_serene'...
+fatal: could not create work tree dir 'quanta_serene': Permission denied
+❌ ERROR: Failed to clone 'quanta_serene'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_cogno'...
+fatal: could not create work tree dir 'quanta_cogno': Permission denied
+❌ ERROR: Failed to clone 'quanta_cogno'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_retina'...
+fatal: could not create work tree dir 'quanta_retina': Permission denied
+❌ ERROR: Failed to clone 'quanta_retina'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_pulsa'...
+fatal: could not create work tree dir 'quanta_pulsa': Permission denied
+❌ ERROR: Failed to clone 'quanta_pulsa'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_lista'...
+fatal: could not create work tree dir 'quanta_lista': Permission denied
+❌ ERROR: Failed to clone 'quanta_lista'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_alarma'...
+fatal: could not create work tree dir 'quanta_alarma': Permission denied
+❌ ERROR: Failed to clone 'quanta_alarma'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+Cloning 'quanta_cerebra'...
+fatal: could not create work tree dir 'quanta_cerebra': Permission denied
+❌ ERROR: Failed to clone 'quanta_cerebra'.
+   Please check the repository name, permissions, and your network connection.
+   Check '/app/bootstrap_setup.log' for more details.
+--------------------------------------------------
+🎉 Bootstrap complete!
+Summary:
+  - Successfully cloned: 0
+  - Failed to clone:     15
+⚠️ Some repositories failed to clone. Please review the log above and in '/app/bootstrap_setup.log'.
+Your workspace directory structure should look like this:
+./app/
+./bin.usr-is-merged/
+./bin/
+./boot/
+./dev/
+./etc/
+./go/
+./home/
+./lib.usr-is-merged/
+./lib/
+./lib64/
+./media/
+./mnt/
+./opt/
+./proc/
+./rom/
+./root/
+./run/
+./sbin.usr-is-merged/
+./sbin/
+./srv/
+./sys/
+./tmp/
+./usr/
+./var/

@@ -32,6 +32,8 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
+import json
+import urllib.request
 
 # Setup logging
 logging.basicConfig(
@@ -102,10 +104,12 @@ KNOWLEDGE_BASE = None
 REPO_CACHE = None
 TARGET_TOPICS = None
 MAX_REPOS = None
+LLAMACPP_URL = None
+LLAMACPP_ENABLED = False
 
 def apply_config(config_data):
     """Applies the loaded configuration to global variables."""
-    global KNOWLEDGE_BASE, REPO_CACHE, TARGET_TOPICS, MAX_REPOS
+    global KNOWLEDGE_BASE, REPO_CACHE, TARGET_TOPICS, MAX_REPOS, LLAMACPP_URL, LLAMACPP_ENABLED
 
     if config_data is None:
         logging.error("No configuration data to apply.")
@@ -116,6 +120,10 @@ def apply_config(config_data):
     REPO_CACHE = Path(main_config.get("repo_cache", "./repo_cache"))
     TARGET_TOPICS = main_config.get("target_topics", ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"])
     MAX_REPOS = main_config.get("max_repos", 10)
+
+    llamacpp_config = config_data.get('llamacpp', {})
+    LLAMACPP_URL = llamacpp_config.get("url", "http://localhost:8080/completion")
+    LLAMACPP_ENABLED = llamacpp_config.get("enabled", False)
 
 # The KNOWLEDGE_BASE and REPO_CACHE directories are created inside main()
 # after the configuration is loaded.
@@ -177,11 +185,53 @@ def prune_cache():
             shutil.rmtree(repo_dir)
     logging.info("Pruned repo cache.")
 
-def main(repo_urls, config_path="config.yaml"):
+def summarize_with_llamacpp(text_content):
+    """Sends text to a LLaMA.cpp server for summarization."""
+    if not LLAMACPP_ENABLED:
+        return None
+
+    logging.info("Sending text to LLaMA.cpp for summarization.")
+
+    # Combine all extracted text into a single block
+    full_text = "\n\n".join(text_content.values())
+
+    # Prepare the payload for the LLaMA.cpp server
+    data = {
+        "prompt": f"Please summarize the following text from a software repository:\n\n{full_text}\n\nSummary:",
+        "n_predict": 128  # Limit the summary length
+    }
+
+    req = urllib.request.Request(
+        LLAMACPP_URL,
+        data=json.dumps(data).encode('utf-8'),
+        headers={'Content-Type': 'application/json'}
+    )
+
+    try:
+        with urllib.request.urlopen(req) as response:
+            if response.status == 200:
+                response_data = json.loads(response.read().decode('utf-8'))
+                summary = response_data.get("content", "").strip()
+                logging.info("Successfully received summary from LLaMA.cpp.")
+                return summary
+            else:
+                logging.error(f"LLaMA.cpp server returned status: {response.status}")
+                return None
+    except Exception as e:
+        logging.error(f"Failed to connect to LLaMA.cpp server: {e}")
+        return None
+
+def main(repo_urls, config_path="config.yaml", summarize=False):
     """Main logic for cloning, extracting, and storing information."""
     # Load and apply configuration
     config_data = load_config(config_path)
     apply_config(config_data)
+
+    # Command-line flag overrides config
+    if summarize:
+        global LLAMACPP_ENABLED
+        LLAMACPP_ENABLED = True
+        logging.info("Summarization enabled by command-line flag.")
 
     # Ensure directories exist (needs to be done after config is loaded)
     KNOWLEDGE_BASE.mkdir(exist_ok=True)
@@ -196,6 +246,13 @@ def main(repo_urls, config_path="config.yaml"):
             extracted = extract_key_info(path)
             if extracted:
                 store_to_knowledge_base(path.name, extracted)
+                summary = summarize_with_llamacpp(extracted)
+                if summary:
+                    summary_path = KNOWLEDGE_BASE / path.name / "summary.txt"
+                    with open(summary_path, 'w', encoding='utf-8') as f:
+                        f.write(summary)
+                    logging.info(f"Stored summary for {path.name} to {summary_path}")
+
     prune_cache()
 
 if __name__ == "__main__":
@@ -215,6 +272,11 @@ if __name__ == "__main__":
                 print("Error: --config flag must be followed by a file path.", file=sys.stderr)
                 sys.exit(1)
 
+        summarize_flag = False
+        if "--summarize" in args:
+            summarize_flag = True
+            args.remove("--summarize")
+
         repo_urls = args
         if not repo_urls:
             # If no repo URLs are provided, run with the default for testing.
@@ -222,7 +284,7 @@ if __name__ == "__main__":
             print("No repository URLs provided. Running with default test repository.")
             repo_urls = ["../quanta_ethos"]
 
-        main(repo_urls, config_path=config_file)
+        main(repo_urls, config_path=config_file, summarize=summarize_flag)
 
     except Exception as e:
         logging.error(f"An unexpected error occurred in main execution: {e}")

@@ -47,7 +47,8 @@ REPOS=(
 )
 
 # Log file for the script's output
-LOG_FILE="bootstrap_setup.log"
+# Use an absolute path to ensure we can write to it after changing directories
+LOG_FILE="$(pwd)/bootstrap_setup.log"
 
 # --- Script Logic ---
 
