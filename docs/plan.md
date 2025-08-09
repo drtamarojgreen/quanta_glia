@@ -24,7 +24,6 @@
   - **Triggers:** The pruner will be triggered periodically, based on a schedule defined in the `config.yaml` (e.g., `pruning.interval_minutes`). This will be managed by the `QuantaParent` scheduler.
   - **Dependencies:**
     - Python 3.x
-    - PyYAML for reading the configuration file.
 - [ ] **Establish ethical decision logic (if applicable)**
   - Pruning decisions, especially deletion, are destructive. Therefore, a robust ethical framework is not optional; it is required.
   - All deletion actions must be logged with a high level of detail, including the justification and the ethical clearance received.
@@ -103,5 +102,5 @@ python scripts/pruner.py --verbose
 
 ### Phase 4: Advanced Intelligence
 - [ ] Integrate with `QuantaSensa` to factor in real usage data into the pruning score.
-- [ ] Begin development of a dependency analysis module to parse files like `requirements.txt` to build a dependency graph and prevent pruning of critical libraries.
-- [ ] Explore NLP techniques (e.g., TF-IDF) for similarity analysis to identify and flag redundant repositories for merging.
+- [ ] Begin development of a dependency analysis module to parse dependency files to build a dependency graph and prevent pruning of critical libraries.
+- [ ] Explore NLP techniques for similarity analysis to identify and flag redundant repositories for merging.
