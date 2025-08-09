@@ -105,3 +105,28 @@
 2025-08-09 21:46:32,987 [INFO] Extracted README.md from dummy_repo
 2025-08-09 21:46:32,989 [INFO] Stored extracted data from dummy_repo to knowledge base.
 2025-08-09 21:46:32,990 [INFO] Pruned repo cache.
+2025-08-09 21:42:43,162 [INFO] Starting QuantaGlia Pruner.
+2025-08-09 21:42:43,162 [INFO] Knowledge base: knowledge_base
+2025-08-09 21:42:43,162 [INFO] Age threshold (days): 30
+2025-08-09 21:43:09,220 [INFO] Starting QuantaGlia Pruner.
+2025-08-09 21:43:09,221 [INFO] Knowledge base: knowledge_base
+2025-08-09 21:43:09,221 [INFO] Age threshold (days): 30
+2025-08-09 21:43:09,221 [INFO] Performing a DRY RUN. No files will be changed.
+2025-08-09 21:43:42,427 [INFO] Starting QuantaGlia Pruner.
+2025-08-09 21:43:42,428 [INFO] Knowledge base: knowledge_base
+2025-08-09 21:43:42,428 [INFO] Age threshold (days): 30
+2025-08-09 21:43:42,428 [INFO] Scanning knowledge_base for repositories older than 30 days.
+2025-08-09 21:44:49,882 [INFO] Starting QuantaGlia Pruner.
+2025-08-09 21:44:49,882 [INFO] Knowledge base: knowledge_base
+2025-08-09 21:44:49,882 [INFO] Age threshold (days): 30
+2025-08-09 21:44:49,882 [INFO] Performing a DRY RUN. No files will be changed.
+2025-08-09 21:44:49,882 [INFO] Scanning knowledge_base for repositories older than 30 days.
+2025-08-09 21:45:15,365 [INFO] Starting QuantaGlia Pruner.
+2025-08-09 21:45:15,365 [INFO] Knowledge base: knowledge_base
+2025-08-09 21:45:15,365 [INFO] Age threshold (days): 30
+2025-08-09 21:45:15,365 [INFO] Scanning knowledge_base for repositories older than 30 days.
+2025-08-09 21:37:37,959 [INFO] Local directory detected at ./test_repo_source. Copying to cache.
+2025-08-09 21:37:37,960 [INFO] Copied local directory: ./test_repo_source to repo_cache/test_repo_source
+2025-08-09 21:37:37,960 [INFO] Extracted README.md from test_repo_source
+2025-08-09 21:37:37,960 [INFO] Stored extracted data from test_repo_source to knowledge base.
+2025-08-09 21:37:37,961 [INFO] Pruned repo cache.

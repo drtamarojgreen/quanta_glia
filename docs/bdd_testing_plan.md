@@ -228,22 +228,22 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install behave
-          # Add other dependencies if needed
+          pip install pytest
+          # pip install -r requirements.txt
 
       - name: Run BDD tests
-        run: behave tests/bdd/ --format progress3 --summary
+        run: pytest tests/bdd/
 
       - name: (Optional) Run BDD tests with JUnit reporting
         if: always() # Run even if previous steps fail to generate a report
-        run: behave tests/bdd/ --junit --junit-directory=reports/
+        run: pytest tests/bdd/ --junitxml=reports/report.xml
 
       - name: (Optional) Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: bdd-test-reports
-          path: reports/
+          path: reports/report.xml
 ```
 
 ---

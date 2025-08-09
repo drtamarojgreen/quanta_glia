@@ -124,8 +124,21 @@ def clone_repo(repo_url):
     repo_name = repo_url.split('/')[-1].replace('.git', '')
     dest_path = REPO_CACHE / repo_name
     if dest_path.exists():
-        logging.info(f"Repo {repo_name} already cloned. Skipping.")
+        logging.info(f"Repo {repo_name} already in cache. Skipping.")
         return dest_path
+
+    # Check if the repo_url is a local directory
+    if os.path.isdir(repo_url):
+        logging.info(f"Local directory detected at {repo_url}. Copying to cache.")
+        try:
+            shutil.copytree(repo_url, dest_path)
+            logging.info(f"Copied local directory: {repo_url} to {dest_path}")
+            return dest_path
+        except Exception as e:
+            logging.error(f"Failed to copy local directory {repo_url}: {e}")
+            return None
+
+    # If not a local directory, assume it's a git repository URL
     try:
         subprocess.run(["git", "clone", "--depth=1", repo_url, str(dest_path)], check=True)
         logging.info(f"Cloned repo: {repo_url}")
