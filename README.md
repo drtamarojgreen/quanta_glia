@@ -1,5 +1,7 @@
 # QuantaGlia: Dynamic Knowledge Pruner
 
+> **Disclaimer:** This README describes the aspirational goals and architecture of the QuantaGlia project. The current implementation is in a very early stage, and most of the features described below (such as repository spawning, intelligent pruning, and the multi-repository workspace) are not yet implemented. The only functional piece is a simple information-harvesting script in `scripts/quanta_glia.py`. Please refer to the `if __name__ == "__main__":` block within that script for example usage.
+
 QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
 
 ---
@@ -17,13 +19,23 @@ The bootstrapping and testing process is designed to create a clean, multi-repos
     git clone https://github.com/drtamarojgreen/quanta_glia.git
     ```
 
-2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. It will automatically clone all other required projects as siblings in the parent directory.
+2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script.
+    > **Note:** Currently, the `bootstrap.sh` script is an empty placeholder and will not clone any other repositories. The multi-repository workspace described below is a future goal.
     ```bash
     cd quanta_glia
     ./bootstrap.sh
     ```
 
-3.  **Resulting Structure**: After the script finishes, your directory will contain all the necessary projects, laid out as follows:
+3.  **Run Tests**:
+    > **Note:** There are currently no tests to run. The `test_workspace.sh` script mentioned in the original documentation does not exist, and its replacement, `scripts/test_all.sh`, is an empty placeholder.
+    >
+    > The following section describes the **aspirational design** for the future testing process.
+
+    ---
+
+    #### Future Testing Design
+
+    After a future implementation of the `bootstrap.sh` script, the workspace would have the following structure:
     ```text
     workspace/
     ├── prismquanta/
@@ -35,7 +47,7 @@ The bootstrapping and testing process is designed to create a clean, multi-repos
     └── quanta_synapse/
     ```
 
-4.  **Run Tests**: You can now run the entire test suite from the `quanta_glia` directory using the provided convenience script.
+    At that point, the entire test suite could be run from the `quanta_glia` directory using a convenience script:
     ```bash
     ./test_workspace.sh
     ```
@@ -49,28 +61,33 @@ QuantaGlia simulates the behavior of biological glial cells: maintaining system 
 ## Key Functions
 
 ### 1. **Repository Spawner**
+> **Status:** Not yet implemented. This section describes a planned feature.
 
 - Clones or forks new lightweight repositories based on identified gaps in knowledge.
 - Automatically tags each repo with intent, utility, and dependencies.
 - Supports different repo types (code, documentation, datasets).
 
 ### 2. **Pruner**
+> **Status:** Not yet implemented. This section describes a planned feature.
 
 - Periodically evaluates repositories for redundancy, obsolescence, or low impact.
 - Merges, archives, or deletes based on configurable thresholds.
 - Logs all pruning decisions with justification.
 
 ### 3. **Semantic Annotator**
+> **Status:** Not yet implemented. This section describes a planned feature.
 
 - Annotates code, scripts, and documentation with contextual tags.
 - Improves discoverability and thematic coherence of the knowledge base.
 
 ### 4. **Knowledge Curator**
+> **Status:** Not yet implemented. This section describes a planned feature.
 
 - Aggregates similar repositories into unified knowledge bundles.
 - Identifies contradictory or outdated knowledge and flags it for review.
 
 ### 5. **Trigger-Based Behavior**
+> **Status:** Not yet implemented. This section describes a planned feature.
 
 - Learns from agent activity (e.g., frequent command patterns, repeated questions).
 - Spawns new utilities (scripts, man-page digests, analysis tools) in response.
@@ -115,6 +132,16 @@ QuantaGlia simulates the behavior of biological glial cells: maintaining system 
 ---
 
 ## Sample Configuration (YAML)
+
+> **Note:** The configuration is not yet integrated into the main script. The `config.yaml` file contains the following placeholder values.
+
+```yaml
+# Configuration for QuantaGlia Pruner
+pruning:
+  age_threshold_days: 30
+```
+
+### Future Configuration Example
 
 ```yaml
 pruning:
