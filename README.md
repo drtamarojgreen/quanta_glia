@@ -1,63 +1,31 @@
 # QuantaGlia: Dynamic Knowledge Pruner
 
-> **Disclaimer:** This README describes the aspirational goals and architecture of the QuantaGlia project. The current implementation is in a very early stage, and most of the features described below (such as repository spawning, intelligent pruning, and the multi-repository workspace) are not yet implemented. The only functional piece is a simple information-harvesting script in `scripts/quanta_glia.py`. Please refer to the `if __name__ == "__main__":` block within that script for example usage.
+> **Disclaimer:** This project is in an early, aspirational stage. Most features are not yet implemented.
 
 QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
 
 ---
+## 🚀 Quickstart
 
-## 🚀 Workspace Setup and Testing
+The only functional component is an information-harvesting script that clones repositories and extracts key files.
 
-This project serves as the primary entry point for setting up and testing the entire PrismQuanta ecosystem.
-
-### Workflow and Directory Structure
-
-The bootstrapping and testing process is designed to create a clean, multi-repository workspace.
-
-1.  **Initial Clone**: First, clone the `quanta_glia` repository into a dedicated workspace directory.
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/drtamarojgreen/quanta_glia.git
-    ```
-
-2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This script will clone all the necessary PrismQuanta repositories into the parent directory, setting up the complete multi-repository workspace.
-    ```bash
     cd quanta_glia
-    bash scripts/bootstrap.sh
     ```
 
-3.  **Run Tests**:
-    > **Note:** There are currently no tests to run. The `test_workspace.sh` script mentioned in the original documentation does not exist, and its replacement, `scripts/test_all.sh`, is an empty placeholder.
-    >
-    > The following section describes the **aspirational design** for the future testing process.
+2.  **Run the script:**
+    The script can be run with one or more repository URLs as arguments. It will clone them and save extracted documents to the `knowledge_base` directory.
 
-    ---
-
-    #### Future Testing Design
-
-    After a future implementation of the `bootstrap.sh` script, the workspace would have the following structure:
-    ```text
-    workspace/
-    ├── prismquanta/     (Core framework)
-    ├── quanta_alarma/   (Alerting/Monitoring)
-    ├── quanta_cerebra/  (Coordination/Orchestration)
-    ├── quanta_cogno/    (Cognitive modeling)
-    ├── quanta_dorsa/    (Data persistence/backbone)
-    ├── quanta_ethos/    (Ethical governance)
-    ├── quanta_glia/     (Knowledge curation) <-- You are here
-    ├── quanta_lista/    (Task management)
-    ├── quanta_memora/   (Memory management)
-    ├── quanta_porto/    (I/O and communication)
-    ├── quanta_pulsa/    (Heartbeat/System status)
-    ├── quanta_retina/   (Observation/Vision)
-    ├── quanta_sensa/    (Sensory input/Workflow execution)
-    ├── quanta_serene/   (State management/Serenity)
-    ├── quanta_synapse/  (Inter-agent communication)
-    └── quanta_tissu/    (Resource management/Fabric)
-    ```
-
-    At that point, the entire test suite could be run from the `quanta_glia` directory using a convenience script:
     ```bash
-    ./test_workspace.sh
+    # Example: Harvest information from one of the PrismQuanta repositories
+    python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git
+    ```
+    You can also point it to a local directory:
+    ```bash
+    # The script will copy the local directory to its cache for processing
+    python3 scripts/quanta_glia.py ../some_local_repo
     ```
 
 ## Core Purpose
@@ -174,10 +142,15 @@ spawning:
 
 ---
 
-## License & Compliance
+## Contributing
 
-- All activity is subject to PrismQuanta's ethical and audit policies.
-- Repositories are to remain in the sandbox unless human-reviewed.
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started.
+
+This project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
