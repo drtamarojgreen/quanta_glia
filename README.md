@@ -1,5 +1,6 @@
 # QuantaGlia: Dynamic Knowledge Pruner
 
+> **Disclaimer:** This project is in an early, aspirational stage. Most features are not yet implemented.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Contributing](https://img.shields.io/badge/Contributing-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
@@ -19,10 +20,10 @@ QuantaGlia is a modular subsystem within the PrismQuanta framework designed to a
 >   - Integration with other Quanta systems for learning and ethical governance.
 
 ---
+## 🚀 Quickstart
 
-## 🚀 Workspace Setup and Testing
+The only functional component is an information-harvesting script that clones repositories and extracts key files.
 
-This project serves as the primary entry point for setting up and testing the entire PrismQuanta ecosystem.
 
 ### Workflow and Directory Structure
 
@@ -34,8 +35,20 @@ This project serves as the primary entry point for setting up and testing the en
 2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This will clone all required PrismQuanta repositories into the parent directory.
     ```bash
     cd quanta_glia
-    bash scripts/bootstrap.sh
     ```
+
+2.  **Run the script:**
+    The script can be run with one or more repository URLs as arguments. It will clone them and save extracted documents to the `knowledge_base` directory.
+
+    ```bash
+    # Example: Harvest information from one of the PrismQuanta repositories
+    python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git
+    ```
+    You can also point it to a local directory:
+    ```bash
+    # The script will copy the local directory to its cache for processing
+    python3 scripts/quanta_glia.py ../some_local_repo
+    
     This sets up the following workspace structure:
     ```text
     workspace/
@@ -189,11 +202,15 @@ spawning:
 
 ---
 
-## License & Contributing
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started.
+
+This project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to get started. For security-related issues, please refer to our [Security Policy](SECURITY.md).
 
 ---
 
