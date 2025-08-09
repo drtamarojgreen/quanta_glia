@@ -5,8 +5,7 @@ main:
   repo_cache: "./repo_cache"
   target_topics:
     - "README"
-    - "LICENSE"
-    - "CONTRIBUTING"
+    - "docs"
     - "ethics"
     - "usage"
   max_repos: 10
