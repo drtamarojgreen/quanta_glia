@@ -1,90 +1,76 @@
 #!/bin/bash
+
 # ==============================================================================
-# QuantaGlia Integration Test Script
+# QuantaGlia Master Test Script
 #
-# This script performs a self-contained integration test of `quanta_glia.py`.
-# It verifies that the script can correctly process a local directory,
-# extract key files, and store them in the knowledge base.
+# This script is the main entry point for all tests. It orchestrates the setup
+# and execution of the entire test suite for the QuantaGlia workspace.
 #
-# The test is designed to be runnable without any external dependencies or
-# prior workspace setup (like running bootstrap.sh).
+# It performs the following steps:
+#   1. Sets up the workspace by cloning all required repositories using bootstrap.sh.
+#   2. Runs a self-contained integration test for the main script.
+#   3. Runs a specific integration test against the 'quanta_ethos' repo.
+#   4. Runs the test suites for all repositories in the workspace.
 #
-# It will:
-# 1. Create a temporary source directory with a test file.
-# 2. Run `quanta_glia.py` against that directory.
-# 3. Verify that the output is created as expected.
-# 4. Clean up all temporary files and directories.
-# 5. Exit with status 0 on success and 1 on failure.
+# The script will exit immediately if any command fails.
 # ==============================================================================
 
-# --- Test Configuration ---
-TEST_SOURCE_DIR="test_repo_source"
-TEST_FILE_NAME="README.md"
-TEST_FILE_CONTENT="This is a test README file for QuantaGlia."
-KNOWLEDGE_BASE_DIR="knowledge_base"
-EXPECTED_OUTPUT_DIR="${KNOWLEDGE_BASE_DIR}/${TEST_SOURCE_DIR}"
-EXPECTED_OUTPUT_FILE="${EXPECTED_OUTPUT_DIR}/${TEST_FILE_NAME}"
+set -e # Exit immediately if a command exits with a non-zero status.
 
-# --- Helper Functions ---
-cleanup() {
-    echo "---"
-    echo "🧹 Cleaning up..."
-    rm -rf "$TEST_SOURCE_DIR"
-    rm -rf "$KNOWLEDGE_BASE_DIR"
-    # The script also creates repo_cache, so we clean that too.
-    rm -rf "repo_cache"
-    echo "Cleanup complete."
+# --- Helper to print section headers ---
+print_header() {
+    echo ""
+    echo "=============================================================================="
+    echo "  $1"
+    echo "=============================================================================="
+    echo ""
 }
 
-# --- Main Test Logic ---
+# --- Main Test Execution ---
 
-echo ""
-echo "--- All Tests Completed ---"
+print_header "STEP 1: BOOTSTRAP - Setting up the workspace"
+bash scripts/bootstrap.sh
 
+print_header "STEP 2: SELF-CONTAINED INTEGRATION TEST"
+bash scripts/test_integration.sh
 
-# Ensure cleanup happens on script exit, including on failure
-trap cleanup EXIT
+print_header "STEP 3: WORKPLACE INTEGRATION TEST (against quanta_ethos)"
 
-echo "🚀 Starting QuantaGlia Integration Test..."
-echo "---"
+# This section is adapted from the original workplace_test_all.sh
+# --- Configuration for Workplace Test ---
+KNOWLEDGE_BASE_DIR="knowledge_base"
+EXPECTED_OUTPUT_FILE="knowledge_base/quanta_ethos/quanta_ethos.py"
+SCRIPT_TO_TEST="scripts/quanta_glia.py"
 
-# 1. Create test source directory and file
-echo "1. Creating temporary test source: '$TEST_SOURCE_DIR'"
-mkdir -p "$TEST_SOURCE_DIR"
-echo "$TEST_FILE_CONTENT" > "${TEST_SOURCE_DIR}/${TEST_FILE_NAME}"
-echo "Test source created."
-echo "---"
+# 1. Cleanup from previous runs
+echo "🧹 Cleaning up previous test run by removing '$KNOWLEDGE_BASE_DIR'..."
+rm -rf "$KNOWLEDGE_BASE_DIR"
 
-# 2. Run the quanta_glia.py script
-echo "2. Running quanta_glia.py..."
-python3 scripts/quanta_glia.py "./${TEST_SOURCE_DIR}"
-if [ $? -ne 0 ]; then
-    echo "❌ TEST FAILED: quanta_glia.py script exited with a non-zero status."
-    exit 1
-fi
-echo "Script executed."
-echo "---"
+# 2. Run the main script
+echo "🔬 Running the main script ($SCRIPT_TO_TEST) for workplace test..."
+python3 "$SCRIPT_TO_TEST"
 
 # 3. Verify the outcome
-echo "3. Verifying test output..."
+echo "🔍 Verifying the workplace test outcome..."
 if [ -f "$EXPECTED_OUTPUT_FILE" ]; then
-    echo "✅ Verification successful: Output file '$EXPECTED_OUTPUT_FILE' was created."
+    echo "✅ Workplace test PASSED: The expected output file was created successfully."
+    echo "   -> Found: $EXPECTED_OUTPUT_FILE"
 else
-    echo "❌ TEST FAILED: Expected output file '$EXPECTED_OUTPUT_FILE' was not found."
-    echo "Contents of knowledge base:"
-    ls -R "$KNOWLEDGE_BASE_DIR"
-    exit 1
+    echo "❌ Workplace test FAILED: The expected output file was not found."
+    echo "   -> Expected to find: $EXPECTED_OUTPUT_FILE"
+
+    # Provide some debugging help
+    if [ -d "$KNOWLEDGE_BASE_DIR" ]; then
+        echo "   Debug info: Listing contents of '$KNOWLEDGE_BASE_DIR':"
+        ls -lR "$KNOWLEDGE_BASE_DIR"
+    else
+        echo "   Debug info: The '$KNOWLEDGE_BASE_DIR' directory was not created."
+    fi
+    exit 1 # Explicitly exit with failure
 fi
 
-# 4. Verify content
-# As an extra check, verify the content matches
-if grep -q "$TEST_FILE_CONTENT" "$EXPECTED_OUTPUT_FILE"; then
-    echo "✅ Verification successful: File content is correct."
-else
-    echo "❌ TEST FAILED: Content of '$EXPECTED_OUTPUT_FILE' does not match expected content."
-    exit 1
-fi
+print_header "STEP 4: WORKSPACE-WIDE TESTS (running tests in all repos)"
+bash scripts/test_workspace.sh
 
-echo "---"
-echo "🎉 TEST PASSED"
-exit 0
+print_header "🎉 ALL TESTS COMPLETED SUCCESSFULLY 🎉"
+echo "The entire QuantaGlia workspace test suite has passed."
