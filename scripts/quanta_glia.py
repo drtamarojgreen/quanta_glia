@@ -1,10 +1,35 @@
+#!/usr/bin/env python3
+
 # QuantaGlia: Repository Intelligence Harvester
 # Purpose: Clone, scan, and distill meaningful information from repositories into structured knowledge
+
+"""
+QuantaGlia - Knowledge Harvester
+
+This script is the primary component of the QuantaGlia system. Its current
+functionality is to:
+1.  Clone one or more Git repositories from provided URLs.
+2.  Scan the cloned repositories for key files (e.g., README, LICENSE).
+3.  Extract the content of these files and store them in a local "knowledge base"
+    directory, organized by repository.
+
+This script is the foundation for a more advanced system that will eventually
+include intelligent pruning and curation of the knowledge base, as described in
+the project documentation.
+
+Usage:
+    python3 scripts/quanta_glia.py <repo_url_1> <repo_url_2> ...
+
+Example:
+    python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git
+    python3 scripts/quanta_glia.py ../quanta_ethos
+"""
 
 import os
 import subprocess
 import shutil
 import logging
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -57,7 +82,7 @@ def extract_key_info(repo_path):
     return extracted
 
 def store_to_knowledge_base(repo_name, extracted_data):
-    kb_dir = KNOWLEDGE_BASE / repo_name
+    kb_dir = KNOWLEDGE_BASE / repo_.name
     kb_dir.mkdir(parents=True, exist_ok=True)
     for fname, content in extracted_data.items():
         with open(kb_dir / fname, 'w', encoding='utf-8') as f:
@@ -82,10 +107,17 @@ def main(repo_urls):
                 store_to_knowledge_base(path.name, extracted)
     prune_cache()
 
-# Example usage
 if __name__ == "__main__":
-    example_repos = [
-        "https://github.com/example/project-one.git",
-        "https://github.com/example/project-two.git"
-    ]
-    main(example_repos)
+    try:
+        if len(sys.argv) < 2:
+            print("Usage: python3 scripts/quanta_glia.py <repo_url_1> <repo_url_2> ...")
+            print("Example: python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git")
+            sys.exit(1)
+
+        repo_urls = sys.argv[1:]
+        main(repo_urls)
+    except NameError as e:
+        if 'sys' in str(e):
+            print("Error: The 'sys' module is required but not imported.", file=sys.stderr)
+            sys.exit(1)
+        raise
