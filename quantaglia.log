@@ -236,3 +236,23 @@
 2025-08-09 22:34:30,875 [INFO] Extracted README.md from dummy_repo
 2025-08-09 22:34:30,875 [INFO] Stored extracted data from dummy_repo to knowledge base.
 2025-08-09 22:34:30,877 [INFO] Pruned repo cache.
+2025-08-09 22:46:10,853 [INFO] No repository URLs provided. Running with default test repository.
+2025-08-09 22:46:10,854 [INFO] Summarization enabled by command-line flag.
+2025-08-09 22:46:10,867 [ERROR] Failed to clone repo: ../quanta_ethos
+2025-08-09 22:46:10,868 [INFO] Pruned repo cache.
+2025-08-09 22:46:20,614 [INFO] Summarization enabled by command-line flag.
+2025-08-09 22:46:21,117 [INFO] Cloned repo: https://github.com/drtamarojgreen/quanta_ethos.git
+2025-08-09 22:46:21,118 [INFO] Extracted README.md from quanta_ethos
+2025-08-09 22:46:21,118 [INFO] Extracted ethics_logic.h from quanta_ethos
+2025-08-09 22:46:21,118 [INFO] Extracted ethics_logic.cpp from quanta_ethos
+2025-08-09 22:46:21,120 [INFO] Stored extracted data from quanta_ethos to knowledge base.
+2025-08-09 22:46:21,120 [INFO] Sending text to LLaMA.cpp for summarization.
+2025-08-09 22:46:21,202 [ERROR] Failed to connect to LLaMA.cpp server: <urlopen error [Errno 97] Address family not supported by protocol>
+2025-08-09 22:46:21,206 [INFO] Pruned repo cache.
+2025-08-09 22:46:56,002 [INFO] Local directory detected at ./test_repo_source. Copying to cache.
+2025-08-09 22:46:56,003 [INFO] Copied local directory: ./test_repo_source to repo_cache/test_repo_source
+2025-08-09 22:46:56,003 [INFO] Extracted README.md from test_repo_source
+2025-08-09 22:46:56,004 [INFO] Stored extracted data from test_repo_source to knowledge base.
+2025-08-09 22:46:56,004 [INFO] Sending text to LLaMA.cpp for summarization.
+2025-08-09 22:46:56,063 [ERROR] Failed to connect to LLaMA.cpp server: <urlopen error [Errno 97] Address family not supported by protocol>
+2025-08-09 22:46:56,064 [INFO] Pruned repo cache.

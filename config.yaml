@@ -13,3 +13,8 @@ main:
 # Configuration for QuantaGlia Pruner
 pruning:
   age_threshold_days: 30
+
+# Configuration for LLaMA.cpp integration
+llamacpp:
+  url: "http://localhost:8080/completion"
+  enabled: false
