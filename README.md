@@ -19,11 +19,10 @@ The bootstrapping and testing process is designed to create a clean, multi-repos
     git clone https://github.com/drtamarojgreen/quanta_glia.git
     ```
 
-2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script.
-    > **Note:** Currently, the `bootstrap.sh` script is an empty placeholder and will not clone any other repositories. The multi-repository workspace described below is a future goal.
+2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This script will clone all the necessary PrismQuanta repositories into the parent directory, setting up the complete multi-repository workspace.
     ```bash
     cd quanta_glia
-    ./bootstrap.sh
+    bash scripts/bootstrap.sh
     ```
 
 3.  **Run Tests**:
