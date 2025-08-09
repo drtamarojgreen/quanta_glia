@@ -15,6 +15,14 @@
 #   3. `bash scripts/bootstrap.sh`
 # ==============================================================================
 
+# --- Dependency Check ---
+# Ensure git is installed before proceeding.
+if ! command -v git &> /dev/null; then
+    echo "❌ ERROR: git could not be found." | tee -a "$LOG_FILE"
+    echo "   Please install git and ensure it is in your PATH." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
 # --- Configuration ---
 # GitHub user who owns the repositories
 GH_USER="drtamarojgreen"
@@ -50,8 +58,9 @@ echo "🚀 Starting QuantaGlia workspace bootstrap..." | tee -a "$LOG_FILE"
 echo "Full log will be saved to: $LOG_FILE" | tee -a "$LOG_FILE"
 
 # Navigate to the parent directory (e.g., `workspace/`)
-echo "Navigating to parent directory..." | tee -a "$LOG_FILE"
+echo "Navigating from '$(pwd)/' to parent directory..." | tee -a "$LOG_FILE"
 cd ..
+echo "Now in '$(pwd)/'. Preparing to clone sibling repositories." | tee -a "$LOG_FILE"
 
 echo "Cloning required repositories from GitHub..." | tee -a "$LOG_FILE"
 echo "--------------------------------------------------" | tee -a "$LOG_FILE"
@@ -89,5 +98,5 @@ if [ "$CLONE_FAIL_COUNT" -gt 0 ]; then
     echo "⚠️ Some repositories failed to clone. Please review the log above and in '$LOG_FILE'." | tee -a "$LOG_FILE"
 fi
 
-echo "Your workspace directory structure should look like this:" | tee -a "$LOG_FILE"
+echo "Final workspace directory structure in '$(pwd)/':" | tee -a "$LOG_FILE"
 ls -d ./*/ | tee -a "$LOG_FILE"

@@ -236,3 +236,8 @@
 2025-08-09 22:34:30,875 [INFO] Extracted README.md from dummy_repo
 2025-08-09 22:34:30,875 [INFO] Stored extracted data from dummy_repo to knowledge base.
 2025-08-09 22:34:30,877 [INFO] Pruned repo cache.
+2025-08-09 22:50:01,197 [INFO] Local directory detected at ./test_repo_source. Copying to cache.
+2025-08-09 22:50:01,198 [INFO] Copied local directory: ./test_repo_source to repo_cache/test_repo_source
+2025-08-09 22:50:01,198 [INFO] Extracted README.md from test_repo_source
+2025-08-09 22:50:01,199 [INFO] Stored extracted data from test_repo_source to knowledge base.
+2025-08-09 22:50:01,199 [INFO] Pruned repo cache.
