@@ -1,0 +1,6 @@
+main:
+  knowledge_base: "./knowledge_base"
+  repo_cache: "./repo_cache"
+  target_topics:
+    - "IMPORTANT_FILE"
+  max_repos: 10
