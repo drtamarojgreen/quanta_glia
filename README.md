@@ -1,8 +1,22 @@
 # QuantaGlia: Dynamic Knowledge Pruner
 
-> **Disclaimer:** This README describes the aspirational goals and architecture of the QuantaGlia project. The current implementation is in a very early stage, and most of the features described below (such as repository spawning, intelligent pruning, and the multi-repository workspace) are not yet implemented. The only functional piece is a simple information-harvesting script in `scripts/quanta_glia.py`. Please refer to the `if __name__ == "__main__":` block within that script for example usage.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Contributing](https://img.shields.io/badge/Contributing-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
 
-QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
+## Current Status
+
+QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories.
+
+> **Project State:** This project is in an early, functional stage. While the ambitious roadmap for intelligent pruning and spawning is still under development, the core components for workspace setup, information harvesting, and testing are operational.
+>
+> - **Implemented:**
+>   - A "knowledge harvester" script (`scripts/quanta_glia.py`) that clones repositories and extracts key files.
+>   - A multi-repository bootstrap script (`scripts/bootstrap.sh`) to set up the full PrismQuanta workspace.
+>   - A comprehensive test suite (`scripts/test_all.sh`) that validates the workspace and the harvester script.
+> - **Aspirational:**
+>   - Fully autonomous pruning, spawning, and semantic annotation.
+>   - Integration with other Quanta systems for learning and ethical governance.
 
 ---
 
@@ -12,53 +26,36 @@ This project serves as the primary entry point for setting up and testing the en
 
 ### Workflow and Directory Structure
 
-The bootstrapping and testing process is designed to create a clean, multi-repository workspace.
-
 1.  **Initial Clone**: First, clone the `quanta_glia` repository into a dedicated workspace directory.
     ```bash
     git clone https://github.com/drtamarojgreen/quanta_glia.git
     ```
 
-2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This script will clone all the necessary PrismQuanta repositories into the parent directory, setting up the complete multi-repository workspace.
+2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This will clone all required PrismQuanta repositories into the parent directory.
     ```bash
     cd quanta_glia
     bash scripts/bootstrap.sh
     ```
-
-3.  **Run Tests**:
-    > **Note:** There are currently no tests to run. The `test_workspace.sh` script mentioned in the original documentation does not exist, and its replacement, `scripts/test_all.sh`, is an empty placeholder.
-    >
-    > The following section describes the **aspirational design** for the future testing process.
-
-    ---
-
-    #### Future Testing Design
-
-    After a future implementation of the `bootstrap.sh` script, the workspace would have the following structure:
+    This sets up the following workspace structure:
     ```text
     workspace/
-    ├── prismquanta/     (Core framework)
-    ├── quanta_alarma/   (Alerting/Monitoring)
-    ├── quanta_cerebra/  (Coordination/Orchestration)
-    ├── quanta_cogno/    (Cognitive modeling)
-    ├── quanta_dorsa/    (Data persistence/backbone)
-    ├── quanta_ethos/    (Ethical governance)
-    ├── quanta_glia/     (Knowledge curation) <-- You are here
-    ├── quanta_lista/    (Task management)
-    ├── quanta_memora/   (Memory management)
-    ├── quanta_porto/    (I/O and communication)
-    ├── quanta_pulsa/    (Heartbeat/System status)
-    ├── quanta_retina/   (Observation/Vision)
-    ├── quanta_sensa/    (Sensory input/Workflow execution)
-    ├── quanta_serene/   (State management/Serenity)
-    ├── quanta_synapse/  (Inter-agent communication)
-    └── quanta_tissu/    (Resource management/Fabric)
+    ├── prismquanta/
+    ├── quanta_alarma/
+    ├── quanta_cerebra/
+    # ... and all other PrismQuanta repositories
+    └── quanta_glia/     <-- You are here
     ```
 
-    At that point, the entire test suite could be run from the `quanta_glia` directory using a convenience script:
+3.  **Run the Test Suite**: A master test script is provided to validate the entire workspace setup and the functionality of the `quanta_glia` scripts. To run all tests, execute:
     ```bash
-    ./test_workspace.sh
+    # From within the quanta_glia directory
+    bash scripts/test_all.sh
     ```
+    This script will:
+    - Run the bootstrap script again (safely).
+    - Execute a self-contained integration test for the harvester.
+    - Run a workplace test against a sibling repository.
+    - Attempt to run tests within all other cloned repositories.
 
 ## Core Purpose
 
@@ -141,15 +138,33 @@ QuantaGlia simulates the behavior of biological glial cells: maintaining system 
 
 ## Sample Configuration (YAML)
 
-> **Note:** The configuration is not yet integrated into the main script. The `config.yaml` file contains the following placeholder values.
+The behavior of the `quanta_glia.py` script is controlled by `config.yaml`. The script reads this file at runtime to determine which directories to use, what files to look for, and whether to enable features like summarization.
+
+### Active Configuration
+
+The following keys in `config.yaml` are currently in use:
 
 ```yaml
-# Configuration for QuantaGlia Pruner
-pruning:
-  age_threshold_days: 30
+# Configuration for QuantaGlia System
+main:
+  knowledge_base: "./knowledge_base"
+  repo_cache: "./repo_cache"
+  target_topics:
+    - "README"
+    - "docs"
+    - "ethics"
+    - "usage"
+  max_repos: 10
+
+# Configuration for LLaMA.cpp integration
+llamacpp:
+  url: "http://localhost:8080/completion"
+  enabled: false
 ```
 
-### Future Configuration Example
+### Future Configuration
+
+The `pruning` section and other keys exist as placeholders for future development. An example of a more advanced future configuration is shown below:
 
 ```yaml
 pruning:
@@ -174,10 +189,11 @@ spawning:
 
 ---
 
-## License & Compliance
+## License & Contributing
 
-- All activity is subject to PrismQuanta's ethical and audit policies.
-- Repositories are to remain in the sandbox unless human-reviewed.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to get started. For security-related issues, please refer to our [Security Policy](SECURITY.md).
 
 ---
 
