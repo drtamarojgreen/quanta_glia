@@ -83,34 +83,7 @@ def test_something(self, mock_some_function):
 
 Test coverage is a metric that measures the percentage of your codebase that is executed by your tests. While 100% coverage is not always the goal, aiming for a high percentage helps ensure that most of the critical code paths are being tested.
 
-We will use the `coverage.py` library to measure test coverage.
-
-### Installation
-
-```bash
-pip install coverage
-```
-
-### Usage
-
-To run your tests and collect coverage data, use the following command from the repository root:
-
-```bash
-coverage run -m unittest discover tests/unit/
-```
-
-After the tests have run, you can generate a report in the terminal:
-
-```bash
-coverage report -m
-```
-
-For a more detailed HTML report, run:
-
-```bash
-coverage html
-```
-This will create an `htmlcov/` directory with an `index.html` file that you can open in your browser to explore the coverage of each file in detail.
+It is possible to measure test coverage using external tools, which can help identify areas of the code that are not well-tested.
 
 ---
 
