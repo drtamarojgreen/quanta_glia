@@ -1,0 +1,10 @@
+2025-08-09 22:59:10,611 [INFO] Local directory detected at ./test_repo_source. Copying to cache.
+2025-08-09 22:59:10,613 [INFO] Copied local directory: ./test_repo_source to repo_cache/test_repo_source
+2025-08-09 22:59:10,613 [INFO] Extracted README.md from test_repo_source
+2025-08-09 22:59:10,613 [INFO] Stored extracted data from test_repo_source to knowledge base.
+2025-08-09 22:59:10,614 [INFO] Sending text to LLaMA.cpp for summarization.
+2025-08-09 22:59:10,723 [ERROR] Failed to connect to LLaMA.cpp server: <urlopen error [Errno 97] Address family not supported by protocol>
+2025-08-09 22:59:10,724 [INFO] Pruned repo cache.
+2025-08-09 22:59:11,102 [INFO] No repository URLs provided. Running with default test repository.
+2025-08-09 22:59:11,108 [ERROR] Failed to clone repo: ../quanta_ethos
+2025-08-09 22:59:11,108 [INFO] Pruned repo cache.
