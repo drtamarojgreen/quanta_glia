@@ -1,2 +1,7 @@
 2025-08-09 20:29:50,104 [INFO] Repo . already cloned. Skipping.
 2025-08-09 20:29:50,105 [INFO] Pruned repo cache.
+2025-08-09 21:37:37,959 [INFO] Local directory detected at ./test_repo_source. Copying to cache.
+2025-08-09 21:37:37,960 [INFO] Copied local directory: ./test_repo_source to repo_cache/test_repo_source
+2025-08-09 21:37:37,960 [INFO] Extracted README.md from test_repo_source
+2025-08-09 21:37:37,960 [INFO] Stored extracted data from test_repo_source to knowledge base.
+2025-08-09 21:37:37,961 [INFO] Pruned repo cache.
