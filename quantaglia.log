@@ -1,2 +1,107 @@
 2025-08-09 20:29:50,104 [INFO] Repo . already cloned. Skipping.
 2025-08-09 20:29:50,105 [INFO] Pruned repo cache.
+2025-08-09 21:43:51,924 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:43:51,925 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:43:51,926 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:43:51,928 [INFO] Pruned repo cache.
+2025-08-09 21:44:06,374 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:44:06,374 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:44:06,375 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:44:06,377 [INFO] Pruned repo cache.
+2025-08-09 21:44:24,308 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:44:24,308 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:44:24,309 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:44:24,311 [INFO] Pruned repo cache.
+2025-08-09 21:44:56,788 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:44:56,789 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:44:56,790 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:44:56,791 [INFO] Pruned repo cache.
+2025-08-09 21:45:14,167 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:45:14,167 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:45:14,168 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:45:14,170 [INFO] Pruned repo cache.
+2025-08-09 21:45:48,214 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:45:48,214 [INFO] Extracted README.md from dummy_repo_custom_config
+2025-08-09 21:45:48,215 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:45:48,216 [INFO] Pruned repo cache.
+2025-08-09 21:46:04,982 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:46:04,982 [INFO] Extracted IMPORTANT_FILE.txt from dummy_repo_custom_config
+2025-08-09 21:46:04,983 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:46:04,985 [INFO] Pruned repo cache.
+2025-08-09 21:46:05,503 [WARNING] Too many repositories. Truncating list.
+2025-08-09 21:46:05,520 [INFO] Cloned repo: ./dummy_repo_max_test_1
+2025-08-09 21:46:05,521 [INFO] Extracted README.md from dummy_repo_max_test_1
+2025-08-09 21:46:05,521 [INFO] Stored extracted data from dummy_repo_max_test_1 to knowledge base.
+2025-08-09 21:46:05,536 [INFO] Cloned repo: ./dummy_repo_max_test_2
+2025-08-09 21:46:05,536 [INFO] Extracted README.md from dummy_repo_max_test_2
+2025-08-09 21:46:05,537 [INFO] Stored extracted data from dummy_repo_max_test_2 to knowledge base.
+2025-08-09 21:46:05,552 [INFO] Cloned repo: ./dummy_repo_max_test_3
+2025-08-09 21:46:05,552 [INFO] Extracted README.md from dummy_repo_max_test_3
+2025-08-09 21:46:05,553 [INFO] Stored extracted data from dummy_repo_max_test_3 to knowledge base.
+2025-08-09 21:46:05,567 [INFO] Cloned repo: ./dummy_repo_max_test_4
+2025-08-09 21:46:05,567 [INFO] Extracted README.md from dummy_repo_max_test_4
+2025-08-09 21:46:05,568 [INFO] Stored extracted data from dummy_repo_max_test_4 to knowledge base.
+2025-08-09 21:46:05,583 [INFO] Cloned repo: ./dummy_repo_max_test_5
+2025-08-09 21:46:05,583 [INFO] Extracted README.md from dummy_repo_max_test_5
+2025-08-09 21:46:05,584 [INFO] Stored extracted data from dummy_repo_max_test_5 to knowledge base.
+2025-08-09 21:46:05,599 [INFO] Cloned repo: ./dummy_repo_max_test_6
+2025-08-09 21:46:05,599 [INFO] Extracted README.md from dummy_repo_max_test_6
+2025-08-09 21:46:05,600 [INFO] Stored extracted data from dummy_repo_max_test_6 to knowledge base.
+2025-08-09 21:46:05,615 [INFO] Cloned repo: ./dummy_repo_max_test_7
+2025-08-09 21:46:05,615 [INFO] Extracted README.md from dummy_repo_max_test_7
+2025-08-09 21:46:05,616 [INFO] Stored extracted data from dummy_repo_max_test_7 to knowledge base.
+2025-08-09 21:46:05,630 [INFO] Cloned repo: ./dummy_repo_max_test_8
+2025-08-09 21:46:05,630 [INFO] Extracted README.md from dummy_repo_max_test_8
+2025-08-09 21:46:05,631 [INFO] Stored extracted data from dummy_repo_max_test_8 to knowledge base.
+2025-08-09 21:46:05,647 [INFO] Cloned repo: ./dummy_repo_max_test_9
+2025-08-09 21:46:05,648 [INFO] Extracted README.md from dummy_repo_max_test_9
+2025-08-09 21:46:05,648 [INFO] Stored extracted data from dummy_repo_max_test_9 to knowledge base.
+2025-08-09 21:46:05,663 [INFO] Cloned repo: ./dummy_repo_max_test_10
+2025-08-09 21:46:05,663 [INFO] Extracted README.md from dummy_repo_max_test_10
+2025-08-09 21:46:05,664 [INFO] Stored extracted data from dummy_repo_max_test_10 to knowledge base.
+2025-08-09 21:46:05,678 [INFO] Pruned repo cache.
+2025-08-09 21:46:06,034 [INFO] Cloned repo: ./dummy_repo_no_targets
+2025-08-09 21:46:06,036 [INFO] Pruned repo cache.
+2025-08-09 21:46:31,703 [INFO] Cloned repo: ./dummy_repo_custom_config
+2025-08-09 21:46:31,703 [INFO] Extracted IMPORTANT_FILE.txt from dummy_repo_custom_config
+2025-08-09 21:46:31,704 [INFO] Stored extracted data from dummy_repo_custom_config to knowledge base.
+2025-08-09 21:46:31,706 [INFO] Pruned repo cache.
+2025-08-09 21:46:32,183 [WARNING] Too many repositories. Truncating list.
+2025-08-09 21:46:32,198 [INFO] Cloned repo: ./dummy_repo_max_test_1
+2025-08-09 21:46:32,198 [INFO] Extracted README.md from dummy_repo_max_test_1
+2025-08-09 21:46:32,199 [INFO] Stored extracted data from dummy_repo_max_test_1 to knowledge base.
+2025-08-09 21:46:32,212 [INFO] Cloned repo: ./dummy_repo_max_test_2
+2025-08-09 21:46:32,213 [INFO] Extracted README.md from dummy_repo_max_test_2
+2025-08-09 21:46:32,213 [INFO] Stored extracted data from dummy_repo_max_test_2 to knowledge base.
+2025-08-09 21:46:32,227 [INFO] Cloned repo: ./dummy_repo_max_test_3
+2025-08-09 21:46:32,227 [INFO] Extracted README.md from dummy_repo_max_test_3
+2025-08-09 21:46:32,228 [INFO] Stored extracted data from dummy_repo_max_test_3 to knowledge base.
+2025-08-09 21:46:32,243 [INFO] Cloned repo: ./dummy_repo_max_test_4
+2025-08-09 21:46:32,243 [INFO] Extracted README.md from dummy_repo_max_test_4
+2025-08-09 21:46:32,244 [INFO] Stored extracted data from dummy_repo_max_test_4 to knowledge base.
+2025-08-09 21:46:32,258 [INFO] Cloned repo: ./dummy_repo_max_test_5
+2025-08-09 21:46:32,259 [INFO] Extracted README.md from dummy_repo_max_test_5
+2025-08-09 21:46:32,259 [INFO] Stored extracted data from dummy_repo_max_test_5 to knowledge base.
+2025-08-09 21:46:32,272 [INFO] Cloned repo: ./dummy_repo_max_test_6
+2025-08-09 21:46:32,273 [INFO] Extracted README.md from dummy_repo_max_test_6
+2025-08-09 21:46:32,273 [INFO] Stored extracted data from dummy_repo_max_test_6 to knowledge base.
+2025-08-09 21:46:32,286 [INFO] Cloned repo: ./dummy_repo_max_test_7
+2025-08-09 21:46:32,287 [INFO] Extracted README.md from dummy_repo_max_test_7
+2025-08-09 21:46:32,287 [INFO] Stored extracted data from dummy_repo_max_test_7 to knowledge base.
+2025-08-09 21:46:32,300 [INFO] Cloned repo: ./dummy_repo_max_test_8
+2025-08-09 21:46:32,300 [INFO] Extracted README.md from dummy_repo_max_test_8
+2025-08-09 21:46:32,301 [INFO] Stored extracted data from dummy_repo_max_test_8 to knowledge base.
+2025-08-09 21:46:32,314 [INFO] Cloned repo: ./dummy_repo_max_test_9
+2025-08-09 21:46:32,314 [INFO] Extracted README.md from dummy_repo_max_test_9
+2025-08-09 21:46:32,314 [INFO] Stored extracted data from dummy_repo_max_test_9 to knowledge base.
+2025-08-09 21:46:32,328 [INFO] Cloned repo: ./dummy_repo_max_test_10
+2025-08-09 21:46:32,328 [INFO] Extracted README.md from dummy_repo_max_test_10
+2025-08-09 21:46:32,329 [INFO] Stored extracted data from dummy_repo_max_test_10 to knowledge base.
+2025-08-09 21:46:32,343 [INFO] Pruned repo cache.
+2025-08-09 21:46:32,670 [INFO] Cloned repo: ./dummy_repo_no_targets
+2025-08-09 21:46:32,672 [INFO] Pruned repo cache.
+2025-08-09 21:46:32,987 [INFO] Cloned repo: ./dummy_repo
+2025-08-09 21:46:32,987 [INFO] Extracted LICENSE from dummy_repo
+2025-08-09 21:46:32,987 [INFO] Extracted README.md from dummy_repo
+2025-08-09 21:46:32,989 [INFO] Stored extracted data from dummy_repo to knowledge base.
+2025-08-09 21:46:32,990 [INFO] Pruned repo cache.

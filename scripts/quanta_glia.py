@@ -43,6 +43,7 @@ logging.basicConfig(
 
 def load_config(config_path="config.yaml"):
     """
+    Loads configuration from a given YAML file path.
     A simple YAML parser for a specific key-value and list structure.
     Does not support nested maps or complex structures.
     """
@@ -57,12 +58,12 @@ def load_config(config_path="config.yaml"):
     current_section = None
     current_list_key = None
 
-    for line in lines:
-        line = line.strip()
+    for raw_line in lines:
+        indentation = len(raw_line) - len(raw_line.lstrip(' '))
+        line = raw_line.strip()
+
         if not line or line.startswith('#'):
             continue
-
-        indentation = len(line) - len(line.lstrip(' '))
 
         if indentation == 0:
             current_section = line.replace(':', '').strip()
@@ -96,20 +97,28 @@ def load_config(config_path="config.yaml"):
                     config[current_section][key] = value
     return config
 
-# Load configuration
-config_data = load_config()
-if config_data is None:
-    sys.exit(1)
+# Global config variables
+KNOWLEDGE_BASE = None
+REPO_CACHE = None
+TARGET_TOPICS = None
+MAX_REPOS = None
 
-main_config = config_data.get('main', {})
-KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
-REPO_CACHE = Path(main_config.get("repo_cache", "./repo_cache"))
-TARGET_TOPICS = main_config.get("target_topics", ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"])
-MAX_REPOS = main_config.get("max_repos", 10)
+def apply_config(config_data):
+    """Applies the loaded configuration to global variables."""
+    global KNOWLEDGE_BASE, REPO_CACHE, TARGET_TOPICS, MAX_REPOS
 
-# Ensure directories exist
-KNOWLEDGE_BASE.mkdir(exist_ok=True)
-REPO_CACHE.mkdir(exist_ok=True)
+    if config_data is None:
+        logging.error("No configuration data to apply.")
+        sys.exit(1)
+
+    main_config = config_data.get('main', {})
+    KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
+    REPO_CACHE = Path(main_config.get("repo_cache", "./repo_cache"))
+    TARGET_TOPICS = main_config.get("target_topics", ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"])
+    MAX_REPOS = main_config.get("max_repos", 10)
+
+# The KNOWLEDGE_BASE and REPO_CACHE directories are created inside main()
+# after the configuration is loaded.
 
 def clone_repo(repo_url):
     repo_name = repo_url.split('/')[-1].replace('.git', '')
@@ -155,7 +164,16 @@ def prune_cache():
             shutil.rmtree(repo_dir)
     logging.info("Pruned repo cache.")
 
-def main(repo_urls):
+def main(repo_urls, config_path="config.yaml"):
+    """Main logic for cloning, extracting, and storing information."""
+    # Load and apply configuration
+    config_data = load_config(config_path)
+    apply_config(config_data)
+
+    # Ensure directories exist (needs to be done after config is loaded)
+    KNOWLEDGE_BASE.mkdir(exist_ok=True)
+    REPO_CACHE.mkdir(exist_ok=True)
+
     if len(repo_urls) > MAX_REPOS:
         logging.warning("Too many repositories. Truncating list.")
         repo_urls = repo_urls[:MAX_REPOS]
@@ -169,15 +187,29 @@ def main(repo_urls):
 
 if __name__ == "__main__":
     try:
-        if len(sys.argv) < 2:
+        args = sys.argv[1:]
+        config_file = "config.yaml"
+
+        # Check for --config argument
+        if "--config" in args:
+            try:
+                config_index = args.index("--config")
+                config_file = args[config_index + 1]
+                # Remove the --config flag and its value from the list of args
+                args.pop(config_index)
+                args.pop(config_index)
+            except (ValueError, IndexError):
+                print("Error: --config flag must be followed by a file path.", file=sys.stderr)
+                sys.exit(1)
+
+        repo_urls = args
+        if not repo_urls:
             # If no repo URLs are provided, run with the default for testing.
             logging.info("No repository URLs provided. Running with default test repository.")
             print("No repository URLs provided. Running with default test repository.")
             repo_urls = ["../quanta_ethos"]
-        else:
-            repo_urls = sys.argv[1:]
 
-        main(repo_urls)
+        main(repo_urls, config_path=config_file)
 
     except Exception as e:
         logging.error(f"An unexpected error occurred in main execution: {e}")
