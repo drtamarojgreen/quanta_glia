@@ -4,6 +4,42 @@ QuantaGlia is a modular subsystem within the PrismQuanta framework designed to a
 
 ---
 
+## 🚀 Workspace Setup and Testing
+
+This project serves as the primary entry point for setting up and testing the entire PrismQuanta ecosystem.
+
+### Workflow and Directory Structure
+
+The bootstrapping and testing process is designed to create a clean, multi-repository workspace.
+
+1.  **Initial Clone**: First, clone the `quanta_glia` repository into a dedicated workspace directory.
+    ```bash
+    git clone https://github.com/drtamarojgreen/quanta_glia.git
+    ```
+
+2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. It will automatically clone all other required projects as siblings in the parent directory.
+    ```bash
+    cd quanta_glia
+    ./bootstrap.sh
+    ```
+
+3.  **Resulting Structure**: After the script finishes, your directory will contain all the necessary projects, laid out as follows:
+    ```text
+    workspace/
+    ├── prismquanta/
+    ├── quanta_dorsa/
+    ├── quanta_ethos/
+    ├── quanta_glia/      <-- You are here
+    ├── quanta_porto/
+    ├── quanta_sensa/
+    └── quanta_synapse/
+    ```
+
+4.  **Run Tests**: You can now run the entire test suite from the `quanta_glia` directory using the provided convenience script.
+    ```bash
+    ./test_workspace.sh
+    ```
+
 ## Core Purpose
 
 QuantaGlia simulates the behavior of biological glial cells: maintaining system health by pruning unused connections, fostering the growth of productive knowledge, and dynamically reorganizing structures based on learning outcomes.
@@ -122,4 +158,3 @@ QuantaGlia is more than a tool—it's a neural helper, sustaining a logical and 
 ---
 
 > "Glia is not the spark, but it feeds the fire."
-
