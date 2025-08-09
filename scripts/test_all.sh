@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # ==============================================================================
 # QuantaGlia Integration Test Script
 #
@@ -38,6 +37,10 @@ cleanup() {
 }
 
 # --- Main Test Logic ---
+
+echo ""
+echo "--- All Tests Completed ---"
+
 
 # Ensure cleanup happens on script exit, including on failure
 trap cleanup EXIT
