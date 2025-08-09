@@ -7,13 +7,10 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 # --- Configuration ---
-# Repositories to test. This list should be kept in sync with
-# the repositories cloned by the `scripts/bootstrap.sh` script.
+# Repositories to test, as listed in the README.
 # The script assumes it's in quanta_glia and these are sibling directories.
 REPOS=(
-    # This repository
     "quanta_glia"
-    # Repositories from bootstrap.sh
     "prismquanta"
     "quanta_dorsa"
     "quanta_ethos"

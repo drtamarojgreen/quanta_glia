@@ -38,13 +38,22 @@ The bootstrapping and testing process is designed to create a clean, multi-repos
     After a future implementation of the `bootstrap.sh` script, the workspace would have the following structure:
     ```text
     workspace/
-    ├── prismquanta/
-    ├── quanta_dorsa/
-    ├── quanta_ethos/
-    ├── quanta_glia/      <-- You are here
-    ├── quanta_porto/
-    ├── quanta_sensa/
-    └── quanta_synapse/
+    ├── prismquanta/     (Core framework)
+    ├── quanta_alarma/   (Alerting/Monitoring)
+    ├── quanta_cerebra/  (Coordination/Orchestration)
+    ├── quanta_cogno/    (Cognitive modeling)
+    ├── quanta_dorsa/    (Data persistence/backbone)
+    ├── quanta_ethos/    (Ethical governance)
+    ├── quanta_glia/     (Knowledge curation) <-- You are here
+    ├── quanta_lista/    (Task management)
+    ├── quanta_memora/   (Memory management)
+    ├── quanta_porto/    (I/O and communication)
+    ├── quanta_pulsa/    (Heartbeat/System status)
+    ├── quanta_retina/   (Observation/Vision)
+    ├── quanta_sensa/    (Sensory input/Workflow execution)
+    ├── quanta_serene/   (State management/Serenity)
+    ├── quanta_synapse/  (Inter-agent communication)
+    └── quanta_tissu/    (Resource management/Fabric)
     ```
 
     At that point, the entire test suite could be run from the `quanta_glia` directory using a convenience script:
