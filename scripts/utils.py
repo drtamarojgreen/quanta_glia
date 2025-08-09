@@ -10,6 +10,62 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
+def load_config(config_path="config.yaml"):
+    """
+    Loads configuration from a given YAML file path.
+    A simple YAML parser for a specific key-value and list structure.
+    Does not support nested maps or complex structures.
+    """
+    config = {}
+    try:
+        with open(config_path, 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        logging.error(f"Configuration file not found at {config_path}")
+        return None
+
+    current_section = None
+    current_list_key = None
+
+    for raw_line in lines:
+        indentation = len(raw_line) - len(raw_line.lstrip(' '))
+        line = raw_line.strip()
+
+        if not line or line.startswith('#'):
+            continue
+
+        if indentation == 0:
+            current_section = line.replace(':', '').strip()
+            config[current_section] = {}
+            current_list_key = None
+            continue
+
+        if current_section and indentation > 0:
+            if line.strip().startswith('-'):
+                if current_list_key:
+                    value = line.replace('-', '').strip().strip("'\"")
+                    config[current_section][current_list_key].append(value)
+            else:
+                try:
+                    key, value = line.split(':', 1)
+                    key = key.strip()
+                    value = value.strip()
+                except ValueError:
+                    logging.warning(f"Could not parse line: {line}")
+                    continue
+
+                if not value:
+                    current_list_key = key
+                    config[current_section][current_list_key] = []
+                else:
+                    current_list_key = None
+                    if value.isdigit():
+                        value = int(value)
+                    else:
+                        value = value.strip("'\"")
+                    config[current_section][key] = value
+    return config
+
 def clone_repo(repo_url, repo_cache_path):
     """
     Clones a repository from a URL or copies it from a local path into the repo cache.

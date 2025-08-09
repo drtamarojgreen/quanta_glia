@@ -35,6 +35,10 @@ from pathlib import Path
 import json
 import urllib.request
 
+# Add the project root to the Python path to allow for absolute imports
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from scripts.utils import load_config, clone_repo, prune_cache
+
 # Setup logging
 logging.basicConfig(
     filename='quantaglia.log',

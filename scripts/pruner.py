@@ -17,6 +17,10 @@ import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
 
+# Add the project root to the Python path to allow for absolute imports
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from scripts.utils import load_config
+
 # Setup logging
 logging.basicConfig(
     filename='quantaglia.log',
@@ -25,66 +29,11 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
-def load_config(config_path="config.yaml"):
-    """
-    A simple YAML parser for a specific key-value and list structure.
-    Does not support nested maps or complex structures.
-    """
-    config = {}
-    try:
-        with open(config_path, 'r') as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        logging.error(f"Configuration file not found at {config_path}")
-        return None
-
-    current_section = None
-    current_list_key = None
-
-    for line in lines:
-        line = line.strip()
-        if not line or line.startswith('#'):
-            continue
-
-        indentation = len(line) - len(line.lstrip(' '))
-
-        if indentation == 0:
-            current_section = line.replace(':', '').strip()
-            config[current_section] = {}
-            current_list_key = None
-            continue
-
-        if current_section and indentation > 0:
-            if line.strip().startswith('-'):
-                if current_list_key:
-                    value = line.replace('-', '').strip().strip("'\"")
-                    config[current_section][current_list_key].append(value)
-            else:
-                try:
-                    key, value = line.split(':', 1)
-                    key = key.strip()
-                    value = value.strip()
-                except ValueError:
-                    logging.warning(f"Could not parse line: {line}")
-                    continue
-
-                if not value:
-                    current_list_key = key
-                    config[current_section][current_list_key] = []
-                else:
-                    current_list_key = None
-                    if value.isdigit():
-                        value = int(value)
-                    else:
-                        value = value.strip("'\"")
-                    config[current_section][key] = value
-    return config
-
 def run_pruning(args):
     """Contains the core logic for pruning."""
     logging.info("Starting QuantaGlia Pruner.")
 
-    config_data = load_config()
+    config_data = load_config(args.config)
     if config_data is None:
         logging.error("Failed to load configuration. Exiting.")
         sys.exit(1)
@@ -147,6 +96,11 @@ def main():
         "--dry-run",
         action="store_true",
         help="Perform a dry run, showing what would be pruned without making changes."
+    )
+    parser.add_argument(
+        "-c", "--config",
+        default="config.yaml",
+        help="Path to the configuration file (default: config.yaml)"
     )
     args = parser.parse_args()
     run_pruning(args)
