@@ -27,11 +27,20 @@ Next, clone all other necessary sibling repositories into the same workspace dir
 
 ```bash
 git clone https://github.com/drtamarojgreen/prismquanta.git
+git clone https://github.com/drtamarojgreen/quanta_alarma.git
+git clone https://github.com/drtamarojgreen/quanta_cerebra.git
+git clone https://github.com/drtamarojgreen/quanta_cogno.git
 git clone https://github.com/drtamarojgreen/quanta_dorsa.git
 git clone https://github.com/drtamarojgreen/quanta_ethos.git
+git clone https://github.com/drtamarojgreen/quanta_lista.git
+git clone https://github.com/drtamarojgreen/quanta_memora.git
 git clone https://github.com/drtamarojgreen/quanta_porto.git
+git clone https://github.com/drtamarojgreen/quanta_pulsa.git
+git clone https://github.com/drtamarojgreen/quanta_retina.git
 git clone https://github.com/drtamarojgreen/quanta_sensa.git
+git clone https://github.com/drtamarojgreen/quanta_serene.git
 git clone https://github.com/drtamarojgreen/quanta_synapse.git
+git clone https://github.com/drtamarojgreen/quanta_tissu.git
 ```
 
 After these steps, your directory structure should look like this:
@@ -39,12 +48,21 @@ After these steps, your directory structure should look like this:
 ```text
 quanta-workspace/
 ├── prismquanta/
+├── quanta_alarma/
+├── quanta_cerebra/
+├── quanta_cogno/
 ├── quanta_dorsa/
 ├── quanta_ethos/
 ├── quanta_glia/
+├── quanta_lista/
+├── quanta_memora/
 ├── quanta_porto/
+├── quanta_pulsa/
+├── quanta_retina/
 ├── quanta_sensa/
-└── quanta_synapse/
+├── quanta_serene/
+├── quanta_synapse/
+└── quanta_tissu/
 ```
 
 ---
