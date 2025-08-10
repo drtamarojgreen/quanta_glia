@@ -14,22 +14,10 @@
 
 ## Highest‑impact gaps and fixes (priority order)
 
-1.  **Ship an explicit license, security posture, and contribution scaffolding**
-    *   Add `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, and `CONTRIBUTING.md`. The README mentions ethics/audit policies but users need enforceable, versioned in‑repo docs for trust and adoption.
-    *   Add repository topics and a short description for discoverability on GitHub.
-
-2.  **Codify data models and schemas**
-    *   Create typed models for `RepoRecord`, `UsageMetrics`, `SimilarityScore`, `PruneDecision`, `SpawnRequest`, `PolicyVerdict`.
-    *   Validate YAML config against a schema; add defaults and strict type checking.
-
-3.  **Observability and auditability from day one**
-    *   Structured logs with correlation IDs, immutable audit logs for decisions, and metrics for spawn/prune outcomes.
-    *   A simple dashboard (even a minimal API + page) to visualize cycles, states, and justifications aligns with your visual interface roadmap.
-
-4.  **Safety rails for pruning and spawning**
+1.  **Safety rails for pruning and spawning**
     *   Dry-run mode, human-in-the-loop thresholds, rollback/restore path for archives, sandbox enforcement by default (already in README).
 
-5.  **Tests + CI + release hygiene**
+2.  **Tests + CI + release hygiene**
     *   Unit tests for scoring, policy, and git actions; integration tests against a sandbox repo.
     *   GitHub Actions for lint, type-check, tests, and a release workflow producing versioned artifacts.
 

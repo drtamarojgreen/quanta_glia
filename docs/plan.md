@@ -81,19 +81,19 @@ python scripts/pruner.py --verbose
 ## Implementation Phases
 
 ### Phase 1: Foundational Pruner (Heuristic-Based)
-- [ ] Create the core `pruner.py` script.
-- [ ] Implement logic to read the `knowledge_base` directory.
-- [ ] Implement a simple age-based pruning rule (e.g., archive repos older than `age_threshold_days` from `config.yaml`).
-- [ ] Add robust logging for all decisions and actions.
-- [ ] Implement a "dry-run" command-line flag (`--dry-run`) to report what would be pruned.
+- [x] Create the core `pruner.py` script.
+- [x] Implement logic to read the `knowledge_base` directory.
+- [x] Implement a simple age-based pruning rule (e.g., archive repos older than `age_threshold_days` from `config.yaml`).
+- [x] Add robust logging for all decisions and actions.
+- [x] Implement a "dry-run" command-line flag (`--dry-run`) to report what would be pruned.
 
 ### Phase 2: Enhanced Logic & Safety
-- [ ] Develop a more sophisticated scoring model that combines multiple heuristics:
+- [x] Develop a more sophisticated scoring model that combines multiple heuristics:
   - Age of repository.
   - Presence/absence of key files (README, LICENSE, etc.).
   - Size and complexity (lines of code, number of files).
-- [ ] Implement configurable pruning strategies in `config.yaml` (e.g., `conservative`, `aggressive`).
-- [ ] Default to "archive" instead of "delete" for all operations.
+- [x] Implement configurable pruning strategies in `config.yaml` (e.g., `conservative`, `aggressive`).
+- [x] Default to "archive" instead of "delete" for all operations.
 
 ### Phase 3: Ethical Integration
 - [ ] Develop the API contract for communicating with `QuantaEthos`.

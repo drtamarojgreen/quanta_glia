@@ -41,10 +41,6 @@
 
 # Proposed Enhancements for QuantaGlia-Harvester
 
-## Codebase & Dependencies
-- [ ] **Replace Custom YAML Parser:** Replace the fragile, custom `load_config` function with a standard library to improve robustness and support for more complex configuration structures.
-- [ ] **Use a Git Library:** Abstract away `subprocess` calls to the `git` command-line tool by using a dedicated Python library. This will improve error handling, platform compatibility, and code clarity.
-
 ## Configuration
 - [ ] **Selective File Extraction:** Add a configuration option to limit the file search to specific directories (e.g., `["/", "/docs"]`) or a specific depth to avoid inefficiently scanning very large repositories.
 - [ ] **Configurable Logging Verbosity:** Implement a `log_level` setting in `config.yaml` (e.g., `DEBUG`, `INFO`, `WARNING`) to allow users to control the verbosity of the `quantaglia.log` file.
