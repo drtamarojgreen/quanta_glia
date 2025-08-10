@@ -9,12 +9,11 @@
 
 QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories.
 
-> **Project State:** This project is in an early, functional stage. While the ambitious roadmap for intelligent pruning and spawning is still under development, the core components for workspace setup, information harvesting, and testing are operational.
+> **Project State:** This project is in an early, functional stage. While the ambitious roadmap for intelligent pruning and spawning is still under development, the core component for information harvesting is operational.
 >
 > - **Implemented:**
 >   - A "knowledge harvester" script (`scripts/quanta_glia.py`) that clones repositories and extracts key files.
->   - A multi-repository bootstrap script (`scripts/bootstrap.sh`) to set up the full PrismQuanta workspace.
->   - A comprehensive test suite (`scripts/test_all.sh`) that validates the workspace and the harvester script.
+>   - A test suite (`scripts/test_all.sh`) that validates the harvester script.
 > - **Aspirational:**
 >   - Fully autonomous pruning, spawning, and semantic annotation.
 >   - Integration with other Quanta systems for learning and ethical governance.
@@ -22,53 +21,44 @@ QuantaGlia is a modular subsystem within the PrismQuanta framework designed to a
 ---
 ## 🚀 Quickstart
 
-The only functional component is an information-harvesting script that clones repositories and extracts key files.
+The core functional component of this repository is an information-harvesting script, `scripts/quanta_glia.py`. This script can clone a remote Git repository or copy a local directory, and then extract key documents from it based on the configuration in `config.yaml`.
 
+### Prerequisites
 
-### Workflow and Directory Structure
+- Python 3.6+
+- Git
 
-1.  **Initial Clone**: First, clone the `quanta_glia` repository into a dedicated workspace directory.
+### Usage
+
+1.  **Clone this repository:**
     ```bash
     git clone https://github.com/drtamarojgreen/quanta_glia.git
-    ```
-
-2.  **Run the Bootstrapper**: Navigate into the new directory and execute the `bootstrap.sh` script. This will clone all required PrismQuanta repositories into the parent directory.
-    ```bash
     cd quanta_glia
     ```
 
 2.  **Run the script:**
-    The script can be run with one or more repository URLs as arguments. It will clone them and save extracted documents to the `knowledge_base` directory.
+    You can provide a remote repository URL or a local directory path as an argument to the script. The extracted documents will be saved in the `knowledge_base` directory.
 
-    ```bash
-    # Example: Harvest information from one of the PrismQuanta repositories
-    python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git
-    ```
-    You can also point it to a local directory:
-    ```bash
-    # The script will copy the local directory to its cache for processing
-    python3 scripts/quanta_glia.py ../some_local_repo
-    
-    This sets up the following workspace structure:
-    ```text
-    workspace/
-    ├── prismquanta/
-    ├── quanta_alarma/
-    ├── quanta_cerebra/
-    # ... and all other PrismQuanta repositories
-    └── quanta_glia/     <-- You are here
-    ```
+    *   **From a remote repository:**
+        ```bash
+        python3 scripts/quanta_glia.py https://github.com/drtamarojgreen/quanta_ethos.git
+        ```
 
-3.  **Run the Test Suite**: A master test script is provided to validate the entire workspace setup and the functionality of the `quanta_glia` scripts. To run all tests, execute:
-    ```bash
-    # From within the quanta_glia directory
-    bash scripts/test_all.sh
-    ```
-    This script will:
-    - Run the bootstrap script again (safely).
-    - Execute a self-contained integration test for the harvester.
-    - Run a workplace test against a sibling repository.
-    - Attempt to run tests within all other cloned repositories.
+    *   **From a local directory:**
+        ```bash
+        python3 scripts/quanta_glia.py /path/to/your/local/repo
+        ```
+
+### Configuration
+
+The script's behavior can be customized by editing the `config.yaml` file. You can specify which files and directories to target, where to cache cloned repositories, and where to store the extracted knowledge.
+
+### Testing
+
+A test suite is available to verify the script's functionality. To run the tests, execute the following command from the root of the repository:
+```bash
+./scripts/test_all.sh
+```
 
 ## Core Purpose
 
