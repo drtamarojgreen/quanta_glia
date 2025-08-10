@@ -20,7 +20,8 @@ The core benefits of BDD include:
 The project currently employs a BDD-style test located at `tests/bdd/test_quanta_glia_bdd.py`.
 
 - **Format:** This test is a shell script, not a Python file.
-- **Method:** It uses `echo` statements with `GIVEN`, `WHEN`, and `THEN` prefixes to describe the test flow in a BDD-like manner.
+- **Format:** This test is a Python script that orchestrates a test scenario by executing shell commands.
+- **Method:** It uses `print()` statements with `GIVEN`, `WHEN`, and `THEN` prefixes to describe the test flow in a BDD-like manner.
 - **Functionality:** It performs a simple integration test on the core `scripts/quanta_glia.py` script by:
     1.  **Given** a new dummy Git repository.
     2.  **When** the `quanta_glia.py` script is run on it.

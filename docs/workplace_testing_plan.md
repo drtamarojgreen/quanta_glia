@@ -1,16 +1,16 @@
 # Quanta Series Workspace Testing Plan
 
-This document outlines the necessary steps to manually set up the Quanta series workspace and perform a basic integration test to ensure core functionality is working correctly.
-
-**Note:** The automated scripts `scripts/bootstrap.sh` and `scripts/test_all.sh` are currently empty. The following manual steps are required until those scripts are implemented.
+This document outlines the automated process for setting up the Quanta series workspace and running the full integration test suite.
 
 ---
 
 ## 1. Workspace Setup
 
-The `README.md` describes an automated setup process that is not yet functional. To set up the workspace, you must manually clone the required repositories.
+The workspace setup is handled by the `scripts/bootstrap.sh` script. This script automates the cloning of all required repositories from the PrismQuanta ecosystem.
 
-First, create a parent directory for your workspace:
+To set up the full workspace:
+
+1.  Create a parent directory for your workspace and navigate into it:
 
 ```bash
 mkdir quanta-workspace

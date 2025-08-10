@@ -31,10 +31,14 @@ print_header() {
 print_header "STEP 1: BOOTSTRAP - Setting up the workspace"
 bash scripts/bootstrap.sh
 
-print_header "STEP 2: SELF-CONTAINED INTEGRATION TEST"
+print_header "STEP 2: UNIT TESTS"
+echo "🔬 Running unit tests for quanta_glia..."
+python3 -m unittest discover tests/unit/
+
+print_header "STEP 3: SELF-CONTAINED INTEGRATION TEST"
 bash scripts/test_integration.sh
 
-print_header "STEP 3: WORKPLACE INTEGRATION TEST (against quanta_ethos)"
+print_header "STEP 4: WORKPLACE INTEGRATION TEST (against quanta_ethos)"
 
 # This section is adapted from the original workplace_test_all.sh
 # --- Configuration for Workplace Test ---
@@ -69,7 +73,7 @@ else
     exit 1 # Explicitly exit with failure
 fi
 
-print_header "STEP 4: WORKSPACE-WIDE TESTS (running tests in all repos)"
+print_header "STEP 5: WORKSPACE-WIDE TESTS (running tests in all repos)"
 bash scripts/test_workspace.sh
 
 print_header "🎉 ALL TESTS COMPLETED SUCCESSFULLY 🎉"
