@@ -21,19 +21,6 @@
     *   Unit tests for scoring, policy, and git actions; integration tests against a sandbox repo.
     *   GitHub Actions for lint, type-check, tests, and a release workflow producing versioned artifacts.
 
-## Proposed architecture
-
-*   **Core loop**
-    *   Triggers → Candidate Set Builder → Annotator (optional) → Scorer → Policy Engine → Action Planner → Executors (Spawn/Prune/Merge/Archive) → Audit Log.
-*   **Services**
-    *   `Spawner`: forks/clones, initializes README/tags, applies naming convention, sets sandbox flag.
-    *   `Pruner`: evaluates age/usage/similarity/ethics risk; merges/archives/deletes per thresholds; logs justification.
-    *   `Annotator`: generates semantic tags; stores vector index to speed dedup/merge.
-    *   `Curator`: groups similars into bundles; flags contradictions/outdated knowledge.
-    *   `Policy/Ethics`: integrates QuantaEthos for gatekeeping; every decision carries a policy verdict and rationale.
-    *   `Scheduler`: driven by QuantaParent intervals, with backpressure control.
-    *   `LLM Adapter`: encapsulates LLaMA.cpp calls with timeouts and cost/latency tracking.
-
 ## Core data models (example)
 
 ```python
@@ -158,7 +145,7 @@ This aligns with your plan for federated deployments and multi-agent environment
 ## 30‑60‑90 day plan
 
 *   **30 days (Foundations)**
-    *   Repo reorg into modules, typed models, config schema and validation.
+    *   Typed models, config schema and validation.
     *   Structured logging + audit ledger, dry-run mode, unit tests, basic CI.
     *   `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, topics/description on GitHub.
 
@@ -183,7 +170,6 @@ This aligns with your plan for federated deployments and multi-agent environment
 ## Concrete PR starters
 
 *   PR: “repo: add LICENSE, SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md; update README with quickstart”
-*   PR: “core: introduce models.py, interfaces.py; implement config schema + validation”
 *   PR: “observability: structured logging + audit ledger; add correlation IDs”
 *   PR: “decisioning: scoring function + thresholds; dry-run mode and CLI”
 *   PR: “annotator: tagging MVP + similarity index; dedup suggestions”
