@@ -19,7 +19,6 @@ The core benefits of BDD include:
 
 The project currently employs a BDD-style test located at `tests/bdd/test_quanta_glia_bdd.py`.
 
-- **Format:** This test is a shell script, not a Python file.
 - **Format:** This test is a Python script that orchestrates a test scenario by executing shell commands.
 - **Method:** It uses `print()` statements with `GIVEN`, `WHEN`, and `THEN` prefixes to describe the test flow in a BDD-like manner.
 - **Functionality:** It performs a simple integration test on the core `scripts/quanta_glia.py` script by:
@@ -53,7 +52,7 @@ tests/
     │   ├── harvest_knowledge.feature
     │   └── steps/
     │       └── harvesting_steps.py
-    └── test_quanta_glia_bdd.py  # (The existing shell script)
+    └── test_quanta_glia_bdd.py  # (The existing Python script)
 ```
 
 - **`features/`**: This directory will contain all feature files.

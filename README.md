@@ -68,7 +68,7 @@ QuantaGlia simulates the behavior of biological glial cells: maintaining system 
 - Supports different repo types (code, documentation, datasets).
 
 ### 2. **Pruner**
-> **Status:** Not yet implemented. This section describes a planned feature.
+> **Status:** An initial version of the pruner is functional. See `scripts/pruner.py`.
 
 - Periodically evaluates repositories for redundancy, obsolescence, or low impact.
 - Merges, archives, or deletes based on configurable thresholds.
