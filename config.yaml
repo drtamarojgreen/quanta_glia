@@ -13,6 +13,17 @@ main:
 # Configuration for QuantaGlia Pruner
 pruning:
   age_threshold_days: 30
+  strategy: "conservative" # conservative (archive) or aggressive (delete)
+  score_threshold: 50 # Repos below this score will be pruned
+  key_files:
+    - "README.md"
+    - "LICENSE"
+    - "CONTRIBUTING.md"
+    - "SECURITY.md"
+  weights:
+    age: 0.5
+    key_files: 0.3
+    size: 0.2
 
 # Configuration for LLaMA.cpp integration
 llamacpp:
