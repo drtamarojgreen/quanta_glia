@@ -33,66 +33,56 @@ logging.basicConfig(
 
 def calculate_repo_score(repo_path: Path, pruning_config: dict) -> float:
     """
-    Calculates a score for a repository based on age, key file presence, and size.
+    Calculates a score for a repository based on the formula from docs/recommendations.md.
+    prune_score = w_u * (1 - usage) + w_a * age_norm + w_r * redundancy + w_e * ethics_risk
 
-    The score is a weighted average of three components:
-    1.  Age Score: Normalized based on the `age_threshold_days`. A brand new repo gets 100,
-        a repo at the age threshold gets 0.
-    2.  Key Files Score: Based on the presence of important files like README.md, LICENSE, etc.
-    3.  Size Score: Based on the number of files in the repository, capped at a reasonable limit.
+    A higher score indicates a higher likelihood of being pruned.
 
     Args:
         repo_path: The path to the repository directory.
         pruning_config: The pruning configuration dictionary from config.yaml.
 
     Returns:
-        A score between 0 and 100.
+        A score between 0 and 1.
     """
     now = datetime.now()
-    weights = pruning_config.get('weights', {'age': 0.5, 'key_files': 0.3, 'size': 0.2})
+    weights = pruning_config.get('weights', {'usage': 0.5, 'age': 0.2, 'redundancy': 0.2, 'ethics': 0.1})
     age_threshold_days = pruning_config.get('age_threshold_days', 30)
-    key_files_list = pruning_config.get('key_files', [])
 
-    # 1. Calculate Age Score
+    # 1. Calculate age_norm and usage
     try:
         mtime = repo_path.stat().st_mtime
         last_modified_date = datetime.fromtimestamp(mtime)
         age = now - last_modified_date
-        age_score = max(0, 100 * (1 - (age.days / age_threshold_days)))
+        age_norm = min(1.0, age.days / age_threshold_days)
+        usage = 1.0 - age_norm  # Higher usage for more recent activity
     except FileNotFoundError:
-        return 0 # Repo was likely deleted mid-scan
+        return 1.0 # Repo was likely deleted mid-scan, max score to be safe
 
-    # 2. Calculate Key Files Score
-    found_key_files = 0
-    if key_files_list:
-        for key_file in key_files_list:
-            if (repo_path / key_file).exists():
-                found_key_files += 1
-        key_files_score = 100 * (found_key_files / len(key_files_list))
-    else:
-        key_files_score = 0
+    # 2. Calculate redundancy (future implementation)
+    # TODO: Implement semantic analysis to detect redundancy
+    redundancy = 0.0
 
-    # 3. Calculate Size Score (based on file count)
-    num_files = sum(1 for _ in repo_path.glob('**/*') if _.is_file())
-    # Normalize size score, let's say 50 files is a "good" size for max score.
-    size_score = min(100, (num_files / 50.0) * 100)
+    # 3. Calculate ethics_risk (future implementation)
+    # TODO: Integrate with QuantaEthos for risk assessment as part of the score
+    ethics_risk = 0.0
 
-    # 4. Calculate final weighted score
-    final_score = (
-        weights.get('age', 0.5) * age_score +
-        weights.get('key_files', 0.3) * key_files_score +
-        weights.get('size', 0.2) * size_score
+    # 4. Calculate final prune_score
+    prune_score = (
+        weights.get('usage', 0.5) * (1 - usage) +
+        weights.get('age', 0.2) * age_norm +
+        weights.get('redundancy', 0.2) * redundancy +
+        weights.get('ethics', 0.1) * ethics_risk
     )
 
     logging.debug(
         f"Scoring for {repo_path.name}: "
-        f"Age={age.days}d (Score: {age_score:.1f}), "
-        f"KeyFiles={found_key_files}/{len(key_files_list)} (Score: {key_files_score:.1f}), "
-        f"Size={num_files} files (Score: {size_score:.1f}), "
-        f"Final Score: {final_score:.1f}"
+        f"Age={age.days}d (AgeNorm: {age_norm:.2f}, Usage: {usage:.2f}), "
+        f"Redundancy: {redundancy:.2f}, EthicsRisk: {ethics_risk:.2f}, "
+        f"Final Prune Score: {prune_score:.2f}"
     )
 
-    return final_score
+    return prune_score
 
 
 def run_pruning(args):
@@ -113,7 +103,7 @@ def run_pruning(args):
     pruning_config = config_data.get('pruning', {})
 
     KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
-    SCORE_THRESHOLD = pruning_config.get("score_threshold", 50)
+    SCORE_THRESHOLD = pruning_config.get("score_threshold", 0.8)
 
     # Strategy can be overridden by command line argument, otherwise use config
     strategy = args.strategy if args.strategy else pruning_config.get("strategy", "conservative")
@@ -139,8 +129,8 @@ def run_pruning(args):
                 score = calculate_repo_score(repo_dir, pruning_config)
                 logging.info(f"Repository '{repo_dir.name}' scored {score:.2f}")
 
-                if score < SCORE_THRESHOLD:
-                    logging.warning(f"Repo '{repo_dir.name}' with score {score:.2f} is below threshold {SCORE_THRESHOLD}.")
+                if score > SCORE_THRESHOLD:
+                    logging.warning(f"Repo '{repo_dir.name}' with score {score:.2f} is above threshold {SCORE_THRESHOLD}.")
 
                     if strategy == 'aggressive':
                         action_verb = "delete"

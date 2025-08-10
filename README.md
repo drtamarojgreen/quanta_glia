@@ -2,6 +2,32 @@
 
 > **Disclaimer:** This README describes the aspirational goals and architecture of the QuantaGlia project. The current implementation is in an early stage. Key foundational pieces like the multi-repository **bootstrapper** (`scripts/bootstrap.sh`) and an initial version of the **pruner** (`scripts/pruner.py`) are functional. However, many advanced features described below (such as repository spawning and semantic annotation) are not yet implemented.
 
+---
+
+## 🚀 Quickstart
+
+Get up and running with QuantaGlia in a few simple steps.
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/drtamarojgreen/quanta_glia.git
+    cd quanta_glia
+    ```
+
+2.  **Run the bootstrap script:**
+    This script sets up the necessary environment and dependencies.
+    ```bash
+    bash scripts/bootstrap.sh
+    ```
+
+3.  **Perform a dry run of the pruner:**
+    This command will simulate the pruning process without making any actual changes.
+    ```bash
+    python3 scripts/pruner.py --dry-run
+    ```
+
+---
+
 QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
 
 ---
