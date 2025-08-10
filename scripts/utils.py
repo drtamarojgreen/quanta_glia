@@ -125,3 +125,76 @@ def prune_cache(repo_cache_path):
         if repo_dir.is_dir():
             shutil.rmtree(repo_dir)
     logging.info(f"Pruned repo cache at {repo_cache_path}.")
+
+# --- New Logging Implementation from Phase I ---
+
+class PrunerJsonFormatter(logging.Formatter):
+    """
+    A custom logging formatter that outputs log records in a structured JSONL
+    format, as specified for the QuantaGlia-Pruner.
+    """
+    def format(self, record):
+        """
+        Formats a log record into a JSON string.
+
+        The log record is expected to have additional data passed via the
+        `extra` dictionary when logging.
+
+        Required extra fields:
+        - event (str): The type of event being logged (e.g., 'prune_decision').
+        - repo_name (str): The name of the repository being evaluated.
+        - decision (str): The action taken (e.g., 'ARCHIVE', 'DELETE', 'KEEP').
+        - reason (str): The justification for the decision.
+        - age_days (int): The calculated age of the repository in days.
+        - dry_run (bool): Whether the operation was a dry run.
+        """
+        # Start with the basic structure
+        log_object = {
+            "timestamp": datetime.utcfromtimestamp(record.created).isoformat() + "Z",
+            "actor": "QuantaGlia-Pruner",
+        }
+
+        # Add fields from the `extra` dictionary, providing defaults
+        log_object.update({
+            "event": getattr(record, "event", "undefined"),
+            "repo_name": getattr(record, "repo_name", "n/a"),
+            "decision": getattr(record, "decision", "n/a"),
+            "reason": getattr(record, "reason", "n/a"),
+            "age_days": getattr(record, "age_days", -1),
+            "dry_run": getattr(record, "dry_run", False),
+        })
+
+        # Add the standard message if it exists and is not the main dict
+        if record.getMessage():
+             log_object['message'] = record.getMessage()
+
+        return json.dumps(log_object)
+
+def setup_pruner_logger(log_path='quantaglia.log', level=logging.INFO):
+    """
+    Sets up a dedicated logger for the pruner that uses the PrunerJsonFormatter.
+
+    This creates a new logger instance to avoid interfering with the root
+    logger or other loggers that may be in use.
+
+    Args:
+        log_path (str): The path to the log file.
+        level (int): The logging level (e.g., logging.INFO).
+
+    Returns:
+        logging.Logger: A configured logger instance.
+    """
+    logger = logging.getLogger("QuantaGlia-Pruner")
+    logger.setLevel(level)
+    logger.propagate = False  # Prevent logs from bubbling up to the root logger
+
+    # Remove any existing handlers to prevent duplicate output
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    # Create a file handler to write to the log file
+    handler = logging.FileHandler(log_path, mode='a')
+    handler.setFormatter(PrunerJsonFormatter())
+    logger.addHandler(handler)
+
+    return logger
