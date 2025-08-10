@@ -3,12 +3,28 @@ import subprocess
 import shutil
 import logging
 from pathlib import Path
+import logging
+import json
+from datetime import datetime
 
-# Setup logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s'
-)
+class JsonFormatter(logging.Formatter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def format(self, record):
+        log_record = {
+            "timestamp": datetime.utcfromtimestamp(record.created).isoformat() + "Z",
+            "level": record.levelname,
+            "message": record.getMessage(),
+            "name": record.name,
+            "filename": record.filename,
+            "funcName": record.funcName,
+            "lineno": record.lineno,
+        }
+        if hasattr(record, "correlation_id"):
+            log_record["correlation_id"] = record.correlation_id
+        return json.dumps(log_record)
+
 
 def load_config(config_path="config.yaml"):
     """
