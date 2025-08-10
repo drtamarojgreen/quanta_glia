@@ -11,6 +11,7 @@ deleting them based on configurable thresholds.
 
 import os
 import sys
+import logging
 import shutil
 import argparse
 from datetime import datetime, timedelta
@@ -104,6 +105,16 @@ def main():
         "-c", "--config",
         default="config.yaml",
         help="Path to the configuration file (default: config.yaml)"
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force a run, ignoring any configured schedule (feature not yet implemented)."
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Increase logging verbosity to DEBUG for this run."
     )
     args = parser.parse_args()
     run_pruning(args)

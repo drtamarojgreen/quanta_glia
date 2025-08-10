@@ -5,7 +5,8 @@ main:
   repo_cache: "./repo_cache"
   target_topics:
     - "README"
-    - "docs"
+    - "LICENSE"
+    - "CONTRIBUTING"
     - "ethics"
     - "usage"
   max_repos: 10
@@ -20,12 +21,8 @@ pruning:
 
   # The default strategy for the pruner.
   # "conservative": Archives repositories. Deletion is disabled.
+  # "aggressive": Allows deletion of repositories.
   default_strategy: "conservative"
 
   # Path to the directory where archived repositories are moved.
   archive_path: "repo_archive/"
-
-# Configuration for LLaMA.cpp integration
-llamacpp:
-  url: "http://localhost:8080/completion"
-  enabled: false

@@ -75,6 +75,10 @@ A `unittest.TestCase` class will manage the test environment using `setUp()` and
     -   For all test cases, capture the logger's output (e.g., by redirecting it to a `StringIO` buffer).
     -   Assert that the logs are structured correctly (JSONL format) and contain the expected information for each decision.
 
+-   **CLI Arguments:**
+    -   Test that the `--verbose` argument correctly sets the logging level to `DEBUG`.
+    -   Test that the `--force` argument is parsed without errors (its functionality will be implemented in later phases).
+
 -   **Edge Cases:**
     -   Test behavior when no repositories meet the pruning criteria.
     -   Test behavior when the `knowledge_base` directory is empty or does not exist.
