@@ -42,7 +42,6 @@
 # Proposed Enhancements for QuantaGlia-Harvester
 
 ## Codebase & Dependencies
-- [ ] **Replace Custom YAML Parser:** Replace the fragile, custom `load_config` function with a standard library to improve robustness and support for more complex configuration structures.
 - [ ] **Use a Git Library:** Abstract away `subprocess` calls to the `git` command-line tool by using a dedicated Python library. This will improve error handling, platform compatibility, and code clarity.
 
 ## Configuration
