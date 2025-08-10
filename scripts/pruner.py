@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 """
-QuantaGlia-Pruner
+QuantaGlia-Pruner - Phase 1 Implementation
 
-This script is responsible for the intelligent, automated maintenance of the
-QuantaGlia knowledge base. It periodically evaluates repositories for
-redundancy, obsolescence, and low impact, and then merges, archiving, or
-deleting them based on configurable thresholds.
+This script implements the foundational pruner. It identifies and archives
+repositories based on a simple, configurable age threshold. It is designed
+to be safe, with dry-run capabilities and structured logging.
 """
 
 import os
@@ -15,210 +14,136 @@ import logging
 import shutil
 import argparse
 import json
-import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Add the project root to the Python path to allow for absolute imports
+# Add project root to Python path for absolute imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from scripts.utils import load_config
+from scripts.utils import load_config, JsonFormatter
 
-# Setup logging
-logging.basicConfig(
-    filename='quantaglia.log',
-    filemode='a',
-    level=logging.INFO, # Default to INFO, verbose flag will set it to DEBUG
-    format='%(asctime)s [%(levelname)s] %(message)s'
-)
+def setup_logging(verbose: bool):
+    """Configures structured (JSONL) logging."""
+    log_level = logging.DEBUG if verbose else logging.INFO
+    log_file = 'quantaglia.log'
 
-def calculate_repo_score(repo_path: Path, pruning_config: dict) -> float:
-    """
-    Calculates a score for a repository based on the formula from docs/recommendations.md.
-    prune_score = w_u * (1 - usage) + w_a * age_norm + w_r * redundancy + w_e * ethics_risk
+    # Get the root logger
+    logger = logging.getLogger()
+    logger.setLevel(log_level)
 
-    A higher score indicates a higher likelihood of being pruned.
+    # Remove any existing handlers to avoid duplicate logs
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
-    Args:
-        repo_path: The path to the repository directory.
-        pruning_config: The pruning configuration dictionary from config.yaml.
+    # Create a file handler and set the formatter
+    file_handler = logging.FileHandler(log_file, mode='a')
+    formatter = JsonFormatter()
+    file_handler.setFormatter(formatter)
 
-    Returns:
-        A score between 0 and 1.
-    """
-    now = datetime.now()
-    weights = pruning_config.get('weights', {'usage': 0.5, 'age': 0.2, 'redundancy': 0.2, 'ethics': 0.1})
-    age_threshold_days = pruning_config.get('age_threshold_days', 30)
+    # Add the handler to the root logger
+    logger.addHandler(file_handler)
 
-    # 1. Calculate age_norm and usage
-    try:
-        mtime = repo_path.stat().st_mtime
-        last_modified_date = datetime.fromtimestamp(mtime)
-        age = now - last_modified_date
-        age_norm = min(1.0, age.days / age_threshold_days)
-        usage = 1.0 - age_norm  # Higher usage for more recent activity
-    except FileNotFoundError:
-        return 1.0 # Repo was likely deleted mid-scan, max score to be safe
+    # Add a stream handler to print to console as well, but only for INFO and above
+    # unless in verbose mode. This provides user-facing feedback.
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(logging.Formatter('%(message)s')) # Simple format for console
+    logger.addHandler(console_handler)
 
-    # 2. Calculate redundancy (future implementation)
-    # TODO: Implement semantic analysis to detect redundancy
-    redundancy = 0.0
-
-    # 3. Calculate ethics_risk (future implementation)
-    # TODO: Integrate with QuantaEthos for risk assessment as part of the score
-    ethics_risk = 0.0
-
-    # 4. Calculate final prune_score
-    prune_score = (
-        weights.get('usage', 0.5) * (1 - usage) +
-        weights.get('age', 0.2) * age_norm +
-        weights.get('redundancy', 0.2) * redundancy +
-        weights.get('ethics', 0.1) * ethics_risk
-    )
-
-    logging.debug(
-        f"Scoring for {repo_path.name}: "
-        f"Age={age.days}d (AgeNorm: {age_norm:.2f}, Usage: {usage:.2f}), "
-        f"Redundancy: {redundancy:.2f}, EthicsRisk: {ethics_risk:.2f}, "
-        f"Final Prune Score: {prune_score:.2f}"
-    )
-
-    return prune_score
+    logging.info({"event": "logging_configured", "level": logging.getLevelName(log_level)})
 
 
 def run_pruning(args):
-    """Contains the core logic for pruning."""
-    if args.verbose:
-        # Set root logger level to DEBUG
-        logging.getLogger().setLevel(logging.DEBUG)
-        logging.info("Verbose logging enabled.")
+    """Contains the core logic for the age-based pruner."""
+    setup_logging(args.verbose)
+    logging.info({"event": "pruner_start", "dry_run": args.dry_run, "force": args.force})
 
-    logging.info("Starting QuantaGlia Pruner.")
+    config = load_config("config.yaml")
+    if not config:
+        logging.error({"event": "config_load_failed", "reason": "Could not load or parse config.yaml"})
+        return
 
-    config_data = load_config(args.config)
-    if config_data is None:
-        logging.error("Failed to load configuration. Exiting.")
-        sys.exit(1)
+    pruning_config = config.get('pruning', {})
+    main_config = config.get('main', {})
 
-    main_config = config_data.get('main', {})
-    pruning_config = config_data.get('pruning', {})
+    age_threshold = timedelta(days=pruning_config.get('age_threshold_days', 90))
+    knowledge_base_path = Path(main_config.get('knowledge_base', './knowledge_base'))
+    archive_path = Path(pruning_config.get('archive_path', 'repo_archive/'))
 
-    KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
-    SCORE_THRESHOLD = pruning_config.get("score_threshold", 0.8)
+    if not knowledge_base_path.is_dir():
+        logging.error({
+            "event": "knowledge_base_not_found",
+            "path": str(knowledge_base_path)
+        })
+        return
 
-    # Strategy can be overridden by command line argument, otherwise use config
-    strategy = args.strategy if args.strategy else pruning_config.get("strategy", "conservative")
+    logging.info({
+        "event": "scan_start",
+        "path": str(knowledge_base_path),
+        "age_threshold_days": age_threshold.days
+    })
 
-    logging.info(f"Knowledge base: {KNOWLEDGE_BASE}")
-    logging.info(f"Score threshold: {SCORE_THRESHOLD}")
-    logging.info(f"Pruning strategy: {strategy}")
+    now = datetime.now()
+    archived_count = 0
 
-    if args.dry_run:
-        logging.info("Performing a DRY RUN. No files will be changed.")
-        print("--- DRY RUN ---")
-
-    if not KNOWLEDGE_BASE.is_dir():
-        logging.error(f"Knowledge base directory not found at: {KNOWLEDGE_BASE}")
-        print(f"Error: Knowledge base directory not found at: {KNOWLEDGE_BASE}", file=sys.stderr)
-        sys.exit(1)
-
-    logging.info(f"Scanning {KNOWLEDGE_BASE} for repositories to prune.")
-
-    for repo_dir in KNOWLEDGE_BASE.iterdir():
-        if repo_dir.is_dir():
+    for repo_path in knowledge_base_path.iterdir():
+        if repo_path.is_dir():
             try:
-                score = calculate_repo_score(repo_dir, pruning_config)
-                logging.info(f"Repository '{repo_dir.name}' scored {score:.2f}")
+                mtime = repo_path.stat().st_mtime
+                last_modified_date = datetime.fromtimestamp(mtime)
+                repo_age = now - last_modified_date
 
-                if score > SCORE_THRESHOLD:
-                    logging.warning(f"Repo '{repo_dir.name}' with score {score:.2f} is above threshold {SCORE_THRESHOLD}.")
+                if repo_age > age_threshold:
+                    decision = "ARCHIVE"
+                    reason = f"Exceeded age threshold of {age_threshold.days} days (age: {repo_age.days} days)"
 
-                    if strategy == 'aggressive':
-                        action_verb = "delete"
-                        destination_info = ""
-                    else: # 'conservative'
-                        action_verb = "archive"
-                        # Use a more generic archive folder, perhaps in parent dir
-                        archive_dir = KNOWLEDGE_BASE.parent / "archive"
-                        archive_dir.mkdir(exist_ok=True)
-                        destination = archive_dir / f"{repo_dir.name}-score{score:.0f}"
-                        destination_info = f" to {destination}"
+                    log_payload = {
+                        "event": "prune_decision",
+                        "repo_name": repo_path.name,
+                        "decision": decision,
+                        "reason": reason,
+                        "age_days": repo_age.days,
+                        "dry_run": args.dry_run,
+                        "actor": "QuantaGlia-Pruner"
+                    }
 
                     if args.dry_run:
-                        print(f"[DRY RUN] Would {action_verb} {repo_dir.name}{destination_info}")
-                        logging.info(f"[DRY RUN] Would {action_verb} {repo_dir.name}{destination_info}")
+                        logging.warning(log_payload)
                     else:
+                        archive_dest = archive_path / repo_path.name
+                        log_payload["destination"] = str(archive_dest)
+
                         try:
-                            if strategy == 'aggressive':
-                                # Ethical check before deletion
-                                ethos_script_path = Path(__file__).parent / 'quanta_ethos.py'
-                                action_description = f"delete repository {repo_dir.name}"
-
-                                try:
-                                    # Ensure we use the same Python interpreter for the subprocess
-                                    ethos_result = subprocess.run(
-                                        [sys.executable, str(ethos_script_path), action_description],
-                                        capture_output=True,
-                                        text=True,
-                                        check=True,
-                                        encoding='utf-8'
-                                    )
-                                    ethos_response = json.loads(ethos_result.stdout)
-                                    decision = ethos_response.get("decision", "deny")
-                                    reason = ethos_response.get("reason", "No reason provided.")
-                                    logging.debug(f"Ethos check for '{action_description}': {decision.upper()} - {reason}")
-
-                                except FileNotFoundError:
-                                    logging.error(f"Ethos script not found at {ethos_script_path}")
-                                    decision = "deny"
-                                    reason = "Ethos script not found."
-                                except subprocess.CalledProcessError as e:
-                                    logging.error(f"Ethos script execution failed for {repo_dir.name}: {e.stderr}")
-                                    decision = "deny"
-                                    reason = f"Ethos script failed: {e.stderr}"
-                                except json.JSONDecodeError as e:
-                                    logging.error(f"Failed to parse Ethos response for {repo_dir.name}: {e}")
-                                    decision = "deny"
-                                    reason = "Could not parse Ethos response."
-
-
-                                if decision == "approve":
-                                    shutil.rmtree(repo_dir)
-                                    print(f"Deleted {repo_dir.name}")
-                                    logging.info(f"Deleted {repo_dir.name} after ethos approval.")
-                                else:
-                                    message = f"Deletion of {repo_dir.name} DENIED by QuantaEthos. Reason: {reason}. Flagged for human review."
-                                    print(message)
-                                    logging.warning(message)
-
-                            else: # 'conservative'
-                                shutil.move(str(repo_dir), str(destination))
-                                print(f"Archived {repo_dir.name}{destination_info}")
-                                logging.info(f"Archived {repo_dir.name}{destination_info}")
+                            # Ensure archive directory exists
+                            archive_path.mkdir(exist_ok=True)
+                            shutil.move(str(repo_path), str(archive_dest))
+                            logging.info(log_payload)
+                            archived_count += 1
                         except Exception as e:
-                            logging.error(f"Failed to {action_verb} {repo_dir.name}: {e}")
+                            log_payload["error"] = str(e)
+                            logging.error(log_payload)
 
             except FileNotFoundError:
-                logging.warning(f"Could not stat directory {repo_dir}, it may have been removed mid-scan.")
+                logging.warning({
+                    "event": "scan_error",
+                    "repo_name": repo_path.name,
+                    "reason": "File not found during scan, likely removed mid-process."
+                })
+
+    logging.info({"event": "pruner_end", "archived_count": archived_count, "dry_run": args.dry_run})
 
 
 def main():
     """Parses command-line arguments and kicks off the pruner."""
-    parser = argparse.ArgumentParser(description="QuantaGlia Knowledge Base Pruner.")
+    parser = argparse.ArgumentParser(description="QuantaGlia Knowledge Base Pruner (Phase 1: Foundational).")
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Perform a dry run, showing what would be pruned without making changes."
+        help="Perform a dry run, showing what would be pruned without making any changes."
     )
     parser.add_argument(
-        "-c", "--config",
-        default="config.yaml",
-        help="Path to the configuration file (default: config.yaml)"
-    )
-    parser.add_argument(
-        "--strategy",
-        choices=["conservative", "aggressive"],
-        default=None,
-        help="Override the pruning strategy from config.yaml (conservative=archive, aggressive=delete)."
+        "--force",
+        action="store_true",
+        help="Force a run, ignoring any scheduling logic (not implemented in Phase 1)."
     )
     parser.add_argument(
         "--verbose",
