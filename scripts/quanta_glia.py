@@ -37,15 +37,37 @@ import urllib.request
 
 # Add the project root to the Python path to allow for absolute imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from scripts.utils import load_config, clone_repo, prune_cache
+rom scripts.utils import JsonFormatter, load_config, clone_repo, prune_cache
+from scripts.audit import log_audit_event
+
+import uuid
 
 # Setup logging
-logging.basicConfig(
-    filename='quantaglia.log',
-    filemode='a',
-    level=logging.DEBUG,
-    format='%(asctime)s [%(levelname)s] %(message)s'
-)
+def setup_logging():
+    log_file = 'quantaglia.log'
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    
+    # Prevent duplicate handlers
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    # File handler with JSON formatter
+    file_handler = logging.FileHandler(log_file, mode='a')
+    formatter = JsonFormatter()
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    
+    # Console handler for errors
+    console_handler = logging.StreamHandler(sys.stderr)
+    console_handler.setLevel(logging.ERROR)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console_handler)
+    
+    return logger
+
+logger = setup_logging()
+
 
 def load_config(config_path="config.yaml"):
     """
