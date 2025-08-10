@@ -1,154 +1,109 @@
 #!/usr/bin/env python3
 
 """
-QuantaGlia-Pruner - Phase 1 Implementation
+QuantaGlia-Pruner
 
-This script implements the foundational pruner. It identifies and archives
-repositories based on a simple, configurable age threshold. It is designed
-to be safe, with dry-run capabilities and structured logging.
+This script is responsible for the intelligent, automated maintenance of the
+QuantaGlia knowledge base. It periodically evaluates repositories for
+redundancy, obsolescence, and low impact, and then merges, archiving, or
+deleting them based on configurable thresholds.
 """
 
 import os
 import sys
-import logging
 import shutil
 import argparse
-import json
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Add project root to Python path for absolute imports
+# Add the project root to the Python path to allow for absolute imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from scripts.utils import load_config, JsonFormatter
-
-def setup_logging(verbose: bool):
-    """Configures structured (JSONL) logging."""
-    log_level = logging.DEBUG if verbose else logging.INFO
-    log_file = 'quantaglia.log'
-
-    # Get the root logger
-    logger = logging.getLogger()
-    logger.setLevel(log_level)
-
-    # Remove any existing handlers to avoid duplicate logs
-    if logger.hasHandlers():
-        logger.handlers.clear()
-
-    # Create a file handler and set the formatter
-    file_handler = logging.FileHandler(log_file, mode='a')
-    formatter = JsonFormatter()
-    file_handler.setFormatter(formatter)
-
-    # Add the handler to the root logger
-    logger.addHandler(file_handler)
-
-    # Add a stream handler to print to console as well, but only for INFO and above
-    # unless in verbose mode. This provides user-facing feedback.
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(log_level)
-    console_handler.setFormatter(logging.Formatter('%(message)s')) # Simple format for console
-    logger.addHandler(console_handler)
-
-    logging.info({"event": "logging_configured", "level": logging.getLevelName(log_level)})
-
+from scripts.utils import load_config, setup_pruner_logger
 
 def run_pruning(args):
-    """Contains the core logic for the age-based pruner."""
-    setup_logging(args.verbose)
-    logging.info({"event": "pruner_start", "dry_run": args.dry_run, "force": args.force})
+    """Contains the core logic for pruning."""
+    logger = setup_pruner_logger()
+    logger.info("Starting QuantaGlia Pruner.")
 
-    config = load_config("config.yaml")
-    if not config:
-        logging.error({"event": "config_load_failed", "reason": "Could not load or parse config.yaml"})
-        return
+    config_data = load_config(args.config)
+    if config_data is None:
+        logger.error("Failed to load configuration. Exiting.")
+        sys.exit(1)
 
-    pruning_config = config.get('pruning', {})
-    main_config = config.get('main', {})
+    main_config = config_data.get('main', {})
+    pruning_config = config_data.get('pruning', {})
 
-    age_threshold = timedelta(days=pruning_config.get('age_threshold_days', 90))
-    knowledge_base_path = Path(main_config.get('knowledge_base', './knowledge_base'))
-    archive_path = Path(pruning_config.get('archive_path', 'repo_archive/'))
+    KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
+    AGE_THRESHOLD_DAYS = pruning_config.get("age_threshold_days", 30)
 
-    if not knowledge_base_path.is_dir():
-        logging.error({
-            "event": "knowledge_base_not_found",
-            "path": str(knowledge_base_path)
-        })
-        return
+    logger.info(f"Knowledge base: {KNOWLEDGE_BASE}")
+    logger.info(f"Age threshold (days): {AGE_THRESHOLD_DAYS}")
 
-    logging.info({
-        "event": "scan_start",
-        "path": str(knowledge_base_path),
-        "age_threshold_days": age_threshold.days
-    })
+    if args.dry_run:
+        logger.info("Performing a DRY RUN. No files will be changed.")
+        print("--- DRY RUN ---")
+
+    if not KNOWLEDGE_BASE.is_dir():
+        logger.error(f"Knowledge base directory not found at: {KNOWLEDGE_BASE}")
+        print(f"Error: Knowledge base directory not found at: {KNOWLEDGE_BASE}", file=sys.stderr)
+        sys.exit(1)
 
     now = datetime.now()
-    archived_count = 0
+    age_threshold = timedelta(days=AGE_THRESHOLD_DAYS)
 
-    for repo_path in knowledge_base_path.iterdir():
-        if repo_path.is_dir():
+    logger.info(f"Scanning {KNOWLEDGE_BASE} for repositories older than {AGE_THRESHOLD_DAYS} days.")
+
+    for repo_dir in KNOWLEDGE_BASE.iterdir():
+        if repo_dir.is_dir():
             try:
-                mtime = repo_path.stat().st_mtime
+                mtime = repo_dir.stat().st_mtime
                 last_modified_date = datetime.fromtimestamp(mtime)
-                repo_age = now - last_modified_date
+                age = now - last_modified_date
 
-                if repo_age > age_threshold:
-                    decision = "ARCHIVE"
-                    reason = f"Exceeded age threshold of {age_threshold.days} days (age: {repo_age.days} days)"
-
-                    log_payload = {
+                if age > age_threshold:
+                    log_extra = {
                         "event": "prune_decision",
-                        "repo_name": repo_path.name,
-                        "decision": decision,
-                        "reason": reason,
-                        "age_days": repo_age.days,
+                        "repo_name": repo_dir.name,
+                        "decision": "ARCHIVE",
+                        "reason": f"Repository age ({age.days} days) exceeds threshold ({AGE_THRESHOLD_DAYS} days).",
+                        "age_days": age.days,
                         "dry_run": args.dry_run,
-                        "actor": "QuantaGlia-Pruner"
                     }
+                    logger.info(f"Found old repository: {repo_dir.name}. Preparing to archive.", extra=log_extra)
+
+                    archive_dir = Path("archive")
+                    archive_dir.mkdir(exist_ok=True)
+                    new_name = f"archive-{repo_dir.name}-age{age.days}"
+                    destination = archive_dir / new_name
 
                     if args.dry_run:
-                        logging.warning(log_payload)
+                        print(f"[DRY RUN] Would archive {repo_dir.name} to {destination}")
+                        logger.info(f"Dry run: Would archive {repo_dir.name}", extra=log_extra)
                     else:
-                        archive_dest = archive_path / repo_path.name
-                        log_payload["destination"] = str(archive_dest)
-
                         try:
-                            # Ensure archive directory exists
-                            archive_path.mkdir(exist_ok=True)
-                            shutil.move(str(repo_path), str(archive_dest))
-                            logging.info(log_payload)
-                            archived_count += 1
+                            shutil.move(str(repo_dir), str(destination))
+                            print(f"Archived {repo_dir.name} to {destination}")
+                            # Update decision for the log record
+                            log_extra["decision"] = "ARCHIVED"
+                            logger.info(f"Archived {repo_dir.name} to {destination}", extra=log_extra)
                         except Exception as e:
-                            log_payload["error"] = str(e)
-                            logging.error(log_payload)
-
+                            logger.error(f"Failed to archive {repo_dir.name}: {e}")
             except FileNotFoundError:
-                logging.warning({
-                    "event": "scan_error",
-                    "repo_name": repo_path.name,
-                    "reason": "File not found during scan, likely removed mid-process."
-                })
-
-    logging.info({"event": "pruner_end", "archived_count": archived_count, "dry_run": args.dry_run})
+                logger.warning(f"Could not stat directory {repo_dir}, it may have been removed.")
 
 
 def main():
     """Parses command-line arguments and kicks off the pruner."""
-    parser = argparse.ArgumentParser(description="QuantaGlia Knowledge Base Pruner (Phase 1: Foundational).")
+    parser = argparse.ArgumentParser(description="QuantaGlia Knowledge Base Pruner.")
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Perform a dry run, showing what would be pruned without making any changes."
+        help="Perform a dry run, showing what would be pruned without making changes."
     )
     parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Force a run, ignoring any scheduling logic (not implemented in Phase 1)."
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable more detailed (DEBUG level) logging output."
+        "-c", "--config",
+        default="config.yaml",
+        help="Path to the configuration file (default: config.yaml)"
     )
     args = parser.parse_args()
     run_pruning(args)

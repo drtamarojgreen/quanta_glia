@@ -37,93 +37,13 @@ import urllib.request
 
 # Add the project root to the Python path to allow for absolute imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-rom scripts.utils import JsonFormatter, load_config, clone_repo, prune_cache
+from scripts.utils import setup_logger, load_config, clone_repo, prune_cache
 from scripts.audit import log_audit_event
 
 import uuid
 
 # Setup logging
-def setup_logging():
-    log_file = 'quantaglia.log'
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    
-    # Prevent duplicate handlers
-    if logger.hasHandlers():
-        logger.handlers.clear()
-
-    # File handler with JSON formatter
-    file_handler = logging.FileHandler(log_file, mode='a')
-    formatter = JsonFormatter()
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-    
-    # Console handler for errors
-    console_handler = logging.StreamHandler(sys.stderr)
-    console_handler.setLevel(logging.ERROR)
-    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-    logger.addHandler(console_handler)
-    
-    return logger
-
-logger = setup_logging()
-
-
-def load_config(config_path="config.yaml"):
-    """
-    Loads configuration from a given YAML file path.
-    A simple YAML parser for a specific key-value and list structure.
-    Does not support nested maps or complex structures.
-    """
-    config = {}
-    try:
-        with open(config_path, 'r') as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        logging.error(f"Configuration file not found at {config_path}")
-        return None
-
-    current_section = None
-    current_list_key = None
-
-    for raw_line in lines:
-        indentation = len(raw_line) - len(raw_line.lstrip(' '))
-        line = raw_line.strip()
-
-        if not line or line.startswith('#'):
-            continue
-
-        if indentation == 0:
-            current_section = line.replace(':', '').strip()
-            config[current_section] = {}
-            current_list_key = None
-            continue
-
-        if current_section and indentation > 0:
-            if line.strip().startswith('-'):
-                if current_list_key:
-                    value = line.replace('-', '').strip().strip("'\"")
-                    config[current_section][current_list_key].append(value)
-            else:
-                try:
-                    key, value = line.split(':', 1)
-                    key = key.strip()
-                    value = value.strip()
-                except ValueError:
-                    logging.warning(f"Could not parse line: {line}")
-                    continue
-
-                if not value:
-                    current_list_key = key
-                    config[current_section][current_list_key] = []
-                else:
-                    current_list_key = None
-                    if value.isdigit():
-                        value = int(value)
-                    else:
-                        value = value.strip("'\"")
-                    config[current_section][key] = value
-    return config
+logger = setup_logger(name='QuantaGlia-Harvester')
 
 # Global config variables
 KNOWLEDGE_BASE = None
@@ -154,33 +74,6 @@ def apply_config(config_data):
 # The KNOWLEDGE_BASE and REPO_CACHE directories are created inside main()
 # after the configuration is loaded.
 
-def clone_repo(repo_url):
-    repo_name = repo_url.split('/')[-1].replace('.git', '')
-    dest_path = REPO_CACHE / repo_name
-    if dest_path.exists():
-        logging.info(f"Repo {repo_name} already in cache. Skipping.")
-        return dest_path
-
-    # Check if the repo_url is a local directory
-    if os.path.isdir(repo_url):
-        logging.info(f"Local directory detected at {repo_url}. Copying to cache.")
-        try:
-            shutil.copytree(repo_url, dest_path)
-            logging.info(f"Copied local directory: {repo_url} to {dest_path}")
-            return dest_path
-        except Exception as e:
-            logging.error(f"Failed to copy local directory {repo_url}: {e}")
-            return None
-
-    # If not a local directory, assume it's a git repository URL
-    try:
-        subprocess.run(["git", "clone", "--depth=1", repo_url, str(dest_path)], check=True)
-        logging.info(f"Cloned repo: {repo_url}")
-        return dest_path
-    except subprocess.CalledProcessError:
-        logging.error(f"Failed to clone repo: {repo_url}")
-        return None
-
 def extract_key_info(repo_path):
     repo_name = repo_path.name
     extracted = {}
@@ -204,12 +97,6 @@ def store_to_knowledge_base(repo_name, extracted_data):
         with open(kb_dir / fname, 'w', encoding='utf-8') as f:
             f.write(content)
     logging.info(f"Stored extracted data from {repo_name} to knowledge base.")
-
-def prune_cache():
-    for repo_dir in REPO_CACHE.iterdir():
-        if repo_dir.is_dir():
-            shutil.rmtree(repo_dir)
-    logging.info("Pruned repo cache.")
 
 def summarize_with_llamacpp(text_content):
     """Sends text to a LLaMA.cpp server for summarization."""
@@ -267,7 +154,7 @@ def main(repo_urls, config_path="config.yaml", summarize=False):
         logging.warning("Too many repositories. Truncating list.")
         repo_urls = repo_urls[:MAX_REPOS]
     for url in repo_urls:
-        path = clone_repo(url)
+        path = clone_repo(url, REPO_CACHE)
         if path:
             extracted = extract_key_info(path)
             if extracted:
@@ -279,7 +166,7 @@ def main(repo_urls, config_path="config.yaml", summarize=False):
                         f.write(summary)
                     logging.info(f"Stored summary for {path.name} to {summary_path}")
 
-    prune_cache()
+    prune_cache(REPO_CACHE)
 
 if __name__ == "__main__":
     try:

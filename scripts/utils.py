@@ -3,6 +3,7 @@ import subprocess
 import shutil
 import logging
 from pathlib import Path
+import sys
 import logging
 import json
 from datetime import datetime
@@ -25,6 +26,31 @@ class JsonFormatter(logging.Formatter):
             log_record["correlation_id"] = record.correlation_id
         return json.dumps(log_record)
 
+
+def setup_logger(log_path='quantaglia.log', level=logging.INFO, name='QuantaGlia'):
+    """
+    Sets up a generic logger that uses the JsonFormatter.
+    """
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.propagate = False
+
+    # Prevent duplicate handlers
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    # File handler with JSON formatter
+    file_handler = logging.FileHandler(log_path, mode='a')
+    file_handler.setFormatter(JsonFormatter())
+    logger.addHandler(file_handler)
+
+    # Console handler for errors
+    console_handler = logging.StreamHandler(sys.stderr)
+    console_handler.setLevel(logging.ERROR)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console_handler)
+
+    return logger
 
 def load_config(config_path="config.yaml"):
     """
