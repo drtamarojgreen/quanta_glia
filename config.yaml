@@ -14,16 +14,12 @@ main:
 pruning:
   age_threshold_days: 30
   strategy: "conservative" # conservative (archive) or aggressive (delete)
-  score_threshold: 50 # Repos below this score will be pruned
-  key_files:
-    - "README.md"
-    - "LICENSE"
-    - "CONTRIBUTING.md"
-    - "SECURITY.md"
+  score_threshold: 0.8 # Repos above this score will be pruned
   weights:
-    age: 0.5
-    key_files: 0.3
-    size: 0.2
+    usage: 0.5
+    age: 0.2
+    redundancy: 0.2
+    ethics: 0.1
 
 # Configuration for LLaMA.cpp integration
 llamacpp:
