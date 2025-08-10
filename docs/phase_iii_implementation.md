@@ -14,34 +14,35 @@ The primary goal of Phase III is to achieve **live, end-to-end integration** wit
 
 Phase III will deliver the following key features:
 
--   **Live Ethical Integration:** The mocked `get_ethical_verdict` function will be replaced with a real API client that communicates with the `QuantaEthos` service. This will involve defining and implementing the API contract for submitting "pruning proposals" and receiving verdicts.
 
--   **Live Usage Metrics:** The pruner will integrate with `QuantaSensa` to fetch real usage scores for repositories, replacing the mocked `usage_score` in the `RepoRecord` data model.
+-   **Advanced Repository Metrics:** The pruner will be enhanced to perform a deep scan of each repository to gather a rich set of metrics, replacing the simple mocked scores. This data will provide a more holistic view of a repository's value and will include:
+    -   Total repository size
+    -   Counts of files, directories, source files, test files, and documentation files
+    -   Predominant programming language
+    -   Date of the last edit
 
 -   **Human-in-the-Loop (HITL) Workflow:** The `REVIEW` decision will be fully implemented. When a repository is flagged for review, the pruner will write the `PruneDecision` object to a dedicated review queue (e.g., a JSONL file like `review_queue.log`) for manual operator assessment.
 
 -   **Dependency Analysis (Python):** The pruner will be enhanced to parse `requirements.txt` files within repositories. Repositories identified as dependencies by others in the knowledge base will be protected from pruning, addressing a key risk outlined in the project plan.
 
+-   **LLM-Powered Ethical Integration:** The mocked `get_ethical_verdict` function will be replaced with a client that communicates with a local **LLaMA.cpp instance**. The pruner will formulate a detailed prompt, asking the LLM to act as an ethical governor and provide a verdict on the proposed action.
+
 ---
 
-## 3. API Contracts (Conceptual)
+## 3. API Contracts & Local Analysis
 
 To facilitate integration, the following conceptual API contracts will be implemented.
 
-### QuantaEthos (`/v1/governance/request_verdict`)
+### LLaMA.cpp for Ethical Verdict (`/completion`)
 
-**Request (Pruner -> Ethos):**
+Instead of a dedicated microservice, the pruner will leverage a local LLaMA.cpp instance for ethical reasoning.
+
+**Request (Pruner -> LLaMA.cpp):**
+The `prompt` will be a carefully constructed request asking the LLM to act as an ethical governor.
 ```json
 {
-  "actor": "QuantaGlia-Pruner",
-  "proposed_action": "DELETE",
-  "target_resource": "old-project-alpha",
-  "justification": "Score (0.92) meets or exceeds DELETE threshold (0.9)",
-  "context": {
-    "usage_score": 0.01,
-    "age_days": 400,
-    "redundancy_score": 0.85
-  }
+  "prompt": "You are QuantaEthos, an ethical governor for an autonomous software system. Your role is to approve or deny actions based on system safety and knowledge preservation. A sub-module, QuantaGlia-Pruner, proposes the following action:\n\n- **Action:** DELETE\n- **Target:** 'old-project-alpha'\n- **Justification:** 'Score (0.92) meets or exceeds DELETE threshold (0.9)'\n- **Metrics:**\n  - Repository Size: 15.2 MB\n  - Total Files: 150 (Source: 80, Tests: 40, Docs: 10)\n  - Language: Python\n  - Last Edit: 450 days ago\n\nBased on this information, is the proposed action safe and reasonable? Respond with only 'VERDICT: ALLOW' or 'VERDICT: DENY' followed by a brief reason.",
+  "n_predict": 64
 }
 ```
 
