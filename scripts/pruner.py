@@ -14,6 +14,8 @@ import sys
 import logging
 import shutil
 import argparse
+import json
+import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -157,9 +159,47 @@ def run_pruning(args):
                     else:
                         try:
                             if strategy == 'aggressive':
-                                shutil.rmtree(repo_dir)
-                                print(f"Deleted {repo_dir.name}")
-                                logging.info(f"Deleted {repo_dir.name}")
+                                # Ethical check before deletion
+                                ethos_script_path = Path(__file__).parent / 'quanta_ethos.py'
+                                action_description = f"delete repository {repo_dir.name}"
+
+                                try:
+                                    # Ensure we use the same Python interpreter for the subprocess
+                                    ethos_result = subprocess.run(
+                                        [sys.executable, str(ethos_script_path), action_description],
+                                        capture_output=True,
+                                        text=True,
+                                        check=True,
+                                        encoding='utf-8'
+                                    )
+                                    ethos_response = json.loads(ethos_result.stdout)
+                                    decision = ethos_response.get("decision", "deny")
+                                    reason = ethos_response.get("reason", "No reason provided.")
+                                    logging.debug(f"Ethos check for '{action_description}': {decision.upper()} - {reason}")
+
+                                except FileNotFoundError:
+                                    logging.error(f"Ethos script not found at {ethos_script_path}")
+                                    decision = "deny"
+                                    reason = "Ethos script not found."
+                                except subprocess.CalledProcessError as e:
+                                    logging.error(f"Ethos script execution failed for {repo_dir.name}: {e.stderr}")
+                                    decision = "deny"
+                                    reason = f"Ethos script failed: {e.stderr}"
+                                except json.JSONDecodeError as e:
+                                    logging.error(f"Failed to parse Ethos response for {repo_dir.name}: {e}")
+                                    decision = "deny"
+                                    reason = "Could not parse Ethos response."
+
+
+                                if decision == "approve":
+                                    shutil.rmtree(repo_dir)
+                                    print(f"Deleted {repo_dir.name}")
+                                    logging.info(f"Deleted {repo_dir.name} after ethos approval.")
+                                else:
+                                    message = f"Deletion of {repo_dir.name} DENIED by QuantaEthos. Reason: {reason}. Flagged for human review."
+                                    print(message)
+                                    logging.warning(message)
+
                             else: # 'conservative'
                                 shutil.move(str(repo_dir), str(destination))
                                 print(f"Archived {repo_dir.name}{destination_info}")
