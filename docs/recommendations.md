@@ -18,37 +18,20 @@
     *   Add `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, and `CONTRIBUTING.md`. The README mentions ethics/audit policies but users need enforceable, versioned in‑repo docs for trust and adoption.
     *   Add repository topics and a short description for discoverability on GitHub.
 
-2.  **Define a crisp architecture with typed interfaces**
-    *   Break into modules: `core/`, `spawner/`, `pruner/`, `annotator/`, `curator/`, `policy/`, `triggers/`, `storage/`, `scheduler/`, `api/`, `ui/`.
-    *   Publish interface contracts (Protocol/ABC) for each boundary so components can be mocked and swapped.
-
-3.  **Codify data models and schemas**
+2.  **Codify data models and schemas**
     *   Create typed models for `RepoRecord`, `UsageMetrics`, `SimilarityScore`, `PruneDecision`, `SpawnRequest`, `PolicyVerdict`.
     *   Validate YAML config against a schema; add defaults and strict type checking.
 
-4.  **Observability and auditability from day one**
+3.  **Observability and auditability from day one**
     *   Structured logs with correlation IDs, immutable audit logs for decisions, and metrics for spawn/prune outcomes.
     *   A simple dashboard (even a minimal API + page) to visualize cycles, states, and justifications aligns with your visual interface roadmap.
 
-5.  **Safety rails for pruning and spawning**
+4.  **Safety rails for pruning and spawning**
     *   Dry-run mode, human-in-the-loop thresholds, rollback/restore path for archives, sandbox enforcement by default (already in README).
 
-6.  **Tests + CI + release hygiene**
+5.  **Tests + CI + release hygiene**
     *   Unit tests for scoring, policy, and git actions; integration tests against a sandbox repo.
     *   GitHub Actions for lint, type-check, tests, and a release workflow producing versioned artifacts.
-
-## Proposed architecture
-
-*   **Core loop**
-    *   Triggers → Candidate Set Builder → Annotator (optional) → Scorer → Policy Engine → Action Planner → Executors (Spawn/Prune/Merge/Archive) → Audit Log.
-*   **Services**
-    *   `Spawner`: forks/clones, initializes README/tags, applies naming convention, sets sandbox flag.
-    *   `Pruner`: evaluates age/usage/similarity/ethics risk; merges/archives/deletes per thresholds; logs justification.
-    *   `Annotator`: generates semantic tags; stores vector index to speed dedup/merge.
-    *   `Curator`: groups similars into bundles; flags contradictions/outdated knowledge.
-    *   `Policy/Ethics`: integrates QuantaEthos for gatekeeping; every decision carries a policy verdict and rationale.
-    *   `Scheduler`: driven by QuantaParent intervals, with backpressure control.
-    *   `LLM Adapter`: encapsulates LLaMA.cpp calls with timeouts and cost/latency tracking.
 
 ## Core data models (example)
 
@@ -174,7 +157,7 @@ This aligns with your plan for federated deployments and multi-agent environment
 ## 30‑60‑90 day plan
 
 *   **30 days (Foundations)**
-    *   Repo reorg into modules, typed models, config schema and validation.
+    *   Typed models, config schema and validation.
     *   Structured logging + audit ledger, dry-run mode, unit tests, basic CI.
     *   `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, topics/description on GitHub.
 
@@ -199,7 +182,6 @@ This aligns with your plan for federated deployments and multi-agent environment
 ## Concrete PR starters
 
 *   PR: “repo: add LICENSE, SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md; update README with quickstart”
-*   PR: “core: introduce models.py, interfaces.py; implement config schema + validation”
 *   PR: “observability: structured logging + audit ledger; add correlation IDs”
 *   PR: “decisioning: scoring function + thresholds; dry-run mode and CLI”
 *   PR: “annotator: tagging MVP + similarity index; dedup suggestions”
