@@ -26,3 +26,16 @@ pruning:
 
   # Path to the directory where archived repositories are moved.
   archive_path: "repo_archive/"
+
+  # Weights for the composite score calculation (mocked for Phase II)
+  scoring_weights:
+    usage: 0.5
+    age: 0.2
+    redundancy: 0.2
+    ethics_risk: 0.1
+
+  # Decision thresholds for the final score
+  decision_thresholds:
+    delete: 0.9  # Score >= 0.9 -> DELETE (if strategy is aggressive)
+    archive: 0.7 # Score >= 0.7 -> ARCHIVE
+    review: 0.5  # Score >= 0.5 -> Flag for human review
