@@ -12,14 +12,18 @@ main:
 
 # Configuration for QuantaGlia Pruner
 pruning:
-  age_threshold_days: 30
-  strategy: "conservative" # conservative (archive) or aggressive (delete)
-  score_threshold: 0.8 # Repos above this score will be pruned
-  weights:
-    usage: 0.5
-    age: 0.2
-    redundancy: 0.2
-    ethics: 0.1
+  # The interval in minutes for periodic pruning runs.
+  interval_minutes: 1440 # 24 hours
+
+  # Repositories older than this will be considered for pruning.
+  age_threshold_days: 90
+
+  # The default strategy for the pruner.
+  # "conservative": Archives repositories. Deletion is disabled.
+  default_strategy: "conservative"
+
+  # Path to the directory where archived repositories are moved.
+  archive_path: "repo_archive/"
 
 # Configuration for LLaMA.cpp integration
 llamacpp:
