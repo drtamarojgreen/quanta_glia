@@ -71,8 +71,12 @@ def develop_ontology_with_llamacpp(text_content):
 
 def main(source_file="README.md"):
     """Main logic for developing and storing the ontology."""
+    # Define path to config relative to this script's location to ensure it's found
+    project_root = Path(__file__).resolve().parent.parent.parent
+    config_file = project_root / "config.yaml"
+
     # Load and apply configuration
-    config_data = load_config("config.yaml")
+    config_data = load_config(config_file)
     apply_config(config_data)
 
     if not ONTOLOGY_FILE.parent.exists():
