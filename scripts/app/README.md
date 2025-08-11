@@ -77,3 +77,13 @@ To add a new validator:
 2.  Implement your logic within this block, reading any necessary values from `p` (the `params` dictionary).
 3.  Return a `(bool, str)` tuple indicating pass/fail and a diagnostic note.
 4.  Add corresponding unit tests to `tests/unit/test_research_integration.py`.
+
+## 7. Possible Enhancements
+
+-   **Implement `code_test` validator**: The framework includes examples for a `code_test` validator, but the logic is not yet implemented in `evaluators.py`. This would involve safely executing a code snippet (e.g., in a container or a restricted environment) and checking its `stdout`, `stderr`, and `exit_code`.
+-   **Add `yaml_schema` validator**: Similar to the existing `json_schema`, this would validate YAML output, which is common in configuration and data serialization.
+-   **External Configuration**: Instead of defining `evaluation_points` in Python code, they could be loaded from a structured file like `YAML` or `JSON`. This would allow non-developers to define and manage evaluation criteria.
+-   **Weighted Scoring**: The current scoring system treats all evaluation points equally. An enhancement would be to add an optional `weight` parameter to each point, allowing for more nuanced and important criteria to have a greater impact on the final score.
+-   **Asynchronous Evaluation**: For validators that are I/O-bound or slow (e.g., `embedding`, or a hypothetical validator that calls an external API), using `asyncio` could significantly speed up the evaluation of a single answer by running checks concurrently.
+-   **Extensible Validator Registry**: The current `if/elif` chain in `evaluators.py` could be replaced with a more extensible design pattern, such as a decorator-based registry. This would make it cleaner and safer to add new validators without modifying the core dispatcher logic.
+-   **Batch Processing & Reporting**: A high-level utility could be added to run evaluations over an entire dataset (e.g., a CSV file mapping research topics to multiple answers) and generate a summary report in a structured format like CSV or JSON, facilitating large-scale model comparisons.
