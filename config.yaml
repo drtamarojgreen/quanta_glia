@@ -39,3 +39,8 @@ pruning:
     delete: 0.9  # Score >= 0.9 -> DELETE (if strategy is aggressive)
     archive: 0.7 # Score >= 0.7 -> ARCHIVE
     review: 0.5  # Score >= 0.5 -> Flag for human review
+
+# Configuration for LLaMA.cpp integration
+llamacpp:
+  url: "http://localhost:8080/completion"
+  enabled: true
