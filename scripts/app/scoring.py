@@ -28,26 +28,55 @@ def evaluate_answer(answer: str, evaluation_points: List[Dict[str, Any]]) -> Tup
     category_totals: Dict[str, float] = {}
     category_passed: Dict[str, float] = {}
     details = []
+    results_by_id: Dict[str, bool] = {}
 
     for point in evaluation_points:
+        point_id = point.get("id")
+        depends_on = point.get("depends_on")
         weight = float(point.get("weight", 1.0))
+        is_informational = point.get("informational", False)
         category = point.get("category", "General")
 
-        ok, note, evidence = run_evaluation_point(answer, point)
+        # Check for dependencies
+        dependency_failed = False
+        if depends_on:
+            if depends_on not in results_by_id:
+                # This case implies an evaluation point depends on one that hasn't run yet.
+                # A more robust implementation might pre-sort or build a dependency graph.
+                # For now, we'll treat it as a failure to be safe.
+                dependency_failed = True
+                note = f"Skipped: Dependency '{depends_on}' not found or has not run yet."
+            elif not results_by_id[depends_on]:
+                dependency_failed = True
+                note = f"Skipped: Dependency '{depends_on}' failed."
 
-        total_weight += weight
-        category_totals[category] = category_totals.get(category, 0.0) + weight
+        if not dependency_failed:
+            ok, note, evidence, duration = run_evaluation_point(answer, point)
+        else:
+            # If dependency failed, the check is not run.
+            ok, evidence, duration = False, None, 0.0
 
-        if ok:
-            passed_weight += weight
-            category_passed[category] = category_passed.get(category, 0.0) + weight
+        # Informational checks do not contribute to the score.
+        if not is_informational:
+            total_weight += weight
+            category_totals[category] = category_totals.get(category, 0.0) + weight
+            if ok:
+                passed_weight += weight
+                category_passed[category] = category_passed.get(category, 0.0) + weight
+
+        # Store result if it has an ID for other points to depend on
+        if point_id:
+            results_by_id[point_id] = ok
 
         details.append({
             "point": point.get("text", "N/A"),
+            "id": point_id,
             "category": category,
+            "informational": is_informational,
             "ok": ok,
             "note": note,
-            "evidence": evidence
+            "evidence": evidence,
+            "duration_ms": duration
         })
 
     # Calculate final weighted score

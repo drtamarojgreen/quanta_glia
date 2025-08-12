@@ -18,6 +18,7 @@ from scripts.app.research_tools import (
     connect_to_llm,
     create_research_topic,
     create_evaluation_points,
+    load_evaluation_points_from_json,
 )
 # Conditionally import examples to avoid errors if the file is missing
 try:
@@ -26,14 +27,13 @@ except ImportError:
     EXAMPLES = None
 
 
-def run_single_topic_evaluation(concept: str, llm_client) -> list:
+def run_single_topic_evaluation(concept: str, llm_client, evaluation_points: list) -> list:
     """
     Runs a full research and evaluation cycle:
     1. Defines a concept.
     2. Creates a research topic.
-    3. Generates evaluation points.
-    4. Gets an answer from the configured LLM.
-    5. Evaluates the answer and prints a report.
+    3. Gets an answer from the configured LLM.
+    4. Evaluates the answer against the provided points and prints a report.
 
     Returns:
         A list of dictionaries, with each dictionary representing a row for a CSV report.
@@ -42,14 +42,16 @@ def run_single_topic_evaluation(concept: str, llm_client) -> list:
     print(f"--- Research Integration Run ---")
     print(f"Research Topic: {topic}\n")
 
-    # 3. Generate evaluation points for the topic
-    evaluation_points = create_evaluation_points(topic)
-    print("Generated Evaluation Points:")
+    if not evaluation_points:
+        logging.error("No evaluation points provided. Aborting.")
+        return []
+
+    print("Using Evaluation Points:")
     for point in evaluation_points:
         print(f"  - {point['text']} (type: {point['type']})")
     print("-" * 20 + "\n")
 
-    # 4. Get an answer from the LLM
+    # 3. Get an answer from the LLM
     answer = llm_client.get_answer(topic)
     print(f"LLM Answer:\n---\n{answer}\n---\n")
 
@@ -67,8 +69,11 @@ def run_single_topic_evaluation(concept: str, llm_client) -> list:
     print("Evaluation Details:")
     for d in details:
         status = 'PASS' if d['ok'] else 'FAIL'
+        if d['informational']:
+            status = 'INFO'
         evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
-        print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
+        duration_str = f" [{d['duration_ms']:.2f}ms]"
+        print(f"  - {status}: {d['point']} ({d['note']}{evidence_str}){duration_str}")
 
     # 6. Prepare data for CSV report
     report_data = []
@@ -82,7 +87,8 @@ def run_single_topic_evaluation(concept: str, llm_client) -> list:
             "CheckText": d['point'],
             "CheckStatus": 'PASS' if d['ok'] else 'FAIL',
             "CheckNote": d['note'],
-            "CheckEvidence": str(d.get('evidence', ''))
+            "CheckEvidence": str(d.get('evidence', '')),
+            "DurationMS": f"{d['duration_ms']:.4f}"
         })
     return report_data
 
@@ -121,8 +127,11 @@ def run_example_set(example: dict) -> list:
             print("  Evaluation Details:")
             for d in details:
                 status = 'PASS' if d['ok'] else 'FAIL'
+                if d['informational']:
+                    status = 'INFO'
                 evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
-                print(f"    - {status}: {d['point']} ({d['note']}{evidence_str})")
+                duration_str = f" [{d['duration_ms']:.2f}ms]"
+                print(f"    - {status}: {d['point']} ({d['note']}{evidence_str}){duration_str}")
 
                 report_data.append({
                     "RunName": example['name'],
@@ -133,7 +142,8 @@ def run_example_set(example: dict) -> list:
                     "CheckText": d['point'],
                     "CheckStatus": status,
                     "CheckNote": d['note'],
-                    "CheckEvidence": str(d.get('evidence', ''))
+                    "CheckEvidence": str(d.get('evidence', '')),
+                    "DurationMS": f"{d['duration_ms']:.4f}"
                 })
 
     elif example['evaluation_type'] == 'individual':
@@ -155,8 +165,11 @@ def run_example_set(example: dict) -> list:
             print("Evaluation Details:")
             for d in details:
                 status = 'PASS' if d['ok'] else 'FAIL'
+                if d['informational']:
+                    status = 'INFO'
                 evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
-                print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
+                duration_str = f" [{d['duration_ms']:.2f}ms]"
+                print(f"  - {status}: {d['point']} ({d['note']}{evidence_str}){duration_str}")
 
                 report_data.append({
                     "RunName": example['name'],
@@ -167,7 +180,8 @@ def run_example_set(example: dict) -> list:
                     "CheckText": d['point'],
                     "CheckStatus": status,
                     "CheckNote": d['note'],
-                    "CheckEvidence": str(d.get('evidence', ''))
+                    "CheckEvidence": str(d.get('evidence', '')),
+                    "DurationMS": f"{d['duration_ms']:.4f}"
                 })
 
     print("-" * 20 + "\n")
@@ -183,7 +197,7 @@ def write_evaluation_report_to_csv(report_data: list, filename: str):
     headers = [
         "RunName", "AnswerID", "OverallScore", "Category",
         "CategoryScore", "CheckText", "CheckStatus",
-        "CheckNote", "CheckEvidence"
+        "CheckNote", "CheckEvidence", "DurationMS"
     ]
 
     try:
@@ -222,6 +236,11 @@ def main():
         type=str,
         help="Path to save a detailed evaluation report in CSV format."
     )
+    parser.add_argument(
+        "--eval-file",
+        type=str,
+        help="Path to a JSON file containing evaluation points to use instead of generating them."
+    )
 
     args = parser.parse_args()
 
@@ -232,9 +251,21 @@ def main():
             report_data = run_example_set(example)
             all_report_data.extend(report_data)
     else:
+        # This is the single-topic evaluation path
         llm_client = connect_to_llm()
         concept_to_run = args.concept if args.concept else "TissLang"
-        report_data = run_single_topic_evaluation(concept_to_run, llm_client)
+
+        eval_points = []
+        if args.eval_file:
+            eval_points = load_evaluation_points_from_json(args.eval_file)
+            if not eval_points:
+                logging.error("Could not load evaluation points from file. Aborting.")
+                sys.exit(1)
+        else:
+            topic = create_research_topic(concept_to_run)
+            eval_points = create_evaluation_points(topic)
+
+        report_data = run_single_topic_evaluation(concept_to_run, llm_client, eval_points)
         all_report_data.extend(report_data)
 
     if args.output_csv:

@@ -102,5 +102,87 @@ EXAMPLES = [
             "Using type hints in Python makes the code self-documenting."
         ],
         "evaluation_type": "comparison"
+    },
+    {
+        "name": "Golden Answer Diffing",
+        "research_topic": "Explain the process of photosynthesis in simple terms.",
+        "evaluation_points": [
+            {
+                "text": "The answer should be very similar to the golden answer.",
+                "category": "Fidelity",
+                "weight": 1.0,
+                "type": "diff",
+                "params": {
+                    "golden_answer": "Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy, through a process that converts carbon dioxide and water into glucose and oxygen.",
+                    "threshold": 0.85
+                }
+            }
+        ],
+        "answers": [
+            # This one is very close and should pass
+            "Photosynthesis is the process used by plants and other organisms to convert light energy into chemical energy. It converts carbon dioxide and water into glucose and oxygen.",
+            # This one is missing key parts and should fail
+            "Photosynthesis is how plants make food using sunlight.",
+            # This one is also close but might be on the edge
+            "Photosynthesis is a process for plants to turn light into energy. They use water and carbon dioxide to make sugar and oxygen."
+        ],
+        "evaluation_type": "individual"
+    },
+    {
+        "name": "Conditional Evaluation",
+        "research_topic": "Provide a Python function that adds two numbers.",
+        "evaluation_points": [
+            {
+                "id": "has-code-block",
+                "text": "The answer must contain a Python code block.",
+                "category": "Format",
+                "weight": 2.0,
+                "type": "regex",
+                "params": {"pattern": "```python(.*?)```"}
+            },
+            {
+                "id": "has-def-keyword",
+                "text": "The code block must contain the 'def' keyword.",
+                "category": "Syntax",
+                "weight": 1.0,
+                "type": "keyword",
+                "params": {"keywords": ["def"]},
+                "depends_on": "has-code-block"
+            }
+        ],
+        "answers": [
+            # This should pass both
+            "Here is the function:\n```python\ndef add(a, b):\n  return a + b\n```",
+            # This should fail the first check and skip the second
+            "The function is `def add(a, b): return a + b`",
+            # This should pass the first check but fail the second
+            "Here is the code:\n```python\n# A function to add two numbers\nresult = 5 + 3\n```"
+        ],
+        "evaluation_type": "individual"
+    },
+    {
+        "name": "Advanced Reporting Features",
+        "research_topic": "What is the capital of France?",
+        "evaluation_points": [
+            {
+                "text": "The answer must contain 'Paris'.",
+                "category": "Correctness",
+                "weight": 1.0,
+                "type": "keyword",
+                "params": {"keywords": ["Paris"]}
+            },
+            {
+                "text": "Log the word count for analysis.",
+                "category": "Metadata",
+                "informational": True,
+                "type": "length",
+                "params": {}
+            }
+        ],
+        "answers": [
+            "The capital of France is Paris.",
+            "France's capital city is Lyon."
+        ],
+        "evaluation_type": "individual"
     }
 ]

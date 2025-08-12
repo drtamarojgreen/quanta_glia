@@ -4,6 +4,7 @@ for the research integration framework. It includes a placeholder for connecting
 to a Large Language Model (LLM).
 """
 import logging
+import json
 from typing import Any, Dict, List
 from .research_utils import connect_to_llm
 
@@ -61,6 +62,26 @@ def create_evaluation_points(topic: str) -> List[Dict[str, Any]]:
     ]
     logging.info(f"Generated {len(points)} evaluation points for topic: '{topic}'")
     return points
+
+def load_evaluation_points_from_json(filepath: str) -> List[Dict[str, Any]]:
+    """Loads evaluation points from a JSON file."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            points = json.load(f)
+        if not isinstance(points, list):
+            logging.error("JSON file %s must contain a list of evaluation points.", filepath)
+            return []
+        logging.info("Successfully loaded %d evaluation points from %s.", len(points), filepath)
+        return points
+    except FileNotFoundError:
+        logging.error("Evaluation file not found at %s", filepath)
+        return []
+    except json.JSONDecodeError:
+        logging.error("Failed to decode JSON from %s", filepath)
+        return []
+    except Exception as e:
+        logging.error("An unexpected error occurred while reading %s: %s", filepath, e)
+        return []
 
 # --- Main execution block for demonstration ---
 
