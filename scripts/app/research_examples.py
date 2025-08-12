@@ -80,5 +80,27 @@ EXAMPLES = [
             "Certainly:\n```python\nprint(hello)\n```"
         ],
         "evaluation_type": "individual"
+    },
+    {
+        "name": "Negation Checking",
+        "research_topic": "Describe the benefits of static typing in Python without mentioning JavaScript.",
+        "evaluation_points": [
+            {"text": "The answer should not mention 'JavaScript' or 'JS'.",
+             "category": "Constraint",
+             "weight": 2.0,
+             "type": "negation",
+             "params": {"keywords": ["JavaScript", "JS"]}},
+            {"text": "The answer mentions benefits like 'readability' or 'errors'.",
+             "category": "Completeness",
+             "weight": 1.0,
+             "type": "keyword",
+             "params": {"keywords": ["readability", "errors", "bugs", "maintainability"], "min_count": 2}}
+        ],
+        "answers": [
+            "Static typing helps catch bugs early and improves code readability. It makes large projects more maintainable.",
+            "Static typing is great because it's not like JavaScript where types are loose. This helps prevent errors.",
+            "Using type hints in Python makes the code self-documenting."
+        ],
+        "evaluation_type": "comparison"
     }
 ]

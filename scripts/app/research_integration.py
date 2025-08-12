@@ -3,6 +3,7 @@ Main entry point for the research integration and evaluation framework.
 This script demonstrates how to use the evaluation and scoring modules.
 """
 import logging
+import csv
 import sys
 import argparse
 from pathlib import Path
@@ -25,7 +26,7 @@ except ImportError:
     EXAMPLES = None
 
 
-def run_single_topic_evaluation(concept: str, llm_client):
+def run_single_topic_evaluation(concept: str, llm_client) -> list:
     """
     Runs a full research and evaluation cycle:
     1. Defines a concept.
@@ -33,6 +34,9 @@ def run_single_topic_evaluation(concept: str, llm_client):
     3. Generates evaluation points.
     4. Gets an answer from the configured LLM.
     5. Evaluates the answer and prints a report.
+
+    Returns:
+        A list of dictionaries, with each dictionary representing a row for a CSV report.
     """
     topic = create_research_topic(concept)
     print(f"--- Research Integration Run ---")
@@ -66,11 +70,30 @@ def run_single_topic_evaluation(concept: str, llm_client):
         evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
         print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
 
+    # 6. Prepare data for CSV report
+    report_data = []
+    for d in details:
+        report_data.append({
+            "RunName": concept,
+            "AnswerID": "LLM_Generated",
+            "OverallScore": f"{score:.2f}",
+            "Category": d['category'],
+            "CategoryScore": f"{category_scores.get(d['category'], 0.0):.2f}",
+            "CheckText": d['point'],
+            "CheckStatus": 'PASS' if d['ok'] else 'FAIL',
+            "CheckNote": d['note'],
+            "CheckEvidence": str(d.get('evidence', ''))
+        })
+    return report_data
 
-def run_example_set(example: dict):
+
+def run_example_set(example: dict) -> list:
     """
     Runs an evaluation for a single example set from research_examples.
     This function handles both 'comparison' and 'individual' evaluation types.
+
+    Returns:
+        A list of dictionaries, with each dictionary representing a row for a CSV report.
     """
     print(f"--- Running Example: {example['name']} ---")
     print(f"Research Topic: {example['research_topic']}")
@@ -78,6 +101,7 @@ def run_example_set(example: dict):
     evaluation_points = example['evaluation_points']
     answers = example['answers']
 
+    report_data = []
     if example['evaluation_type'] == 'comparison':
         print(f"Comparing {len(answers)} pre-defined answers...")
 
@@ -97,7 +121,20 @@ def run_example_set(example: dict):
             print("  Evaluation Details:")
             for d in details:
                 status = 'PASS' if d['ok'] else 'FAIL'
-                print(f"    - {status}: {d['point']} ({d['note']})")
+                evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
+                print(f"    - {status}: {d['point']} ({d['note']}{evidence_str})")
+
+                report_data.append({
+                    "RunName": example['name'],
+                    "AnswerID": f"Model_{idx + 1}",
+                    "OverallScore": f"{score:.2f}",
+                    "Category": d['category'],
+                    "CategoryScore": f"{category_scores.get(d['category'], 0.0):.2f}",
+                    "CheckText": d['point'],
+                    "CheckStatus": status,
+                    "CheckNote": d['note'],
+                    "CheckEvidence": str(d.get('evidence', ''))
+                })
 
     elif example['evaluation_type'] == 'individual':
         print(f"Evaluating {len(answers)} pre-defined answers individually...")
@@ -121,8 +158,43 @@ def run_example_set(example: dict):
                 evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
                 print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
 
-    print("-" * 20 + "\n")
+                report_data.append({
+                    "RunName": example['name'],
+                    "AnswerID": f"Answer_{i + 1}",
+                    "OverallScore": f"{score:.2f}",
+                    "Category": d['category'],
+                    "CategoryScore": f"{category_scores.get(d['category'], 0.0):.2f}",
+                    "CheckText": d['point'],
+                    "CheckStatus": status,
+                    "CheckNote": d['note'],
+                    "CheckEvidence": str(d.get('evidence', ''))
+                })
 
+    print("-" * 20 + "\n")
+    return report_data
+
+
+def write_evaluation_report_to_csv(report_data: list, filename: str):
+    """Writes a detailed evaluation report to a CSV file."""
+    if not report_data:
+        logging.warning("No data to write to CSV report.")
+        return
+
+    headers = [
+        "RunName", "AnswerID", "OverallScore", "Category",
+        "CategoryScore", "CheckText", "CheckStatus",
+        "CheckNote", "CheckEvidence"
+    ]
+
+    try:
+        with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=headers)
+            writer.writeheader()
+            for row in report_data:
+                writer.writerow(row)
+        logging.info("Successfully wrote evaluation report to %s", filename)
+    except IOError as e:
+        logging.error("Failed to write CSV report to %s: %s", filename, e)
 
 def main():
     """
@@ -145,21 +217,31 @@ def main():
             action="store_true",
             help="Run all predefined examples from research_examples.py.\n(Uses pre-canned answers, does not call the LLM)."
         )
+    parser.add_argument(
+        "--output-csv",
+        type=str,
+        help="Path to save a detailed evaluation report in CSV format."
+    )
 
     args = parser.parse_args()
 
+    all_report_data = []
     if args.run_examples:
         print("--- Running All Predefined Examples ---")
         for example in EXAMPLES:
-            run_example_set(example)
+            report_data = run_example_set(example)
+            all_report_data.extend(report_data)
     else:
         llm_client = connect_to_llm()
         concept_to_run = args.concept if args.concept else "TissLang"
-        run_single_topic_evaluation(concept_to_run, llm_client)
+        report_data = run_single_topic_evaluation(concept_to_run, llm_client)
+        all_report_data.extend(report_data)
+
+    if args.output_csv:
+        write_evaluation_report_to_csv(all_report_data, args.output_csv)
 
     print("\n" + "-" * 20)
     print("Run complete.")
-
 
 if __name__ == "__main__":
     main()
