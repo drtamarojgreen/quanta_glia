@@ -86,8 +86,15 @@ def run_example_set(example: dict):
             [evaluation_points] * len(answers)
         )
         print(f"\nBest answer: Model {winner_idx + 1}")
-        for idx, (score, details) in enumerate(score_details):
-            print(f"  Model {idx + 1} score: {score:.2f}")
+        for idx, (score, category_scores, details) in enumerate(score_details):
+            print(f"\n--- Model {idx + 1} Report ---")
+            print(f"  Final Weighted Score: {score:.2f}")
+            if category_scores:
+                print("  Scores by Category:")
+                for cat, cat_score in category_scores.items():
+                    print(f"    - {cat}: {cat_score:.2f}")
+
+            print("  Evaluation Details:")
             for d in details:
                 status = 'PASS' if d['ok'] else 'FAIL'
                 print(f"    - {status}: {d['point']} ({d['note']})")
@@ -101,11 +108,18 @@ def run_example_set(example: dict):
             else:
                 print(f"Answer: {ans}")
 
-            score, details = evaluate_answer(ans, evaluation_points)
-            print(f"Score: {score:.2f}")
+            score, category_scores, details = evaluate_answer(ans, evaluation_points)
+            print(f"Final Weighted Score: {score:.2f}")
+            if category_scores:
+                print("Scores by Category:")
+                for cat, cat_score in category_scores.items():
+                    print(f"  - {cat}: {cat_score:.2f}")
+
+            print("Evaluation Details:")
             for d in details:
                 status = 'PASS' if d['ok'] else 'FAIL'
-                print(f"  - {status}: {d['point']} ({d['note']})")
+                evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
+                print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
 
     print("-" * 20 + "\n")
 
