@@ -3,104 +3,131 @@
 # Agentic Polling: A script to simulate agentic behavior with a local LLM
 # Purpose: This script polls a local LLM server to generate, evaluate, and refine plans and prompts.
 
-import os
 import sys
 import time
 import json
 import logging
-import urllib.request
+
+import requests
 from pathlib import Path
+from datetime import datetime, timezone
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from scripts.utils import setup_logger, load_config
+from scripts.utils import load_config
 
 # Global config variables
 LLAMACPP_URL = None
 LLAMACPP_ENABLED = False
-POLLING_INTERVAL_SECONDS = 60
+MAX_RETRIES = 3
+RETRY_DELAY = 5
 
-def apply_config(config_data):
-    """Applies the loaded configuration to global variables."""
-    global LLAMACPP_URL, LLAMACPP_ENABLED, POLLING_INTERVAL_SECONDS
+def initialize_llamacpp():
+    """Initializes LLaMA.cpp settings from config."""
+    global LLAMACPP_URL, LLAMACPP_ENABLED
+    config = load_config()
+    LLAMACPP_ENABLED = config.get("llamacpp_enabled", False)
+    if LLAMACPP_ENABLED:
+        llamacpp_host = config.get("llamacpp_host", "127.0.0.1")
+        llamacpp_port = config.get("llamacpp_port", 8080)
+        LLAMACPP_URL = f"http://{llamacpp_host}:{llamacpp_port}/completion"
+        logger.info(f"LLaMA.cpp enabled at {LLAMACPP_URL}")
+    else:
+        logger.info("LLaMA.cpp is disabled in the configuration.")
 
-    if config_data is None:
-        logging.error("No configuration data to apply.")
-        sys.exit(1)
+def get_base_prompt():
+    """Reads the base prompt from a file."""
+    try:
+        with open("prompts/base_prompt.txt", "r") as f:
+            return f.read()
+    except FileNotFoundError:
+        logger.error("Base prompt file not found.")
+        return ""
 
-    # LLaMA.cpp settings
-    llamacpp_config = config_data.get('llamacpp', {})
-    LLAMACPP_URL = llamacpp_config.get("url", "http://localhost:8080/completion")
-    LLAMACPP_ENABLED = llamacpp_config.get("enabled", False)
+def get_evaluation_prompt(prompt_to_evaluate):
+    """Formats the evaluation prompt."""
+    try:
+        with open("prompts/evaluation_prompt.txt", "r") as f:
+            evaluation_prompt_template = f.read()
+        return evaluation_prompt_template.format(prompt=prompt_to_evaluate)
+    except FileNotFoundError:
+        logger.error("Evaluation prompt file not found.")
+        return ""
 
-    # Agentic polling settings
-    agentic_polling_config = config_data.get('agentic_polling', {})
-    POLLING_INTERVAL_SECONDS = agentic_polling_config.get("interval_seconds", 60)
-
-def main(config_path="config.yaml"):
-    """Main function to run the agentic polling loop."""
-    # Load and apply configuration
-    config_data = load_config(config_path)
-    apply_config(config_data)
-
-    logger.info("Starting agentic polling script.")
-    logger.info(f"LLaMA.cpp enabled: {LLAMACPP_ENABLED}")
-    logger.info(f"Polling interval: {POLLING_INTERVAL_SECONDS} seconds")
-    print("Agentic polling script started. Press Ctrl+C to exit.")
-
-    if not LLAMACPP_ENABLED:
-        logger.warning("LLaMA.cpp is not enabled. The script will run but not interact with the LLM.")
-
-    while True:
-        logger.info("--- Starting new agentic cycle ---")
-
-        # 1. Generate a plan
-        plan = generate_plan()
-
-        # 2. Generate a prompt from the plan
-        prompt = generate_prompt(plan)
-
-        # 3. Evaluate the prompt
-        evaluation = evaluate_prompt(prompt)
-
-        # 4. Improve the prompt based on the evaluation
-        improved_prompt = improve_prompt(prompt, evaluation)
-
-        logger.info(f"Original plan: {plan}")
-        logger.info(f"Generated prompt: {prompt}")
-        logger.info(f"Evaluation: {evaluation}")
-        logger.info(f"Improved prompt: {improved_prompt}")
-
-        logger.info(f"--- Agentic cycle complete. Waiting for {POLLING_INTERVAL_SECONDS} seconds. ---")
-        time.sleep(POLLING_INTERVAL_SECONDS)
-
-def generate_plan():
-    """Generates a high-level plan by querying the LLM."""
-    logger.info("Generating a new plan...")
-    prompt = "You are an autonomous agent. Generate a high-level plan to improve the functionality of this software repository."
-    plan = query_llamacpp(prompt)
-    return plan if plan else "Default plan: Analyze repository data."
-
-def generate_prompt(plan):
-    """Generates a specific prompt based on the plan by querying the LLM."""
-    logger.info(f"Generating a prompt for the plan: '{plan}'")
-    prompt = f"Based on the plan '{plan}', create a detailed, actionable prompt for another AI to execute."
-    detailed_prompt = query_llamacpp(prompt, n_predict=256)
-    return detailed_prompt if detailed_prompt else "Default prompt: Write a Python script."
+def get_improvement_prompt(prompt, evaluation):
+    """Formats the improvement prompt."""
+    try:
+        with open("prompts/improvement_prompt.txt", "r") as f:
+            improvement_prompt_template = f.read()
+        return improvement_prompt_template.format(prompt=prompt, evaluation=evaluation)
+    except FileNotFoundError:
+        logger.error("Improvement prompt file not found.")
+        return ""
 
 def evaluate_prompt(prompt):
-    """Evaluates the generated prompt by querying the LLM."""
-    logger.info(f"Evaluating the prompt: '{prompt}'")
-    evaluation_prompt = f"Please evaluate the following AI prompt for clarity, completeness, and effectiveness. Be critical and provide constructive feedback.\n\nPrompt: '{prompt}'"
-    evaluation = query_llamacpp(evaluation_prompt)
-    return evaluation if evaluation else "Default evaluation: The prompt is adequate."
+    """Evaluates a given prompt using a meta-prompt."""
+    evaluation_prompt = get_evaluation_prompt(prompt)
+    if not evaluation_prompt:
+        return "Evaluation failed: Could not generate evaluation prompt."
+
+    logger.info("Evaluating prompt...")
+    evaluation = query_llamacpp(evaluation_prompt, n_predict=128)
+    return evaluation if evaluation else "Evaluation failed: No response from LLaMA.cpp."
 
 def improve_prompt(prompt, evaluation):
-    """Improves the prompt based on the evaluation by querying the LLM."""
-    logger.info(f"Improving the prompt based on the evaluation: '{evaluation}'")
-    improvement_prompt = f"Given the following prompt and its evaluation, rewrite the prompt to be better. Incorporate the feedback from the evaluation.\n\nOriginal Prompt: '{prompt}'\n\nEvaluation: '{evaluation}'\n\nImproved Prompt:"
+    """Improves a given prompt based on evaluation."""
+    improvement_prompt = get_improvement_prompt(prompt, evaluation)
+    if not improvement_prompt:
+        return prompt  # Return original prompt if improvement prompt fails
+
+    logger.info("Improving prompt based on evaluation...")
     improved_prompt = query_llamacpp(improvement_prompt, n_predict=256)
     return improved_prompt if improved_prompt else prompt
+
+
+
+class AgenticPollingJsonFormatter(logging.Formatter):
+    """
+    A custom logging formatter that outputs log records in a structured JSONL
+    format for agentic polling events.
+    """
+    def format(self, record):
+        log_object = {
+            "timestamp": datetime.fromtimestamp(record.created, timezone.utc).isoformat() + "Z",
+            "level": record.levelname,
+            "message": record.getMessage(),
+            "name": record.name,
+            "filename": record.filename,
+            "funcName": record.funcName,
+            "lineno": record.lineno,
+        }
+        if hasattr(record, "event"):
+            log_object["event"] = record.event
+        if hasattr(record, "details"):
+            log_object["details"] = record.details
+        return json.dumps(log_object)
+
+def setup_agentic_logger(log_path='logs/agentic.log', level=logging.INFO):
+    """
+    Sets up a dedicated logger for agentic polling that uses the AgenticPollingJsonFormatter.
+    """
+    logger = logging.getLogger("Agentic-Polling")
+    logger.setLevel(level)
+    logger.propagate = False
+
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    file_handler = logging.FileHandler(log_path, mode='a')
+    file_handler.setFormatter(AgenticPollingJsonFormatter())
+    logger.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler(sys.stderr)
+    console_handler.setLevel(logging.ERROR)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console_handler)
+
+    return logger
 
 def query_llamacpp(prompt_text, n_predict=128):
     """Sends a prompt to the LLaMA.cpp server and gets a completion."""
@@ -108,53 +135,66 @@ def query_llamacpp(prompt_text, n_predict=128):
         logger.warning("LLaMA.cpp is not enabled. Skipping query.")
         return None
 
-    logger.info("Sending prompt to LLaMA.cpp server.")
-
     data = {
         "prompt": prompt_text,
         "n_predict": n_predict
     }
 
-    req = urllib.request.Request(
-        LLAMACPP_URL,
-        data=json.dumps(data).encode('utf-8'),
-        headers={'Content-Type': 'application/json'}
-    )
+    logger.debug(f"Sending request to {LLAMACPP_URL} with data: {json.dumps(data)}")
 
     try:
-        with urllib.request.urlopen(req) as response:
-            if response.status == 200:
-                response_data = json.loads(response.read().decode('utf-8'))
-                completion = response_data.get("content", "").strip()
-                logger.info("Successfully received completion from LLaMA.cpp.")
-                return completion
-            else:
-                logger.error(f"LLaMA.cpp server returned status: {response.status}")
-                return None
-    except Exception as e:
-        logger.error(f"Failed to connect to LLaMA.cpp server: {e}")
+        response = requests.post(LLAMACPP_URL, json=data)
+        response.raise_for_status()  # Raise an exception for HTTP errors (4xx or 5xx)
+
+        response_data = response.json()
+        completion = response_data.get("content", "").strip()
+        logger.debug(f"Received response from LLaMA.cpp: {json.dumps(response_data)}")
+        logger.info("Successfully received completion from LLaMA.cpp.")
+        return completion
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to connect to or get response from LLaMA.cpp server: {e}")
+        return None
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to decode JSON response from LLaMA.cpp server: {e}")
         return None
 
 # Setup logging
-logger = setup_logger(name='Agentic-Polling')
+logger = setup_agentic_logger(log_path='logs/agentic.log')
 
 if __name__ == "__main__":
     try:
-        config_file = "config.yaml"
-        # Check for --config argument
-        if "--config" in sys.argv:
-            try:
-                config_index = sys.argv.index("--config")
-                config_file = sys.argv[config_index + 1]
-            except (ValueError, IndexError):
-                print("Error: --config flag must be followed by a file path.", file=sys.stderr)
-                sys.exit(1)
+        initialize_llamacpp()
+        base_prompt = get_base_prompt()
+        if not base_prompt:
+            sys.exit(1)
 
-        main(config_path=config_file)
+        current_prompt = base_prompt
+        iteration = 1
+        max_iterations = 5  # To prevent infinite loops
+
+        while iteration <= max_iterations:
+            logger.info(f"--- Iteration {iteration} ---")
+            logger.info(f"Current prompt:\n{current_prompt}")
+
+            evaluation = evaluate_prompt(current_prompt)
+            logger.info(f"Evaluation:\n{evaluation}")
+
+            # Simple exit condition: if evaluation contains "good" or "effective"
+            if "good" in evaluation.lower() or "effective" in evaluation.lower():
+                logger.info("Prompt deemed effective. Halting improvement cycle.")
+                break
+
+            current_prompt = improve_prompt(current_prompt, evaluation)
+
+            # Save the improved prompt to a file for inspection
+            with open(f"prompts/improved_prompt_v{iteration}.txt", "w") as f:
+                f.write(current_prompt)
+
+            logger.info(f"Saved improved prompt to prompts/improved_prompt_v{iteration}.txt")
+
+            iteration += 1
+            time.sleep(2) # Pause between iterations
+
     except KeyboardInterrupt:
-        print("\nScript interrupted by user. Exiting.")
+        logger.info("Process interrupted by user.")
         sys.exit(0)
-    except Exception as e:
-        logger.error(f"An unexpected error occurred in main execution: {e}")
-        print(f"An error occurred: {e}", file=sys.stderr)
-        sys.exit(1)
