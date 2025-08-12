@@ -51,12 +51,20 @@ def run_single_topic_evaluation(concept: str, llm_client):
 
     # 5. Evaluate the answer
     print("Evaluating Answer...")
-    score, details = evaluate_answer(answer, evaluation_points)
-    print(f"\nFinal Score: {score:.2f}")
+    score, category_scores, details = evaluate_answer(answer, evaluation_points)
+    print(f"\n--- Evaluation Report ---")
+    print(f"Final Weighted Score: {score:.2f}")
+
+    if category_scores:
+        print("\nScores by Category:")
+        for cat, cat_score in category_scores.items():
+            print(f"  - {cat}: {cat_score:.2f}")
+
     print("Evaluation Details:")
     for d in details:
         status = 'PASS' if d['ok'] else 'FAIL'
-        print(f"  - {status}: {d['point']} ({d['note']})")
+        evidence_str = f" (Evidence: {d['evidence']})" if d.get('evidence') is not None else ""
+        print(f"  - {status}: {d['point']} ({d['note']}{evidence_str})")
 
 
 def run_example_set(example: dict):

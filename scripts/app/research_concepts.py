@@ -3,47 +3,11 @@ from pathlib import Path
 import sys
 
 # Add project root to the Python path to allow for absolute imports
-sys.path.insert(0, str(
+project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(project_root))
+from scripts.app.research_utils import connect_to_llm
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-
-# Configuration for the LLaMA.cpp server
-LLAMACPP_URL = "http://127.0.0.1:8080/completion"
-LLAMACPP_ENABLED = True # Enable for this script
-
-def generate_concepts_with_llamacpp(prompt_text):
-    """Sends a prompt to a LLaMA.cpp server to generate text."""
-    if not LLAMACPP_ENABLED:
-        logging.warning("LLaMA.cpp is not enabled. Skipping concept generation.")
-        return None
-
-    logging.info("Sending prompt to LLaMA.cpp server.")
-
-    # Prepare the payload for the LLaMA.cpp server
-    data = {
-        "prompt": prompt_text,
-        "n_predict": 512  # Allow for a longer response for concepts
-    }
-
-    req = urllib.request.Request(
-        LLAMACPP_URL,
-        data=json.dumps(data).encode('utf-8'),
-        headers={'Content-Type': 'application/json'}
-    )
-
-    try:
-        with urllib.request.urlopen(req) as response:
-            if response.status == 200:
-                response_data = json.loads(response.read().decode('utf-8'))
-                content = response_data.get("content", "").strip()
-                logging.info("Successfully received response from LLaMA.cpp.")
-                return content
-            else:
-                logging.error(f"LLaMA.cpp server returned status: {response.status}")
-                return None
-    except Exception as e:
-        logging.error(f"Failed to connect to LLaMA.cpp server: {e}")
-        return None
 
 def main():
     """
@@ -69,8 +33,11 @@ def main():
         "\n\nExample format:\n1. Core Concepts\n  1.1. Knowledge Node\n  1.2. Semantic Link\n2. Data Ingestion\n  2.1. Web Scraper\n\nOntology:"
     )
 
+    llm_client = connect_to_llm()
+
     print("Generating ontology concepts using the LLM...")
-    concepts_text = generate_concepts_with_llamacpp(prompt)
+    # Use a longer prediction length for this creative task
+    concepts_text = llm_client.get_completion(prompt, n_predict=1024)
 
     if concepts_text:
         try:

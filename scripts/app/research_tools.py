@@ -3,65 +3,9 @@ This module provides tools for creating research topics and evaluation points
 for the research integration framework. It includes a placeholder for connecting
 to a Large Language Model (LLM).
 """
-import json
 import logging
-import sys
-import urllib.request
 from typing import Any, Dict, List
-
-# --- Configuration for LLaMA.cpp server ---
-LLAMACPP_URL = "http://127.0.0.1:8080/completion"
-LLAMACPP_ENABLED = True # Master switch
-
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-
-class LLMClient:
-    """A client to get answers from a local LLaMA.cpp server."""
-    def get_answer(self, topic: str) -> str:
-        """Fetches an answer for a given research topic from the LLM."""
-        if not LLAMACPP_ENABLED:
-            logging.warning("LLaMA.cpp is not enabled. Returning placeholder answer.")
-            return f"LLM is disabled. This is a placeholder answer about '{topic}'."
-
-        logging.info(f"Sending prompt to LLaMA.cpp for topic: '{topic[:40]}...'")
-
-        # Prepare the payload for the LLaMA.cpp server
-        data = {
-            "prompt": topic,
-            "n_predict": 512, # Allow for a reasonably long answer
-            "temperature": 0.7,
-        }
-
-        req = urllib.request.Request(
-            LLAMACPP_URL,
-            data=json.dumps(data).encode('utf-8'),
-            headers={'Content-Type': 'application/json'}
-        )
-
-        try:
-            with urllib.request.urlopen(req) as response:
-                if response.status == 200:
-                    response_data = json.loads(response.read().decode('utf-8'))
-                    content = response_data.get("content", "").strip()
-                    logging.info("Successfully received response from LLaMA.cpp.")
-                    return content
-                else:
-                    logging.error(f"LLaMA.cpp server returned status: {response.status}")
-                    return f"Error: Failed to get response from LLM (status: {response.status})."
-        except Exception as e:
-            logging.error(f"Failed to connect to LLaMA.cpp server at {LLAMACPP_URL}: {e}")
-            return f"Error: Could not connect to LLM: {e}"
-
-def connect_to_llm() -> LLMClient:
-    """
-    Establishes a connection to the LLM.
-
-    Returns:
-        A client object for interacting with the LLM.
-    """
-    logging.info("Connecting to LLM...")
-    return LLMClient()
+from .research_utils import connect_to_llm
 
 # --- Research Topic and Evaluation Point Creation ---
 
@@ -100,12 +44,18 @@ def create_evaluation_points(topic: str) -> List[Dict[str, Any]]:
 
     points = [
         {"text": f"The answer clearly defines {concept_name}'s purpose.",
+         "category": "Clarity",
+         "weight": 1.5,
          "type": "keyword",
          "params": {"keywords": [concept_name, "purpose", "language"], "min_count": 3}},
         {"text": "The answer provides at least two distinct code examples.",
+         "category": "Completeness",
+         "weight": 1.0,
          "type": "regex",
          "params": {"pattern": r"```(.*?)```.*?```(.*?)```"}},
         {"text": "The answer is at least 50 words long.",
+         "category": "Completeness",
+         "weight": 0.5,
          "type": "length",
          "params": {"min": 50}},
     ]
@@ -115,7 +65,7 @@ def create_evaluation_points(topic: str) -> List[Dict[str, Any]]:
 # --- Main execution block for demonstration ---
 
 if __name__ == "__main__":
-    # 1. Connect to the LLM (mock)
+    # 1. Connect to the LLM
     llm_client = connect_to_llm()
 
     # 2. Define a concept and create a research topic
@@ -130,9 +80,9 @@ if __name__ == "__main__":
         print(f"  - {point['text']} (type: {point['type']})")
     print("\n")
 
-    # 4. Get a (mock) answer from the LLM
+    # 4. Get an answer from the LLM
     answer = llm_client.get_answer(topic)
-    print(f"Mock LLM Answer:\n---\n{answer}\n---")
+    print(f"LLM Answer:\n---\n{answer}\n---")
 
     # In a real workflow, you would now use the `evaluate_answer` function
     # from `scoring.py` to score this answer against the evaluation points.
