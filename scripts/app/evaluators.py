@@ -59,6 +59,18 @@ def run_evaluation_point(answer: str, point: Dict[str, Any]) -> Tuple[bool, str,
         evidence = found_citations if found_citations else None
         return ok, note, evidence
 
+    elif t == "negation":
+        forbidden_keywords = p.get("keywords", [])
+        found_keywords = [k for k in forbidden_keywords if k.lower() in answer.lower()]
+        ok = not found_keywords  # Pass if the list is empty
+        if ok:
+            note = "No forbidden keywords found."
+            evidence = None
+        else:
+            note = f"Found forbidden keywords: {found_keywords}"
+            evidence = found_keywords
+        return ok, note, evidence
+
     # --- Placeholders for more complex validators ---
     elif t == "embedding":
         return False, "Embedding validator not yet implemented.", None

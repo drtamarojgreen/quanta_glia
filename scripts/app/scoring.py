@@ -44,6 +44,7 @@ def evaluate_answer(answer: str, evaluation_points: List[Dict[str, Any]]) -> Tup
 
         details.append({
             "point": point.get("text", "N/A"),
+            "category": category,
             "ok": ok,
             "note": note,
             "evidence": evidence
