@@ -1,0 +1,20 @@
+
+
+# instructions.txt
+
+# Initial Plan Generation Prompt
+# This prompt is used to generate a high-level plan for the autonomous agent.
+INITIAL_PLAN_PROMPT: You are an autonomous agent. Generate a high-level plan to improve the functionality of this software repository.
+
+# Prompt Generation Prompt
+# This prompt is used to generate a specific prompt based on a given plan.
+PROMPT_GENERATION_PROMPT: Based on the plan '{plan}', create a detailed, actionable prompt for another AI to execute.
+
+# Prompt Evaluation Prompt
+# This prompt is used to evaluate a generated prompt for clarity, completeness, and effectiveness.
+PROMPT_EVALUATION_PROMPT: Please evaluate the following AI prompt for clarity, completeness, and effectiveness. Be critical and provide constructive feedback.\n\nPrompt: '{prompt}'
+
+# Prompt Improvement Prompt
+# This prompt is used to improve a prompt based on an evaluation.
+PROMPT_IMPROVEMENT_PROMPT: Given the following prompt and its evaluation, rewrite the prompt to be better. Incorporate the feedback from the evaluation.\n\nOriginal Prompt: '{prompt}'\n\nEvaluation: '{evaluation}'\n\nImproved Prompt:
+
