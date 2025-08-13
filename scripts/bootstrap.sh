@@ -46,8 +46,13 @@ REPOS=(
     "quanta_cerebra"
 )
 
+# --- Configuration ---
+# ... (rest of the configuration remains the same)
+
+# Directory to clone sibling repositories into
+WORKSPACE_DIR="workspace"
+
 # Log file for the script's output
-# Use an absolute path to ensure we can write to it after changing directories
 LOG_FILE="$(pwd)/bootstrap_setup.log"
 
 # --- Script Logic ---
@@ -58,9 +63,10 @@ true > "$LOG_FILE"
 echo "🚀 Starting QuantaGlia workspace bootstrap..." | tee -a "$LOG_FILE"
 echo "Full log will be saved to: $LOG_FILE" | tee -a "$LOG_FILE"
 
-# Navigate to the parent directory (e.g., `workspace/`)
-echo "Navigating from '$(pwd)/' to parent directory..." | tee -a "$LOG_FILE"
-cd ..
+# Create and navigate to the workspace directory
+echo "Creating workspace directory at: '$(pwd)/$WORKSPACE_DIR/'" | tee -a "$LOG_FILE"
+mkdir -p "$WORKSPACE_DIR"
+cd "$WORKSPACE_DIR"
 echo "Now in '$(pwd)/'. Preparing to clone sibling repositories." | tee -a "$LOG_FILE"
 
 echo "Cloning required repositories from GitHub..." | tee -a "$LOG_FILE"
