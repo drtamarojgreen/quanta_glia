@@ -39,6 +39,8 @@ import urllib.request
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scripts.utils import setup_logger, load_config, clone_repo, prune_cache
 from scripts.audit import log_audit_event
+from scripts.integration.quanta_tissu_connector import QuantaTissuConnector
+import scripts.config as defaultConfig
 
 import uuid
 
@@ -134,7 +136,7 @@ def summarize_with_llamacpp(text_content):
         logging.error(f"Failed to connect to LLaMA.cpp server: {e}")
         return None
 
-def main(repo_urls, config_path="config.yaml", summarize=False):
+def main(repo_urls, config_path="config.yaml", summarize=False, use_tissudb=False, tissudb_host=None, tissudb_port=None):
     """Main logic for cloning, extracting, and storing information."""
     # Load and apply configuration
     config_data = load_config(config_path)
@@ -146,6 +148,11 @@ def main(repo_urls, config_path="config.yaml", summarize=False):
         LLAMACPP_ENABLED = True
         logging.info("Summarization enabled by command-line flag.")
 
+    # Determine TissuDB configuration
+    db_enabled = use_tissudb or defaultConfig.TISSDB_ENABLED
+    db_host = tissudb_host or defaultConfig.TISSDB_HOST
+    db_port = tissudb_port or defaultConfig.TISSDB_PORT
+
     # Ensure directories exist (needs to be done after config is loaded)
     KNOWLEDGE_BASE.mkdir(exist_ok=True)
     REPO_CACHE.mkdir(exist_ok=True)
@@ -153,51 +160,99 @@ def main(repo_urls, config_path="config.yaml", summarize=False):
     if len(repo_urls) > MAX_REPOS:
         logging.warning("Too many repositories. Truncating list.")
         repo_urls = repo_urls[:MAX_REPOS]
-    for url in repo_urls:
-        path = clone_repo(url, REPO_CACHE)
-        if path:
-            extracted = extract_key_info(path)
-            if extracted:
-                store_to_knowledge_base(path.name, extracted)
-                summary = summarize_with_llamacpp(extracted)
-                if summary:
-                    summary_path = KNOWLEDGE_BASE / path.name / "summary.txt"
-                    with open(summary_path, 'w', encoding='utf-8') as f:
-                        f.write(summary)
-                    logging.info(f"Stored summary for {path.name} to {summary_path}")
 
-    prune_cache(REPO_CACHE)
+    connector = None
+    if db_enabled:
+        logging.info(f"TissuDB integration enabled. Connecting to {db_host}:{db_port}")
+        connector = QuantaTissuConnector(db_host, db_port)
+        connector.connect()
+
+    try:
+        for url in repo_urls:
+            path = clone_repo(url, REPO_CACHE)
+            if path:
+                extracted = extract_key_info(path)
+                if extracted:
+                    # Existing functionality: store to knowledge base
+                    store_to_knowledge_base(path.name, extracted)
+
+                    # New functionality: store to TissuDB if enabled
+                    if connector:
+                        logging.info(f"Storing knowledge for {path.name} in TissuDB.")
+                        knowledge_data = {
+                            'repo_name': path.name,
+                            'files': extracted,
+                            'timestamp': datetime.utcnow().isoformat()
+                        }
+                        connector.store_knowledge(knowledge_data)
+
+                    summary = summarize_with_llamacpp(extracted)
+                    if summary:
+                        summary_path = KNOWLEDGE_BASE / path.name / "summary.txt"
+                        with open(summary_path, 'w', encoding='utf-8') as f:
+                            f.write(summary)
+                        logging.info(f"Stored summary for {path.name} to {summary_path}")
+    finally:
+        if connector:
+            connector.disconnect()
+        prune_cache(REPO_CACHE)
+
 
 if __name__ == "__main__":
     try:
         args = sys.argv[1:]
+        repo_urls = []
         config_file = "config.yaml"
-
-        # Check for --config argument
-        if "--config" in args:
-            try:
-                config_index = args.index("--config")
-                config_file = args[config_index + 1]
-                # Remove the --config flag and its value from the list of args
-                args.pop(config_index)
-                args.pop(config_index)
-            except (ValueError, IndexError):
-                print("Error: --config flag must be followed by a file path.", file=sys.stderr)
-                sys.exit(1)
-
         summarize_flag = False
-        if "--summarize" in args:
-            summarize_flag = True
-            args.remove("--summarize")
+        use_tissudb_flag = False
+        tissudb_host_val = None
+        tissudb_port_val = None
 
-        repo_urls = args
+        i = 0
+        while i < len(args):
+            arg = args[i]
+            if arg == "--config":
+                if i + 1 < len(args):
+                    config_file = args[i + 1]
+                    i += 1
+                else:
+                    print("Error: --config flag must be followed by a file path.", file=sys.stderr)
+                    sys.exit(1)
+            elif arg == "--summarize":
+                summarize_flag = True
+            elif arg == "--use-tissdb":
+                use_tissudb_flag = True
+            elif arg == "--tissdb-host":
+                if i + 1 < len(args):
+                    tissudb_host_val = args[i + 1]
+                    i += 1
+                else:
+                    print("Error: --tissdb-host flag must be followed by a value.", file=sys.stderr)
+                    sys.exit(1)
+            elif arg == "--tissdb-port":
+                if i + 1 < len(args):
+                    tissudb_port_val = args[i + 1]
+                    i += 1
+                else:
+                    print("Error: --tissdb-port flag must be followed by a value.", file=sys.stderr)
+                    sys.exit(1)
+            else:
+                repo_urls.append(arg)
+            i += 1
+
         if not repo_urls:
-            # If no repo URLs are provided, run with the default for testing.
             logging.info("No repository URLs provided. Running with default test repository.")
             print("No repository URLs provided. Running with default test repository.")
             repo_urls = ["../quanta_ethos"]
 
-        main(repo_urls, config_path=config_file, summarize=summarize_flag)
+        main(
+            repo_urls,
+            config_path=config_file,
+            summarize=summarize_flag,
+            use_tissudb=use_tissudb_flag,
+            tissudb_host=tissudb_host_val,
+            tissudb_port=tissudb_port_val
+        )
 
     except Exception as e:
         logging.error(f"An unexpected error occurred in main execution: {e}")
