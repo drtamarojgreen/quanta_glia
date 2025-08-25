@@ -1,8 +1,6 @@
 # Use an official Python runtime as a parent image
 FROM python:3.10-slim
 
-# Set the maintainer label
-LABEL maintainer="Jules"
 
 # Install git, which is required for cloning repositories
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
@@ -16,10 +14,12 @@ COPY . .
 # Add the app directory to the python path
 ENV PYTHONPATH=/app
 
+# Use a build-time argument for the GitHub user, with a default value
+ARG GH_USER="drtamarojgreen"
+
 # Create the workspace directory and clone all required sibling repositories
 # as defined in the project's bootstrap.sh script.
-RUN GH_USER="drtamarojgreen" && \
-    REPOS="prismquanta quanta_dorsa quanta_ethos quanta_porto quanta_sensa quanta_synapse quanta_tissu quanta_memora quanta_serene quanta_cogno quanta_retina quanta_pulsa quanta_lista quanta_alarma quanta_cerebra" && \
+RUN REPOS="prismquanta quanta_dorsa quanta_ethos quanta_porto quanta_sensa quanta_synapse quanta_tissu quanta_memora quanta_serene quanta_cogno quanta_retina quanta_pulsa quanta_lista quanta_alarma quanta_cerebra" && \
     mkdir -p workspace && \
     cd workspace && \
     for repo in $REPOS; do \
