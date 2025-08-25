@@ -50,14 +50,13 @@ logger = setup_logger(name='QuantaGlia-Harvester')
 # Global config variables
 KNOWLEDGE_BASE = None
 REPO_CACHE = None
-TARGET_TOPICS = None
 MAX_REPOS = None
 LLAMACPP_URL = None
 LLAMACPP_ENABLED = False
 
 def apply_config(config_data):
     """Applies the loaded configuration to global variables."""
-    global KNOWLEDGE_BASE, REPO_CACHE, TARGET_TOPICS, MAX_REPOS, LLAMACPP_URL, LLAMACPP_ENABLED
+    global KNOWLEDGE_BASE, REPO_CACHE, MAX_REPOS, LLAMACPP_URL, LLAMACPP_ENABLED
 
     if config_data is None:
         logging.error("No configuration data to apply.")
@@ -66,7 +65,6 @@ def apply_config(config_data):
     main_config = config_data.get('main', {})
     KNOWLEDGE_BASE = Path(main_config.get("knowledge_base", "./knowledge_base"))
     REPO_CACHE = Path(main_config.get("repo_cache", "./repo_cache"))
-    TARGET_TOPICS = main_config.get("target_topics", ["README", "LICENSE", "CONTRIBUTING", "ethics", "usage"])
     MAX_REPOS = main_config.get("max_repos", 10)
 
     llamacpp_config = config_data.get('llamacpp', {})
@@ -76,77 +74,122 @@ def apply_config(config_data):
 # The KNOWLEDGE_BASE and REPO_CACHE directories are created inside main()
 # after the configuration is loaded.
 
-def extract_key_info(repo_path):
+def parse_markdown_phases(file_path):
+    """
+    A simple parser to extract phase-based checklist items from a markdown file.
+    Looks for a header containing 'Phases' and extracts list items below it.
+    """
+    phases = {}
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+    except Exception:
+        return {}
+
+    in_phases_section = False
+    current_phase_header = None
+    for line in lines:
+        stripped_line = line.strip()
+        # Check for a header that might start a phase section
+        if stripped_line.startswith('##') and 'Phases' in stripped_line:
+            in_phases_section = True
+            continue
+
+        # Check for a header that might be a specific phase
+        if in_phases_section and stripped_line.startswith('###'):
+            current_phase_header = stripped_line.replace('#', '').strip()
+            phases[current_phase_header] = []
+
+        # If we are in a phase section and have a phase header, look for list items
+        if in_phases_section and current_phase_header and stripped_line.startswith('- '):
+            phases[current_phase_header].append(stripped_line.lstrip('- ').strip())
+
+    return phases
+
+def parse_markdown_enhancements(file_path):
+    """
+    A simple parser to extract proposed enhancements from a markdown file.
+    Looks for headers for modules and extracts checklist items.
+    """
+    enhancements = {}
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+    except Exception:
+        return {}
+
+    current_module = None
+    for line in lines:
+        stripped_line = line.strip()
+        if stripped_line.startswith('##') and 'Proposed Enhancements for' in stripped_line:
+            current_module = stripped_line.replace('##', '').replace('Proposed Enhancements for', '').strip()
+            enhancements[current_module] = []
+
+        if current_module and stripped_line.startswith('- ['):
+            enhancements[current_module].append(stripped_line.lstrip('- ').strip())
+
+    return enhancements
+
+
+def analyze_repository(repo_path):
+    """
+    Analyzes a repository's structure, planning docs, and enhancement docs.
+    """
     repo_name = repo_path.name
-    extracted = {}
-    for root, _, files in os.walk(repo_path):
-        for file in files:
-            if any(topic.lower() in file.lower() for topic in TARGET_TOPICS):
-                full_path = Path(root) / file
-                try:
-                    with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                    extracted[file] = content
-                    logging.info(f"Extracted {file} from {repo_name}")
-                except Exception as e:
-                    logging.warning(f"Error reading {file} in {repo_name}: {e}")
-    return extracted
-
-def store_to_knowledge_base(repo_name, extracted_data):
-    kb_dir = KNOWLEDGE_BASE / repo_name
-    kb_dir.mkdir(parents=True, exist_ok=True)
-    for fname, content in extracted_data.items():
-        with open(kb_dir / fname, 'w', encoding='utf-8') as f:
-            f.write(content)
-    logging.info(f"Stored extracted data from {repo_name} to knowledge base.")
-
-def summarize_with_llamacpp(text_content):
-    """Sends text to a LLaMA.cpp server for summarization."""
-    if not LLAMACPP_ENABLED:
-        return None
-
-    logging.info("Sending text to LLaMA.cpp for summarization.")
-
-    # Combine all extracted text into a single block
-    full_text = "\n\n".join(text_content.values())
-
-    # Prepare the payload for the LLaMA.cpp server
-    data = {
-        "prompt": f"Please summarize the following text from a software repository:\n\n{full_text}\n\nSummary:",
-        "n_predict": 128  # Limit the summary length
+    knowledge = {
+        'repo_name': repo_name,
+        'key_components': [],
+        'planning_phases': {},
+        'enhancement_phases': {}
     }
 
-    req = urllib.request.Request(
-        LLAMACPP_URL,
-        data=json.dumps(data).encode('utf-8'),
-        headers={'Content-Type': 'application/json'}
-    )
+    logging.info(f"Analyzing repository structure for {repo_name}")
 
+    # 1. Capture Key Components (file structure)
+    for root, dirs, files in os.walk(repo_path):
+        # Create a relative path from the repo_path
+        relative_root = Path(root).relative_to(repo_path)
+        # Sort for consistent ordering
+        dirs.sort()
+        files.sort()
+        for d in dirs:
+            knowledge['key_components'].append(str(relative_root / d))
+        for f in files:
+            knowledge['key_components'].append(str(relative_root / f))
+
+    logging.info(f"Found {len(knowledge['key_components'])} files and directories.")
+
+    # 2. Find and parse planning and enhancement docs
+    docs_path = repo_path / 'docs'
+    if docs_path.is_dir():
+        for doc_file in sorted(docs_path.iterdir()):
+            if 'plan' in doc_file.name.lower():
+                logging.info(f"Parsing planning document: {doc_file.name}")
+                knowledge['planning_phases'].update(parse_markdown_phases(doc_file))
+            if 'enhancement' in doc_file.name.lower():
+                logging.info(f"Parsing enhancement document: {doc_file.name}")
+                knowledge['enhancement_phases'].update(parse_markdown_enhancements(doc_file))
+
+    return knowledge
+
+def store_to_knowledge_base(repo_name, knowledge_data):
+    """Stores the analyzed repository knowledge as a single JSON file."""
+    kb_dir = KNOWLEDGE_BASE / repo_name
+    kb_dir.mkdir(parents=True, exist_ok=True)
+
+    output_path = kb_dir / 'repository_analysis.json'
     try:
-        with urllib.request.urlopen(req) as response:
-            if response.status == 200:
-                response_data = json.loads(response.read().decode('utf-8'))
-                summary = response_data.get("content", "").strip()
-                logging.info("Successfully received summary from LLaMA.cpp.")
-                return summary
-            else:
-                logging.error(f"LLaMA.cpp server returned status: {response.status}")
-                return None
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(knowledge_data, f, indent=4)
+        logging.info(f"Stored repository analysis for {repo_name} to {output_path}")
     except Exception as e:
-        logging.error(f"Failed to connect to LLaMA.cpp server: {e}")
-        return None
+        logging.error(f"Failed to write knowledge base for {repo_name}: {e}")
 
 def main(repo_urls, config_path="config.yaml", summarize=False, use_tissudb=False, tissudb_host=None, tissudb_port=None):
-    """Main logic for cloning, extracting, and storing information."""
+    """Main logic for cloning, analyzing, and storing information."""
     # Load and apply configuration
     config_data = load_config(config_path)
     apply_config(config_data)
-
-    # Command-line flag overrides config
-    if summarize:
-        global LLAMACPP_ENABLED
-        LLAMACPP_ENABLED = True
-        logging.info("Summarization enabled by command-line flag.")
 
     # Determine TissuDB configuration
     db_enabled = use_tissudb or defaultConfig.TISSDB_ENABLED
@@ -171,27 +214,18 @@ def main(repo_urls, config_path="config.yaml", summarize=False, use_tissudb=Fals
         for url in repo_urls:
             path = clone_repo(url, REPO_CACHE)
             if path:
-                extracted = extract_key_info(path)
-                if extracted:
-                    # Existing functionality: store to knowledge base
-                    store_to_knowledge_base(path.name, extracted)
+                analysis_data = analyze_repository(path)
+                if analysis_data:
+                    # Store analysis to knowledge base
+                    store_to_knowledge_base(path.name, analysis_data)
 
-                    # New functionality: store to TissuDB if enabled
+                    # Store to TissuDB if enabled
                     if connector:
                         logging.info(f"Storing knowledge for {path.name} in TissuDB.")
-                        knowledge_data = {
-                            'repo_name': path.name,
-                            'files': extracted,
-                            'timestamp': datetime.utcnow().isoformat()
-                        }
-                        connector.store_knowledge(knowledge_data)
-
-                    summary = summarize_with_llamacpp(extracted)
-                    if summary:
-                        summary_path = KNOWLEDGE_BASE / path.name / "summary.txt"
-                        with open(summary_path, 'w', encoding='utf-8') as f:
-                            f.write(summary)
-                        logging.info(f"Stored summary for {path.name} to {summary_path}")
+                        # Adapt data for TissuDB if necessary
+                        tissu_data = analysis_data.copy()
+                        tissu_data['timestamp'] = datetime.utcnow().isoformat()
+                        connector.store_knowledge(tissu_data)
     finally:
         if connector:
             connector.disconnect()
