@@ -101,20 +101,57 @@ def clone_repo(repo_url, cache_dir):
         logging.error(f"Failed to clone repo: {repo_url}. Error: {e.stderr}")
         return None
 
-def extract_text_from_repo(repo_path, target_topics):
+def extract_text_from_repo(repo_path, target_topics, search_paths=["/"], max_depth=5, max_lines_per_file=100):
     """Extracts text content from files matching target topics."""
     extracted_content = {}
-    for root, _, files in os.walk(repo_path):
-        for file in files:
-            if any(topic.lower() in file.lower() for topic in target_topics):
-                full_path = Path(root) / file
-                try:
-                    with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                    extracted_content[file] = content
-                    logging.info(f"Extracted '{file}' from {repo_path.name}")
-                except Exception as e:
-                    logging.warning(f"Error reading {file} in {repo_path.name}: {e}")
+
+    # Normalize search_paths to be relative to repo_path
+    actual_search_paths = []
+    for p in search_paths:
+        if p == "/":
+            actual_search_paths.append(repo_path)
+        else:
+            # Ensure p is treated as a relative path from repo_path
+            rel_p = p.lstrip("/")
+            actual_search_paths.append(repo_path / rel_p)
+
+    for start_path in actual_search_paths:
+        if not start_path.exists():
+            logging.warning(f"Search path {start_path} does not exist in {repo_path.name}")
+            continue
+
+        for root, dirs, files in os.walk(start_path):
+            # Calculate current depth relative to repo_path
+            rel_path = os.path.relpath(root, repo_path)
+            if rel_path == ".":
+                depth = 0
+            else:
+                depth = len(rel_path.split(os.sep))
+
+            if depth >= max_depth:
+                # Stop descending further
+                dirs[:] = []
+                # But we still process the files in the current directory if it's EXACTLY max_depth?
+                # Actually depth > max_depth should be the limit if we want to include files AT max_depth.
+                # Let's say max_depth=0 means only root.
+                if depth > max_depth:
+                    continue
+
+            for file in files:
+                if any(topic.lower() in file.lower() for topic in target_topics):
+                    full_path = Path(root) / file
+                    try:
+                        with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                            lines = []
+                            for i, line in enumerate(f):
+                                if i >= max_lines_per_file:
+                                    break
+                                lines.append(line)
+                            content = "".join(lines)
+                        extracted_content[file] = content
+                        logging.info(f"Extracted '{file}' (up to {max_lines_per_file} lines) from {repo_path.name}")
+                    except Exception as e:
+                        logging.warning(f"Error reading {file} in {repo_path.name}: {e}")
     return extracted_content
 
 def process_with_llamacpp(text_content, llamacpp_url):
@@ -166,6 +203,15 @@ def main():
 
     repo_cache_dir = Path(main_config.get("repo_cache", "./repo_cache"))
     target_topics = main_config.get("target_topics", ["README"])
+
+    # New configurations
+    log_level_str = main_config.get("log_level", "INFO").upper()
+    logging.getLogger().setLevel(getattr(logging, log_level_str, logging.INFO))
+
+    search_paths = main_config.get("search_paths", ["/"])
+    max_depth = int(main_config.get("max_depth", 5))
+    max_lines_per_file = int(main_config.get("max_lines_per_file", 100))
+
     llamacpp_url = llamacpp_config.get("url")
     llamacpp_enabled = llamacpp_config.get("enabled", False)
 
@@ -192,7 +238,13 @@ def main():
         if not repo_path:
             continue
 
-        extracted_text = extract_text_from_repo(repo_path, target_topics)
+        extracted_text = extract_text_from_repo(
+            repo_path,
+            target_topics,
+            search_paths=search_paths,
+            max_depth=max_depth,
+            max_lines_per_file=max_lines_per_file
+        )
         if not extracted_text:
             logging.warning(f"No target files found in {url}. Skipping.")
             continue

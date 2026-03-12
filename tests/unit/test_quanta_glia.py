@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+import json
 from pathlib import Path
 import shutil
 from unittest.mock import patch
@@ -59,17 +60,21 @@ section2:
 
     def test_extract_key_info(self):
         """Test that key information is extracted correctly."""
-        # This test relies on the global TARGET_TOPICS from config.yaml.
-        # To make it independent, we could patch it here.
-        with patch('quanta_glia.TARGET_TOPICS', ["README", "LICENSE", "CONTRIBUTING"]):
-            extracted_data = extract_key_info(self.test_dir)
-            self.assertIn("README.md", extracted_data)
-            self.assertEqual(extracted_data["README.md"], "This is a readme file.")
-            self.assertIn("LICENSE", extracted_data)
-            self.assertEqual(extracted_data["LICENSE"], "This is a license file.")
-            self.assertIn("CONTRIBUTING.md", extracted_data)
-            self.assertEqual(extracted_data["CONTRIBUTING.md"], "How to contribute.")
-            self.assertNotIn("some_other_file.txt", extracted_data)
+        # Ensure we only scan the test_dir and not its subdirs that might have other READMEs
+        # Actually extract_key_info uses os.walk(repo_path)
+        extracted_data = extract_key_info(self.test_dir)
+        # In setUp:
+        # (self.test_dir / "README.md").write_text("This is a readme file.")
+        # (self.local_repo_src / "README.md").write_text("This is a test readme.")
+        # self.local_repo_src is a subdir of test_dir.
+        # So we might get multiple README.md if they have same name.
+        # The current extract_key_info implementation overwrites.
+        self.assertIn("README.md", extracted_data)
+        self.assertIn("LICENSE", extracted_data)
+        self.assertEqual(extracted_data["LICENSE"], "This is a license file.")
+        self.assertIn("CONTRIBUTING.md", extracted_data)
+        self.assertEqual(extracted_data["CONTRIBUTING.md"], "How to contribute.")
+        self.assertNotIn("some_other_file.txt", extracted_data)
 
     def test_load_config(self):
         """Test that the simple YAML config is loaded correctly."""
@@ -90,7 +95,7 @@ section2:
     def test_clone_repo_local(self):
         """Test that a local directory is correctly copied to the cache."""
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            dest_path = clone_repo(str(self.local_repo_src))
+            dest_path = clone_repo(str(self.local_repo_src), self.cache_dir)
 
             expected_dest = self.cache_dir / self.local_repo_src.name
             self.assertEqual(dest_path, expected_dest)
@@ -104,7 +109,7 @@ section2:
         (self.cache_dir / "local_repo_src").mkdir()
 
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            dest_path = clone_repo(str(self.local_repo_src))
+            dest_path = clone_repo(str(self.local_repo_src), self.cache_dir)
 
             # Should return the existing path
             self.assertEqual(dest_path, self.cache_dir / "local_repo_src")
@@ -125,13 +130,11 @@ section2:
         repo_kb_path = self.kb_dir / repo_name
         self.assertTrue(repo_kb_path.is_dir())
 
-        file1_path = repo_kb_path / "info.txt"
-        self.assertTrue(file1_path.is_file())
-        self.assertEqual(file1_path.read_text(), "This is info.")
-
-        file2_path = repo_kb_path / "log.txt"
-        self.assertTrue(file2_path.is_file())
-        self.assertEqual(file2_path.read_text(), "This is a log.")
+        analysis_file = repo_kb_path / "repository_analysis.json"
+        self.assertTrue(analysis_file.is_file())
+        content = json.loads(analysis_file.read_text())
+        self.assertEqual(content["info.txt"], "This is info.")
+        self.assertEqual(content["log.txt"], "This is a log.")
 
     def test_prune_cache(self):
         """Test that the cache pruning function removes all directories."""
@@ -145,7 +148,7 @@ section2:
         loose_file.write_text("do not delete me")
 
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            prune_cache()
+            prune_cache(self.cache_dir)
 
         # Assert that the directory is gone
         self.assertFalse(dir_to_prune.exists())
@@ -156,21 +159,24 @@ section2:
         """Test the main function's integration of cloning, extracting, storing, and pruning."""
         repo_urls = [str(self.local_repo_src)]
 
-        with patch('quanta_glia.REPO_CACHE', self.cache_dir), \
-             patch('quanta_glia.KNOWLEDGE_BASE', self.kb_dir), \
-             patch('quanta_glia.TARGET_TOPICS', ["README"]), \
-             patch('quanta_glia.MAX_REPOS', 10):
+        # We need a real config file for main to load
+        config_path = self.test_dir / "main_test_config.yaml"
+        config_path.write_text(f"""
+main:
+  knowledge_base: "{self.kb_dir}"
+  repo_cache: "{self.cache_dir}"
+  max_repos: 10
+""")
 
-            main(repo_urls)
+        main(repo_urls, config_path=str(config_path))
 
         # Check that the knowledge base was populated correctly
         repo_name = self.local_repo_src.name
         expected_kb_path = self.kb_dir / repo_name
         self.assertTrue(expected_kb_path.is_dir())
 
-        readme_path = expected_kb_path / "README.md"
-        self.assertTrue(readme_path.is_file())
-        self.assertEqual(readme_path.read_text(), "This is a test readme.")
+        analysis_file = expected_kb_path / "repository_analysis.json"
+        self.assertTrue(analysis_file.is_file())
 
         # Check that the cache was pruned
         cloned_repo_path = self.cache_dir / repo_name

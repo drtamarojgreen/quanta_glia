@@ -101,6 +101,35 @@ def get_ethical_verdict(repo_name: str, decision: DecisionType) -> (Literal["ALL
             return "DENY", "Ethical governor blocked action on a protected repository."
     return "ALLOW", "Action approved by ethical governor."
 
+def build_dependency_map(knowledge_base: Path) -> dict:
+    """
+    Scans repositories in the knowledge base to identify potential dependencies.
+    It looks for repository names within common dependency files.
+    """
+    all_repos = [d.name for d in knowledge_base.iterdir() if d.is_dir()]
+    dependency_map = {repo: [] for repo in all_repos}
+
+    dependency_files = ["requirements.txt", "package.json", "go.mod", "pom.xml"]
+
+    for repo_dir in knowledge_base.iterdir():
+        if not repo_dir.is_dir():
+            continue
+
+        for dep_file in dependency_files:
+            file_path = repo_dir / dep_file
+            if file_path.exists():
+                try:
+                    with open(file_path, "r", errors="ignore") as f:
+                        content = f.read()
+                        for other_repo in all_repos:
+                            if other_repo == repo_dir.name:
+                                continue
+                            if other_repo in content:
+                                dependency_map[other_repo].append(repo_dir.name)
+                except Exception:
+                    pass
+    return dependency_map
+
 def run_pruning(args):
     """Contains the core logic for pruning."""
     logger = setup_pruner_logger()
@@ -144,6 +173,11 @@ def run_pruning(args):
     now = datetime.now()
     logger.info(f"Scanning {KNOWLEDGE_BASE} for repositories...")
 
+    # Build dependency map to avoid pruning dependencies
+    dependency_map = build_dependency_map(KNOWLEDGE_BASE)
+    if any(dependency_map.values()):
+        logger.info(f"Found dependencies: { {k: v for k, v in dependency_map.items() if v} }")
+
     for repo_dir in KNOWLEDGE_BASE.iterdir():
         if repo_dir.is_dir():
             try:
@@ -174,6 +208,14 @@ def run_pruning(args):
                     policy_verdict, policy_reason = get_ethical_verdict(repo_record.name, decision)
                 
                 prune_decision.policy_verdict = policy_verdict
+
+                # --- Dependency Check (Resilience Feature) ---
+                if decision in ["DELETE", "ARCHIVE"]:
+                    dependents = dependency_map.get(repo_record.name, [])
+                    if dependents:
+                        logger.warning(f"Action '{decision}' on {repo_record.name} BLOCKED because it is a dependency for: {', '.join(dependents)}")
+                        print(f"BLOCKED {decision} on {repo_record.name} (is a dependency).")
+                        continue
 
                 log_extra = {
                     "event": "prune_decision",

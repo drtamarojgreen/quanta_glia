@@ -39,8 +39,8 @@ echo -e "${YELLOW}Starting PrismQuanta workspace test suite...${NC}"
 echo "This script will iterate through all known repositories and run their respective tests."
 echo "---------------------------------------------------------------------"
 
-# The script is in quanta_glia, so we need to go to the parent directory
-WORKSPACE_DIR="$(pwd)/.."
+# The script is in quanta_glia, so we need to go to the workspace directory
+WORKSPACE_DIR="$(pwd)/workspace"
 cd "$WORKSPACE_DIR"
 
 FAILED_REPOS=()
