@@ -10,6 +10,11 @@ main:
     - "ethics"
     - "usage"
   max_repos: 10
+  log_level: "INFO"
+  search_paths:
+    - "/"
+  max_depth: 5
+  max_lines_per_file: 100
 
 # Configuration for QuantaGlia Pruner
 pruning:

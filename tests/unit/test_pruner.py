@@ -58,6 +58,7 @@ class TestPrunerLogic(unittest.TestCase):
 
     def test_calculate_composite_score_ethics_risk(self):
         """Test that ethics risk contributes to the score."""
+        self.base_repo.usage_score = 1.0 # High usage (0 contribution)
         self.base_repo.ethics_risk_score = 1.0
         age_days = 0
         score = calculate_composite_score(self.base_repo, age_days, self.mock_weights)

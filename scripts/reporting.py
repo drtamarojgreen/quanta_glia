@@ -5,6 +5,7 @@ import logging
 import sys
 import csv
 from pathlib import Path
+from datetime import datetime
 
 # Setup logging
 logging.basicConfig(
@@ -65,7 +66,12 @@ def main(repo_urls):
     if repo_path:
         repo_name = repo_path.name
         repo_size = get_repo_size(repo_path)
-        num_files, num_src_files, num_doc_files, num_test_files = analyze_repo_files(repo_path)
+        num_files, num_src_files, num_doc_files, num_test_files, extension_counts = analyze_repo_files(repo_path)
+
+        # Determine tech stack (primary language)
+        tech_stack = "Unknown"
+        if extension_counts:
+            tech_stack = max(extension_counts, key=extension_counts.get)
 
         logging.info(f"Repository: {repo_name}")
         logging.info(f"Size: {repo_size} bytes")
@@ -75,12 +81,14 @@ def main(repo_urls):
         logging.info(f"Test files: {num_test_files}")
 
         report_data = {
+            'timestamp': datetime.now().isoformat(),
             'repository_name': repo_name,
             'repository_size': repo_size,
             'number_files': num_files,
             'number_src_files': num_src_files,
             'number_doc_files': num_doc_files,
             'number_test_files': num_test_files,
+            'tech_stack': tech_stack,
         }
         write_to_csv(report_data)
 
@@ -88,9 +96,10 @@ def main(repo_urls):
 
 def write_to_csv(data, filename="repository_data.csv"):
     file_exists = os.path.isfile(filename)
+    fieldnames = ['timestamp', 'repository_name', 'repository_size', 'number_files',
+                  'number_src_files', 'number_doc_files', 'number_test_files', 'tech_stack']
+
     with open(filename, 'a', newline='') as csvfile:
-        fieldnames = ['repository_name', 'repository_size', 'number_files',
-                      'number_src_files', 'number_doc_files', 'number_test_files']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         if not file_exists:
@@ -113,23 +122,26 @@ def analyze_repo_files(repo_path):
     num_src_files = 0
     num_doc_files = 0
     num_test_files = 0
+    extension_counts = {}
 
     src_exts = ['.py', '.js', '.java', '.c', '.cpp', '.go', '.rs', '.ts', '.html', '.css']
     doc_exts = ['.md', '.txt', '.rst']
 
     for dirpath, dirnames, filenames in os.walk(repo_path):
-        # Exclude .git directory
-        if '.git' in dirnames:
-            dirnames.remove('.git')
+        # Exclude .git and .pytest_cache directories
+        for excluded in ['.git', '.pytest_cache', '__pycache__']:
+            if excluded in dirnames:
+                dirnames.remove(excluded)
 
         for f in filenames:
             num_files += 1
             file_path = Path(dirpath) / f
+            rel_path = file_path.relative_to(repo_path)
             file_ext = file_path.suffix
             file_stem = file_path.stem.lower()
 
             # Check for test files
-            if 'test' in str(file_path).lower():
+            if 'test' in str(rel_path).lower():
                 num_test_files += 1
                 continue
 
@@ -141,8 +153,9 @@ def analyze_repo_files(repo_path):
             # Check for src files
             if file_ext in src_exts:
                 num_src_files += 1
+                extension_counts[file_ext] = extension_counts.get(file_ext, 0) + 1
 
-    return num_files, num_src_files, num_doc_files, num_test_files
+    return num_files, num_src_files, num_doc_files, num_test_files, extension_counts
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

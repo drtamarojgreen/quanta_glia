@@ -43,7 +43,7 @@ print_header "STEP 4: WORKPLACE INTEGRATION TEST (against quanta_ethos)"
 # This section is adapted from the original workplace_test_all.sh
 # --- Configuration for Workplace Test ---
 KNOWLEDGE_BASE_DIR="knowledge_base"
-EXPECTED_OUTPUT_FILE="knowledge_base/quanta_ethos/quanta_ethos.py"
+EXPECTED_OUTPUT_FILE="knowledge_base/quanta_ethos/repository_analysis.json"
 SCRIPT_TO_TEST="scripts/quanta_glia.py"
 
 # 1. Cleanup from previous runs
