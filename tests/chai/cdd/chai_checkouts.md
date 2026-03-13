@@ -92,3 +92,98 @@
     -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/card_runner` (executable)
     -   *Observation:* Comment lines starting with '#' (e.g., `# This is a comment`) and empty lines are skipped in `environment.facts` during parsing.
     -   *Notes:* This sip correctly implements comment handling for '#' and empty lines.
+
+-   **`card_runner_card_discovery_operational` Sip:** `card_runner.cpp` was modified to discover and list all files in the `tests/chai/cdd/cards/` directory.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/card_runner` (executable)
+    -   *Observation:* Files within the `cards/` directory are discovered and their filenames are printed to the console.
+    -   *Notes:* This sip establishes the baseline for dynamic card awareness within the runner.
+
+-   **`card_runner_fact_storage_verified_operational` Sip:** `card_runner.cpp` was modified to store parsed facts in a `std::map<std::string, std::string>` and print the final fact pool.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/card_runner` (executable)
+    -   *Observation:* Facts from `environment.facts` are successfully parsed, stored, and printed in a "Stored Facts Pool" section.
+    -   *Notes:* This enables the runner to maintain a stateful representation of the environment, a prerequisite for fact aggregation.
+
+-   **`check_os_card_creation_and_compilation_operational` Sip:** Created and compiled `tests/chai/cdd/cards/check_os.cpp` to empirically verify the OS type.
+    -   *Artifacts:* `tests/chai/cdd/cards/check_os.cpp`, `tests/chai/cdd/cards/check_os` (executable)
+    -   *Observation:* Running `./check_os` outputs `os_type = linux` and `check_os_operational = true`.
+    -   *Notes:* Demonstrates the creation of a new, functional card that provides environment-specific facts.
+
+-   **`card_runner_execution_interface_operational` Sip:** `card_runner.cpp` was modified to include an `execute_command` helper and a heuristic for discovering and executing runnable cards (files without extensions).
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/card_runner` (executable)
+    -   *Observation:* The runner identifies `string_trim_test` and `check_os` as cards, executes them, and prints their stdout.
+    -   *Notes:* This provides the "Load Card" capability, closing a major gap in the runner's lifecycle.
+
+-   **`card_source_decorator_parsing_operational` Sip:** `card_runner.cpp` was modified to parse source files (`.cpp`) for decorator comments (e.g., `// @decorator value`) before execution.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/check_os.cpp` (modified)
+    -   *Observation:* Running the runner prints `Decorator: @platform linux` for the `check_os` card.
+    -   *Notes:* This establishes the mechanism for card metadata and conditional execution logic (decorators).
+
+-   **`card_runner_decorator_evaluation_platform_operational` Sip:** `card_runner.cpp` was modified to parse decorators into a `std::map` and evaluate the `@platform` decorator against the environment facts.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/windows_only_card.cpp` (new)
+    -   *Observation:* The runner correctly identifies and executes `check_os` (with `@platform linux`) and skips `windows_only_card` (with `@platform windows`), printing a mismatch message.
+    -   *Notes:* This implements the first functional decorator, enabling environment-aware card execution.
+
+-   **`card_runner_report_generation_operational` Sip:** `card_runner.cpp` was modified to output all execution trace into timestamped `.report` files in `tests/chai/cdd/reports/`.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/reports/` (directory)
+    -   *Observation:* Running the runner creates a file (e.g., `run_20260313_014448.report`) containing the duplicate of the console output.
+    -   *Notes:* This provides persistent evidence of CDD runs, a core requirement for accountability in agentic workflows.
+
+-   **`card_runner_complex_decorator_requires_operational` Sip:** `card_runner.cpp` was modified to support the `@requires key == value` decorator, enabling complex conditional execution based on environment facts.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/compiler_check.cpp` (new), `tests/chai/cdd/cards/network_test.cpp` (new)
+    -   *Observation:* The runner correctly evaluates requirements: `compiler_check` runs (match), while `network_test` is skipped (mismatch against `network_available = false`).
+    -   *Notes:* This completes the initial complex decorator logic, allowing cards to specify precise environment dependencies.
+
+-   **`card_runner_level_labels_revert_operational` Sip:** Reverted hardcoded "Level: [Is/Needs/Results]" labels in `card_runner.cpp` to return to a clean baseline for specialized decorator implementation.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified)
+    -   *Observation:* Runner output returned to generic "Fact" and "Decorator" labels.
+    -   *Notes:* Essential cleanup to prevent "monolithic drift" before introducing formalized level decorators.
+
+-   **`card_runner_decorator_is_validation_operational` Sip:** Implemented the `@Is` decorator logic to validate system state during card evaluation.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/check_os.cpp` (modified)
+    -   *Observation:* Runner correctly identifies `// @Is platform == linux` in `check_os.cpp`, logs it as `Level: [Is]`, and verifies the match against current facts.
+    -   *Notes:* This formalizes the "Is" level (current state) as a card-driven requirement.
+
+-   **`card_runner_decorator_needs_enforcement_operational` Sip:** Implemented the `@Needs` decorator logic to enforce environment prerequisites during card evaluation.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/network_test.cpp` (modified)
+    -   *Observation:* Runner correctly identifies `// @Needs network_available == true` in `network_test.cpp`, logs it as `Level: [Needs]`, and skips execution because the fact is `false`.
+    -   *Notes:* This formalizes the "Needs" level (prerequisites) as a card-driven enforcement mechanism.
+
+-   **`card_runner_decorator_results_verification_operational` Sip:** Implemented the `@Results` decorator logic to observe and verify card execution outputs against expectations.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/check_os.cpp` (modified)
+    -   *Observation:* Runner correctly identifies `// @Results os_type == linux` in `check_os.cpp`, logs it as `Level: [Results]`, and verifies that the card outputted the matching fact.
+    -   *Notes:* This formalizes the "Results" level (observations) as a card-driven verification mechanism, completing the Is/Needs/Results decorator trifecta.
+
+-   **`card_runner_facts_prefix_restructure_operational` Sip:** Restructured `environment.facts` to use the standardized `Is`, `Needs`, and `Results` prefixes.
+    -   *Artifacts:* `tests/chai/cdd/facts/environment.facts` (modified)
+    -   *Observation:* Fact file structure now follows the CHAI Facts_Levels discipline.
+    -   *Notes:* This prepares the environment for level-aware parsing and validation in the runner.
+
+-   **`card_runner_level_aware_parsing_validation_operational` Sip:** Implemented level-aware parsing and storage in `card_runner.cpp`, enabling the runner to distinguish between `Is`, `Needs`, and `Results` facts and decorators.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified)
+    -   *Observation:* Runner correctly parses prefixed facts from `environment.facts`, groups them in the report trace, and validates decorators against their specific levels.
+    -   *Notes:* This aligns the runner's execution engine with the CHAI Facts_Levels discipline, ensuring accountability and non-destructive state management.
+
+-   **`card_runner_custom_facts_file_execution_operational` Sip:** Created a new standardized facts file (`validation.facts`) and verified that the `card_runner` correctly executes using it via CLI argument.
+    -   *Artifacts:* `tests/chai/cdd/facts/validation.facts` (new), `tests/chai/cdd/card_runner.cpp` (modified in previous sip)
+    -   *Observation:* Running `./card_runner validation.facts` correctly parses `Is network_available = true`, enabling the `network_test` card which was previously skipped.
+    -   *Notes:* This completes the end-to-end integration of Cli-driven, level-aware fact processing into the runner.
+
+-   **`card_runner_class_based_discovery_operational` Sip:** Implemented recursive card discovery, where subdirectories under `cards/` are treated as "Classes."
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/network/` (new directory), `tests/chai/cdd/cards/system/` (new directory)
+    -   *Observation:* Runner correctly discovers cards in `network/` and `system/` subdirectories and logs them with their respective classes (e.g., `Class: [system] Card: [check_os]`).
+    -   *Notes:* This allows for logical grouping of cards into classes, enhancing the scalability and organization of the test suite. **Lesson Learned:** Failed to strictly follow the request "sip creating classes with multiple cards"; instead of focus on the card-to-class relationship, I jumped to technical implementation of recursive directory search, which was a detour from the core architectural sip requested. I've now corrected this by implementing file-based Classes containing multiple Logical Cards.
+
+-   **`card_runner_multi_card_files_operational` Sip:** Implemented support for multiple cards defined within a single `.cpp` file (the Class).
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/cards/SystemClass.cpp` (new)
+    -   *Observation:* Runner correctly parses multiple `@Card` blocks in `SystemClass.cpp`, executes them individually using command-line arguments, and verifies their unique decorators.
+    -   *Notes:* This achieves the "multiple cards in one class file" architecture, allowing independent validation logic for related cards grouped into a single source entity.
+
+-   **`card_runner_situational_facts_operational` Sip:** Implemented "Situations" in fact files to allow grouping of facts for different environment scenarios.
+    -   *Artifacts:* `tests/chai/cdd/card_runner.cpp` (modified), `tests/chai/cdd/facts/validation.facts` (updated), `tests/chai/cdd/cards/LowResourceClass.cpp` (new)
+    -   *Observation:* Runner correctly parses `Situation: Name` blocks. `LowResourceClass` cards utilizing `@Situation LowResources` only see facts from that specific block, while other cards default to the `Default` situation.
+    -   *Notes:* This enables complex testing scenarios where a single fact file can describe multiple system states, and cards can be targeted against specific states.
+
+-   **`card_runner_new_card_check_disk_space_operational` Sip:** Created a new card `check_disk_space.cpp` utilizing the `@Needs` decorator and verified its execution against `validation.facts`.
+    -   *Artifacts:* `tests/chai/cdd/cards/check_disk_space.cpp` (new)
+    -   *Observation:* Runner correctly evaluates `Level: [Needs] - Prerequisite: disk_space == high` and executes the card.
+    -   *Notes:* Confirms that the runner correctly handles specific "Needs" level facts from the fact file.
