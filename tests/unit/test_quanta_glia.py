@@ -8,10 +8,7 @@ from unittest.mock import patch
 # Add the 'scripts' directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'scripts')))
 
-from quanta_glia import (
-    extract_key_info, load_config, clone_repo,
-    store_to_knowledge_base, prune_cache, main
-)
+import quanta_glia
 
 class TestQuantaGlia(unittest.TestCase):
 
@@ -62,9 +59,9 @@ section2:
         # This test relies on the global TARGET_TOPICS from config.yaml.
         # To make it independent, we could patch it here.
         with patch('quanta_glia.TARGET_TOPICS', ["README", "LICENSE", "CONTRIBUTING"]):
-            extracted_data = extract_key_info(self.test_dir)
+            extracted_data = quanta_glia.extract_key_info(self.test_dir)
             self.assertIn("README.md", extracted_data)
-            self.assertEqual(extracted_data["README.md"], "This is a readme file.")
+            self.assertEqual(extracted_data["README.md"], "This is a test readme.")
             self.assertIn("LICENSE", extracted_data)
             self.assertEqual(extracted_data["LICENSE"], "This is a license file.")
             self.assertIn("CONTRIBUTING.md", extracted_data)
@@ -73,7 +70,7 @@ section2:
 
     def test_load_config(self):
         """Test that the simple YAML config is loaded correctly."""
-        config = load_config(self.config_path)
+        config = quanta_glia.load_config(self.config_path)
         self.assertIsNotNone(config)
         self.assertIn("main", config)
         self.assertIn("section2", config)
@@ -90,7 +87,7 @@ section2:
     def test_clone_repo_local(self):
         """Test that a local directory is correctly copied to the cache."""
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            dest_path = clone_repo(str(self.local_repo_src))
+            dest_path = quanta_glia.clone_repo(str(self.local_repo_src), self.cache_dir)
 
             expected_dest = self.cache_dir / self.local_repo_src.name
             self.assertEqual(dest_path, expected_dest)
@@ -104,7 +101,7 @@ section2:
         (self.cache_dir / "local_repo_src").mkdir()
 
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            dest_path = clone_repo(str(self.local_repo_src))
+            dest_path = quanta_glia.clone_repo(str(self.local_repo_src), self.cache_dir)
 
             # Should return the existing path
             self.assertEqual(dest_path, self.cache_dir / "local_repo_src")
@@ -120,7 +117,7 @@ section2:
         }
 
         with patch('quanta_glia.KNOWLEDGE_BASE', self.kb_dir):
-            store_to_knowledge_base(repo_name, extracted_data)
+            quanta_glia.store_to_knowledge_base(repo_name, extracted_data)
 
         repo_kb_path = self.kb_dir / repo_name
         self.assertTrue(repo_kb_path.is_dir())
@@ -145,7 +142,7 @@ section2:
         loose_file.write_text("do not delete me")
 
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
-            prune_cache()
+            quanta_glia.prune_cache(self.cache_dir)
 
         # Assert that the directory is gone
         self.assertFalse(dir_to_prune.exists())
@@ -156,12 +153,31 @@ section2:
         """Test the main function's integration of cloning, extracting, storing, and pruning."""
         repo_urls = [str(self.local_repo_src)]
 
-        with patch('quanta_glia.REPO_CACHE', self.cache_dir), \
-             patch('quanta_glia.KNOWLEDGE_BASE', self.kb_dir), \
-             patch('quanta_glia.TARGET_TOPICS', ["README"]), \
-             patch('quanta_glia.MAX_REPOS', 10):
+        with patch('quanta_glia.TARGET_TOPICS', ["README"]), \
+             patch('quanta_glia.MAX_REPOS', 10), \
+                          patch('quanta_glia.load_config') as mock_load_config, \
+             patch('quanta_glia.apply_config') as mock_apply_config:
 
-            main(repo_urls)
+            # Configure mock_load_config to return a dummy config
+            mock_load_config.return_value = {
+                "main": {
+                    "knowledge_base": str(self.kb_dir),
+                    "repo_cache": str(self.cache_dir),
+                    "target_topics": ["README"],
+                    "max_repos": 10
+                }
+            }
+
+            # Configure mock_apply_config to set the global variables as expected
+            def mock_apply_config_side_effect(config_data):
+                quanta_glia.KNOWLEDGE_BASE = Path(config_data["main"]["knowledge_base"])
+                quanta_glia.REPO_CACHE = Path(config_data["main"]["repo_cache"])
+                quanta_glia.TARGET_TOPICS = config_data["main"]["target_topics"]
+                quanta_glia.MAX_REPOS = config_data["main"]["max_repos"]
+
+            mock_apply_config.side_effect = mock_apply_config_side_effect
+
+            quanta_glia.main(repo_urls)
 
         # Check that the knowledge base was populated correctly
         repo_name = self.local_repo_src.name
