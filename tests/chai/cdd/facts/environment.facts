@@ -1,0 +1,5 @@
+compiler = g++
+platform = linux
+filesystem_create_file_operational = true
+# This is a comment
+network_available = false
