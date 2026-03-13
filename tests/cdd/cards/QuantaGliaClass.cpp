@@ -77,9 +77,50 @@ void max_repos_limit_verification_card() {
     }
 }
 
+// @Card: custom_config_verification
+// @Is python_available == true
+// @Results quanta_glia_custom_config_operational == true
+void custom_config_verification_card() {
+    std::string repo_name = "chai_custom_config_repo";
+    std::string config_file = "tests/bdd/custom_config.yaml";
+    fs::path repo_path(repo_name);
+
+    fs::create_directory(repo_path);
+    {
+        std::ofstream f(repo_path / "README.md");
+        f << "should be skipped";
+    }
+    {
+        std::ofstream f(repo_path / "IMPORTANT_FILE.txt");
+        f << "should be extracted";
+    }
+
+    std::string command = "python3 scripts/quanta_glia.py --config " + config_file + " " + repo_name + " > /dev/null 2>&1";
+    std::system(command.c_str());
+
+    fs::path kb_path = fs::path("knowledge_base") / repo_name;
+    bool important_exists = fs::exists(kb_path / "IMPORTANT_FILE.txt");
+    bool readme_exists = fs::exists(kb_path / "README.md");
+
+    std::cout << "quanta_glia_custom_config_operational = " << (important_exists && !readme_exists ? "true" : "false") << std::endl;
+
+    // Cleanup
+    fs::remove_all(repo_path);
+    if (fs::exists(kb_path)) {
+        fs::remove_all(kb_path);
+    }
+}
+
 int main(int argc, char* argv[]) {
-    if (argc > 1 && std::string(argv[1]) == "max_repos") {
-        max_repos_limit_verification_card();
+    if (argc > 1) {
+        std::string arg = argv[1];
+        if (arg == "max_repos") {
+            max_repos_limit_verification_card();
+        } else if (arg == "custom_config") {
+            custom_config_verification_card();
+        } else {
+            quanta_glia_extraction_card();
+        }
     } else {
         quanta_glia_extraction_card();
     }

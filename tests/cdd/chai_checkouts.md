@@ -20,3 +20,7 @@
 -   **Max Repos Limit Card Integration:** Integrated BDD test for `MAX_REPOS` limit into `QuantaGliaClass.cpp`.
     -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
     -   *Observation:* `max_repos_limit_card_integrated = true`
+
+-   **Custom Config Card Integration:** Integrated BDD test for custom configuration into `QuantaGliaClass.cpp`.
+    -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
+    -   *Observation:* `custom_config_card_integrated = true`
