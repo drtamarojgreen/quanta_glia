@@ -35,7 +35,53 @@ void quanta_glia_extraction_card() {
     }
 }
 
-int main() {
-    quanta_glia_extraction_card();
+// @Card: max_repos_limit_verification
+// @Is python_available == true
+// @Results quanta_glia_max_repos_limit_operational == true
+void max_repos_limit_verification_card() {
+    int max_repos = 10; // Default in config.yaml
+    int num_to_create = max_repos + 1;
+    std::string repo_prefix = "chai_max_test_";
+    std::string repo_list = "";
+
+    for (int i = 1; i <= num_to_create; ++i) {
+        std::string repo_name = repo_prefix + std::to_string(i);
+        fs::create_directory(repo_name);
+        std::ofstream readme(fs::path(repo_name) / "README.md");
+        readme << "test";
+        readme.close();
+        repo_list += " " + repo_name;
+    }
+
+    std::string command = "python3 scripts/quanta_glia.py " + repo_list + " > /dev/null 2>&1";
+    std::system(command.c_str());
+
+    int count = 0;
+    if (fs::exists("knowledge_base")) {
+        for (auto const& dir_entry : fs::directory_iterator("knowledge_base")) {
+            if (dir_entry.is_directory() && dir_entry.path().filename().string().find(repo_prefix) == 0) {
+                count++;
+            }
+        }
+    }
+
+    std::cout << "quanta_glia_max_repos_limit_operational = " << (count == max_repos ? "true" : "false") << std::endl;
+
+    // Cleanup
+    for (int i = 1; i <= num_to_create; ++i) {
+        std::string repo_name = repo_prefix + std::to_string(i);
+        fs::remove_all(repo_name);
+        if (fs::exists("knowledge_base/" + repo_name)) {
+            fs::remove_all("knowledge_base/" + repo_name);
+        }
+    }
+}
+
+int main(int argc, char* argv[]) {
+    if (argc > 1 && std::string(argv[1]) == "max_repos") {
+        max_repos_limit_verification_card();
+    } else {
+        quanta_glia_extraction_card();
+    }
     return 0;
 }

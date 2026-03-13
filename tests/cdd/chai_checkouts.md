@@ -16,3 +16,7 @@
 -   **Pruner Logic Card Integration:** Integrated pruning decision logic into `PrunerClass.cpp`.
     -   *Artifacts:* `tests/cdd/cards/PrunerClass.cpp`
     -   *Observation:* `pruner_logic_card_migrated = true`
+
+-   **Max Repos Limit Card Integration:** Integrated BDD test for `MAX_REPOS` limit into `QuantaGliaClass.cpp`.
+    -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
+    -   *Observation:* `max_repos_limit_card_integrated = true`
