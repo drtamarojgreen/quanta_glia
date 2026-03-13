@@ -1,0 +1,5 @@
+# Empirical observations for QuantaGlia and Pruner
+# <domain>_<capability>_<state> format
+
+quanta_glia_extraction_operational = false
+pruner_logic_operational = false
