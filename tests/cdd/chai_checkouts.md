@@ -24,3 +24,7 @@
 -   **Custom Config Card Integration:** Integrated BDD test for custom configuration into `QuantaGliaClass.cpp`.
     -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
     -   *Observation:* `custom_config_card_integrated = true`
+
+-   **No Target Files Card Integration:** Integrated BDD test for repositories with no target files into `QuantaGliaClass.cpp`.
+    -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
+    -   *Observation:* `no_target_files_card_integrated = true`

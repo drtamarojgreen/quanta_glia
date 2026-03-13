@@ -111,6 +111,34 @@ void custom_config_verification_card() {
     }
 }
 
+// @Card: no_target_files_verification
+// @Is python_available == true
+// @Results quanta_glia_no_target_files_operational == true
+void no_target_files_verification_card() {
+    std::string repo_name = "chai_no_targets_repo";
+    fs::path repo_path(repo_name);
+
+    fs::create_directory(repo_path);
+    {
+        std::ofstream f(repo_path / "some_other_file.txt");
+        f << "This is not a target file.";
+    }
+
+    std::string command = "python3 scripts/quanta_glia.py " + repo_name + " > /dev/null 2>&1";
+    std::system(command.c_str());
+
+    fs::path kb_path = fs::path("knowledge_base") / repo_name;
+    bool kb_exists = fs::exists(kb_path);
+
+    std::cout << "quanta_glia_no_target_files_operational = " << (!kb_exists ? "true" : "false") << std::endl;
+
+    // Cleanup
+    fs::remove_all(repo_path);
+    if (kb_exists) {
+        fs::remove_all(kb_path);
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc > 1) {
         std::string arg = argv[1];
@@ -118,6 +146,8 @@ int main(int argc, char* argv[]) {
             max_repos_limit_verification_card();
         } else if (arg == "custom_config") {
             custom_config_verification_card();
+        } else if (arg == "no_targets") {
+            no_target_files_verification_card();
         } else {
             quanta_glia_extraction_card();
         }
