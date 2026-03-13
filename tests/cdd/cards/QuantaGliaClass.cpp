@@ -5,7 +5,10 @@
 
 namespace fs = std::filesystem;
 
-int main() {
+// @Card: quanta_glia_extraction
+// @Is python_available == true
+// @Results quanta_glia_extraction_operational == true
+void quanta_glia_extraction_card() {
     std::string repo_name = "chai_dummy_repo";
     fs::path repo_path(repo_name);
 
@@ -30,6 +33,9 @@ int main() {
     if (fs::exists("knowledge_base/" + repo_name)) {
         fs::remove_all("knowledge_base/" + repo_name);
     }
+}
 
+int main() {
+    quanta_glia_extraction_card();
     return 0;
 }

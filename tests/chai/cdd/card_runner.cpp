@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
     } else {
         facts_file_path = cdd_dir / "facts" / "environment.facts";
     }
-    
+
     log("Attempting to read facts from: " + facts_file_path.string());
 
     // situation -> level -> key -> value
@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
     for (const auto& card : discovered_cards) {
         std::string situation = card.decorators.count("Situation") ? card.decorators.at("Situation") : "Default";
         log("Class: [" + card.className + "] Card: [" + card.name + "] Situation: [" + situation + "]");
-        
+
         if (indexed_facts.find(situation) == indexed_facts.end()) {
             log("  Skipping: Situation [" + situation + "] not found in fact files.");
             continue;
@@ -224,7 +224,7 @@ int main(int argc, char* argv[]) {
         }
 
         bool should_execute = true;
-        
+
         // Is Level Evaluation
         if (card.decorators.count("Is")) {
             std::string val = card.decorators.at("Is");
@@ -246,7 +246,7 @@ int main(int argc, char* argv[]) {
         if (should_execute && card.decorators.count("platform")) {
             std::string platform_req = card.decorators.at("platform");
             if (active_facts.count("Is") && active_facts.at("Is").count("platform") && platform_req != active_facts.at("Is").at("platform")) {
-                log("  Skipping: Platform mismatch (Required: " + platform_req 
+                log("  Skipping: Platform mismatch (Required: " + platform_req
                           + ", Current: " + active_facts.at("Is").at("platform") + ")");
                 should_execute = false;
             }
@@ -268,14 +268,14 @@ int main(int argc, char* argv[]) {
                     log("    Requirement met (verified system state): " + key + " == " + expected);
                     met = true;
                 }
-                
+
                 if (!met) {
                     log("    Skipping: Prerequisite not met (" + key + " == " + expected + ")");
                     should_execute = false;
                 }
             }
         }
-        
+
         if (should_execute && card.decorators.count("requires")) {
             std::string req = card.decorators.at("requires");
             size_t eq_pos = req.find("==");
@@ -294,7 +294,7 @@ int main(int argc, char* argv[]) {
         if (should_execute) {
             std::string output = execute_command(card.executablePath.string() + " " + card.name);
             log("Resulting Output Trace:\n" + output);
-            
+
             log("  Level: [Results] (Observations)");
             std::stringstream output_stream(output);
             std::string out_line;

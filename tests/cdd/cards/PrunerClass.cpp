@@ -33,7 +33,9 @@ std::string make_pruning_decision(float score) {
     return "KEEP";
 }
 
-int main() {
+// @Card: pruner_logic_verification
+// @Results pruner_logic_operational == true
+void pruner_logic_verification_card() {
     // Scenario: Old, unused, redundant repo (Should result in DELETE)
     RepoRecord repo = {0.0, 1.0, 0.0};
     float score = calculate_composite_score(repo, 365);
@@ -43,6 +45,9 @@ int main() {
     bool decision_ok = (decision == "DELETE");
 
     std::cout << "pruner_logic_operational = " << (score_ok && decision_ok ? "true" : "false") << std::endl;
+}
 
+int main() {
+    pruner_logic_verification_card();
     return 0;
 }
