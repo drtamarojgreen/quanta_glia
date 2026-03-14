@@ -2,21 +2,25 @@
 #include <fstream>
 #include <filesystem>
 #include <cstdlib>
+#include <map>
+#include "../cpp/util/fact_utils.h"
 
 namespace fs = std::filesystem;
+using namespace Chai::Cdd::Util;
 
 // @Card: quanta_glia_extraction
 // @Is python_available == true
 // @Results quanta_glia_extraction_operational == true
-void quanta_glia_extraction_card() {
-    std::string repo_name = "chai_dummy_repo";
+void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts) {
+    std::string repo_name = facts.at("repo_prefix") + "_extract";
     fs::path repo_path(repo_name);
 
     // Setup: Create a dummy repository with a README
     fs::create_directory(repo_path);
-    std::ofstream readme(repo_path / "README.md");
-    readme << "Test Readme Content";
-    readme.close();
+    {
+        std::ofstream readme(repo_path / "README.md");
+        readme << "Test Readme Content";
+    }
 
     // Execute Quanta Glia script via system call
     std::string command = "python3 scripts/quanta_glia.py " + repo_name + " > /dev/null 2>&1";
@@ -38,10 +42,10 @@ void quanta_glia_extraction_card() {
 // @Card: max_repos_limit_verification
 // @Is python_available == true
 // @Results quanta_glia_max_repos_limit_operational == true
-void max_repos_limit_verification_card() {
-    int max_repos = 10; // Default in config.yaml
+void max_repos_limit_verification_card(const std::map<std::string, std::string>& facts) {
+    int max_repos = std::stoi(facts.at("max_repos"));
     int num_to_create = max_repos + 1;
-    std::string repo_prefix = "chai_max_test_";
+    std::string repo_prefix = facts.at("repo_prefix") + "_max_";
     std::string repo_list = "";
 
     for (int i = 1; i <= num_to_create; ++i) {
@@ -80,9 +84,9 @@ void max_repos_limit_verification_card() {
 // @Card: custom_config_verification
 // @Is python_available == true
 // @Results quanta_glia_custom_config_operational == true
-void custom_config_verification_card() {
-    std::string repo_name = "chai_custom_config_repo";
-    std::string config_file = "tests/bdd/custom_config.yaml";
+void custom_config_verification_card(const std::map<std::string, std::string>& facts) {
+    std::string repo_name = facts.at("repo_prefix") + "_custom";
+    std::string config_file = facts.at("custom_config_path");
     fs::path repo_path(repo_name);
 
     fs::create_directory(repo_path);
@@ -114,8 +118,8 @@ void custom_config_verification_card() {
 // @Card: no_target_files_verification
 // @Is python_available == true
 // @Results quanta_glia_no_target_files_operational == true
-void no_target_files_verification_card() {
-    std::string repo_name = "chai_no_targets_repo";
+void no_target_files_verification_card(const std::map<std::string, std::string>& facts) {
+    std::string repo_name = facts.at("repo_prefix") + "_no_targets";
     fs::path repo_path(repo_name);
 
     fs::create_directory(repo_path);
@@ -140,19 +144,25 @@ void no_target_files_verification_card() {
 }
 
 int main(int argc, char* argv[]) {
+    auto facts = FactReader::readFacts("tests/cdd/facts/quanta_glia.facts");
+    if (facts.empty()) {
+        std::cerr << "Error: Could not read facts from tests/cdd/facts/quanta_glia.facts" << std::endl;
+        return 1;
+    }
+
     if (argc > 1) {
         std::string arg = argv[1];
         if (arg == "max_repos") {
-            max_repos_limit_verification_card();
+            max_repos_limit_verification_card(facts);
         } else if (arg == "custom_config") {
-            custom_config_verification_card();
+            custom_config_verification_card(facts);
         } else if (arg == "no_targets") {
-            no_target_files_verification_card();
+            no_target_files_verification_card(facts);
         } else {
-            quanta_glia_extraction_card();
+            quanta_glia_extraction_card(facts);
         }
     } else {
-        quanta_glia_extraction_card();
+        quanta_glia_extraction_card(facts);
     }
     return 0;
 }

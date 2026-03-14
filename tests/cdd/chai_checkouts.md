@@ -28,3 +28,8 @@
 -   **No Target Files Card Integration:** Integrated BDD test for repositories with no target files into `QuantaGliaClass.cpp`.
     -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp`
     -   *Observation:* `no_target_files_card_integrated = true`
+
+-   **Parameter Externalization to Fact Files:** Removed hardcoded parameters from CHAI cards and moved them to `.facts` files.
+    -   *Artifacts:* `tests/cdd/facts/quanta_glia.facts`, `tests/cdd/facts/pruner.facts`, `tests/cdd/cpp/util/fact_utils.h`, `tests/cdd/cards/QuantaGliaClass.cpp` (modified), `tests/cdd/cards/PrunerClass.cpp` (modified)
+    -   *Observation:* `parameter_externalization_completed = true`
+    -   *Notes:* Implemented a `FactReader` utility to allow C++ cards to parse CHAI-formatted facts. This ensures that test parameters are managed as empirical truths rather than hardcoded assumptions.
