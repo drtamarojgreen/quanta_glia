@@ -143,6 +143,50 @@ void no_target_files_verification_card(const std::map<std::string, std::string>&
     }
 }
 
+// @Card: repo_cloning_verification
+// @Is python_available == true
+// @Results quanta_glia_clone_repo_operational == true
+void repo_cloning_verification_card(const std::map<std::string, std::string>& facts) {
+    std::string src_repo = facts.at("clone_src");
+    std::string cache_dir = facts.at("cache_dir");
+    fs::create_directory(src_repo);
+    { std::ofstream f(fs::path(src_repo) / "a.txt"); f << "test"; }
+
+    fs::create_directory(cache_dir);
+
+    std::string python_cmd = "python3 -c \"from scripts import quanta_glia; from pathlib import Path; quanta_glia.clone_repo('" + src_repo + "', Path('" + cache_dir + "'))\"";
+    std::system(python_cmd.c_str());
+
+    bool operational = fs::exists(fs::path(cache_dir) / src_repo / "a.txt");
+
+    std::cout << "quanta_glia_clone_repo_operational = " << (operational ? "true" : "false") << std::endl;
+
+    // Cleanup
+    fs::remove_all(src_repo);
+    fs::remove_all(cache_dir);
+}
+
+// @Card: cache_pruning_verification
+// @Is python_available == true
+// @Results quanta_glia_prune_cache_operational == true
+void cache_pruning_verification_card(const std::map<std::string, std::string>& facts) {
+    std::string cache_dir = facts.at("cache_dir") + "_prune";
+    fs::create_directory(cache_dir);
+    fs::create_directory(fs::path(cache_dir) / "to_delete");
+    { std::ofstream f(fs::path(cache_dir) / "keep.txt"); f << "keep"; }
+
+    std::string python_cmd = "python3 -c \"from scripts import quanta_glia; from pathlib import Path; quanta_glia.prune_cache(Path('" + cache_dir + "'))\"";
+    std::system(python_cmd.c_str());
+
+    bool dir_deleted = !fs::exists(fs::path(cache_dir) / "to_delete");
+    bool file_kept = fs::exists(fs::path(cache_dir) / "keep.txt");
+
+    std::cout << "quanta_glia_prune_cache_operational = " << (dir_deleted && file_kept ? "true" : "false") << std::endl;
+
+    // Cleanup
+    fs::remove_all(cache_dir);
+}
+
 int main(int argc, char* argv[]) {
     auto facts = FactReader::readFacts("tests/cdd/facts/quanta_glia.facts");
     if (facts.empty()) {
@@ -158,6 +202,10 @@ int main(int argc, char* argv[]) {
             custom_config_verification_card(facts);
         } else if (arg == "no_targets") {
             no_target_files_verification_card(facts);
+        } else if (arg == "clone") {
+            repo_cloning_verification_card(facts);
+        } else if (arg == "prune") {
+            cache_pruning_verification_card(facts);
         } else {
             quanta_glia_extraction_card(facts);
         }

@@ -33,3 +33,15 @@
     -   *Artifacts:* `tests/cdd/facts/quanta_glia.facts`, `tests/cdd/facts/pruner.facts`, `tests/cdd/cpp/util/fact_utils.h`, `tests/cdd/cards/QuantaGliaClass.cpp` (modified), `tests/cdd/cards/PrunerClass.cpp` (modified)
     -   *Observation:* `parameter_externalization_completed = true`
     -   *Notes:* Implemented a `FactReader` utility to allow C++ cards to parse CHAI-formatted facts. This ensures that test parameters are managed as empirical truths rather than hardcoded assumptions.
+
+-   **Logging Verification Card Integration:** Converted `test_agentic_documentation_repurpose.py` logging test to CHAI.
+    -   *Artifacts:* `tests/cdd/cards/LoggingClass.cpp`, `tests/cdd/facts/agent_utils.facts`
+    -   *Observation:* `logging_card_integrated = true`
+
+-   **Evaluators Verification Card Integration:** Converted `test_research_integration.py` validator tests to CHAI.
+    -   *Artifacts:* `tests/cdd/cards/EvaluatorsClass.cpp`, `tests/cdd/facts/evaluators.facts`
+    -   *Observation:* `evaluators_card_integrated = true`
+
+-   **Clone and Prune Card Integration:** Converted `test_quanta_glia.py` (clone/prune) to CHAI.
+    -   *Artifacts:* `tests/cdd/cards/QuantaGliaClass.cpp` (modified), `tests/cdd/facts/quanta_glia.facts` (modified)
+    -   *Observation:* `clone_prune_cards_integrated = true`
