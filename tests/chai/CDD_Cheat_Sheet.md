@@ -21,25 +21,32 @@
 
 ## **Key CDD Artifacts**
 
-*   **Card (C++ file in `tests/chai/cdd/cards/`):**
-    *   An executable C++ program.
-    *   Implements *one capability* (e.g., `filesystem_create_file.cpp`).
-    *   Outputs *empirical observations*, not `pass/fail`.
-    *   _Example Output:_ `filesystem_create_file_operational = true`
+*   **Class (C++ file in `tests/chai/cdd/cards/`):**
+    *   A single source file grouped by domain (e.g., `SystemClass.cpp`).
+    *   Contains one or more **Logical Cards**.
+    *   Cards are defined by comments: `// @Card: name`.
+    *   Cards are executed via `card_runner` passing the name as `argv[1]`.
 
-*   **Fact (Line in `tests/chai/cdd/facts/environment.facts`):**
-    *   A single line recording a *verified observation*.
-    *   Always `key = value` (e.g., `compiler_available = g++`).
-    *   **Append-only! Never modify existing facts.**
+*   **Logical Card (Unit of Work):**
+    *   Defined within a Class file.
+    *   Uses **Decorators** for prerequisites and validation.
+    *   *Decorators:* `// @Is key == val`, `// @Needs key == val`, `// @Results key == val`, `// @Situation name`.
 
-*   **Runner (C++ executable):**
-    *   Executes Cards against Facts.
-    *   Records Card results.
+*   **Fact (Line in `tests/chai/cdd/facts/*.facts`):**
+    *   Structured by **Situation**, **Level**, and **Fact**.
+    *   *Syntax:* `[Level] [key] = [value]`.
+    *   *Levels:* `Is` (System State), `Needs` (Prerequisite), `Results` (Observation).
+    *   *Situations:* Grouped by `Situation: Name` headers.
+
+*   **Runner (`tests/chai/cdd/card_runner.cpp`):**
+    *   Discovers Classes and Logical Cards.
+    *   Indexes Facts by Situation and Level.
+    *   Evaluates decorators before/after execution.
+    *   Reports truth based on empirical observation.
 
 *   **`chai_checkins.md`:**
     *   Located in `tests/chai/cdd/`.
-    *   Lists *unimplemented functions/features*.
-    *   **No conceptual code in working files; only real code or nothing.**
+    *   Tracks incremental **Sips** (Done, Error, Pending).
 
 ---
 

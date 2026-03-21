@@ -31,27 +31,26 @@ A structured format designed for machine reasoning first, replacing natural lang
 
 ## 4. Key CDD Primitives
 
-### a. Situation (formerly Scenario)
--   **Definition:** A complete operational environment defining the context for an AI agent's work.
--   **Components:** Environment, tools, parameters, objectives, restrictions.
--   **Purpose:** Describes operational environments rather than narrative behaviors.
+### a. Situation
+-   **Definition:** A specific environmental state described in a `.facts` file.
+-   **Syntax:** Defined by `Situation: Name` headers.
+-   **Purpose:** Allows cards to be evaluated against different system states (e.g., `LowResources`, `Production`).
 
-### b. Card (formerly Step)
--   **Definition:** An atomic, structured development task or controlled experiment, replacing BDD steps.
--   **Purpose:** Produces **empirical observations** (data), not status (pass/fail).
--   **Structure (minimal shape):**
-    ```
-    card: <card_name>
-    tool: <tool_identifier>
-    parameters:
-      <param_key> = <param_value>
-    results:
-      <result_key> = <result_value>
+### b. Class / Card
+-   **Class:** A C/C++ source file (e.g., `SystemClass.cpp`) representing a domain of cards.
+-   **Card:** An atomic unit of work defined via `// @Card: name` inside a class file.
+-   **Structure:**
+    ```cpp
+    // @Card: check_os
+    // @Is platform == linux
+    // @Results os_type == linux
     ```
 
 ### c. Fact
 -   **Definition:** A validated, immutable piece of knowledge about the environment or system, derived from empirical observation.
--   **Location:** `cdd/facts/environment.facts` (append-only, one fact per line, `<domain>_<capability>_<state>` format).
+-   **Structure:** Prefixed by Level (`Is`, `Needs`, `Results`).
+-   **Syntax:** `Is key = value`
+-   **Location:** `cdd/facts/*.facts`
 -   **Purpose:** Serves as the ground truth for agents, preventing assumptions and hallucinations.
 
 ## 5. The Sip Principle
@@ -106,16 +105,16 @@ Agents must **discover environment context** instead of assuming it.
 ```
 tests/chai/
 ├── README.md              (This document)
-├── chai                   (Compiled CHAI CLI executable)
-├── chai_cli_invocation_sip.cpp (Source for CHAI CLI)
+├── CDD_Cheat_Sheet.md     (Quick technical reference)
 └── cdd/
-    ├── README.md          (CDD doctrine for agents)
+    ├── card_runner.cpp    (Core CHAI runner)
+    ├── chai_checkins.md   (Sip tracking)
+    ├── chai_checkouts.md  (Completed work history)
     ├── facts/
-    │   └── environment.facts (Append-only record of verified facts)
-    ├── cards/
-    │   └── filesystem_create_file.cpp (Example card C++ source)
-    └── card_runner.cpp    (Conceptual card runner source)
-    └── chai_checkins.md   (Documentation for future work on card_runner.cpp)
+    │   ├── environment.facts (Default environment facts)
+    │   └── validation.facts  (Test situations)
+    └── cards/
+        └── SystemClass.cpp (Class file with multiple logical cards)
 ```
 
 ## 12. CHAI CLI Capabilities (Implemented Sips)

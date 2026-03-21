@@ -1,5 +1,6 @@
-compiler = g++
-platform = linux
-filesystem_create_file_operational = true
-# This is a comment
-network_available = false
+Is platform = linux
+Is compiler = g++
+Is network_available = false
+
+# Pre-existing observations
+Results filesystem_create_file_operational = true
