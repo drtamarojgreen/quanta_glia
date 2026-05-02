@@ -84,3 +84,25 @@ int main(int argc, char** argv) {
     - Parses stdout into `observed_results`.
     - Validates observed results against `@Results`.
     - Reports success or mismatch.
+
+## 5. CDD Checkins vs Checkouts
+
+CHAI CDD uses two complementary logs to make iterative development auditable and reproducible:
+
+- **`chai_checkins.md` (planned work):** Records pending or proposed sips/tasks that still need implementation.
+- **`chai_checkouts.md` (completed work):** Records completed sips/tasks, what changed, and the resulting observation(s).
+
+### Why checkouts matter
+- They create a durable execution history for CDD evolution over time.
+- They capture evidence-based outcomes (what was actually verified), not just intent.
+- They provide fast onboarding context for new contributors by linking each increment to artifacts and observations.
+
+### Expected checkout entry content
+A checkout entry should minimally include:
+1. **Sip/Capability name** (what was implemented).
+2. **Artifacts touched** (files or directories created/modified).
+3. **Observation(s)** (empirical result or validation status).
+4. **Notes** (optional: constraints, follow-ups, or corrections).
+
+Together, checkins + checkouts provide a complete CDD loop: propose -> implement -> observe -> record.
+

@@ -102,3 +102,11 @@ graph TD
 11. **AI Agent - Understanding Mode (AI_U):** The AI agent consumes the newly recorded **Facts (FACTS)** and **Card Results (RESULTS)**, updating its understanding of the environment and state. This completes one sip cycle, leading to the next iteration of planning.
 
 **Human Developer Oversight (dashed lines):** The human continuously monitors and can intervene at various points, especially during Reasoning Gate and Restrictions Engine checks, or by reviewing Observations and Facts. This ensures the AI remains aligned with the overall vision without micromanagement.
+
+## Checkin/Checkout Traceability Rule
+
+CDD lifecycle governance relies on two files:
+- **`chai_checkins.md`** captures what is still pending.
+- **`chai_checkouts.md`** captures what has been done and verified.
+
+This pairing provides end-to-end traceability across lifecycle stages and enforces evidence-based progress reporting.
