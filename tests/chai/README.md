@@ -163,3 +163,12 @@ CDD's profitability lies in solving existing business problems by **verifying re
 - **Audience:** Engineering teams, SREs, architects.
 
 **Core Strategy:** Do not sell CDD. Sell solutions to problems developers already complain about: broken environments, mysterious CI failures, and AI agent safety. CDD is the engine behind the product.
+
+## Checkins and Checkouts (CDD Work Ledger)
+
+CDD uses a dual-ledger model for iterative work tracking:
+- **`cdd/chai_checkins.md`** tracks planned, deferred, or unfinished sips.
+- **`cdd/chai_checkouts.md`** tracks completed sips, touched artifacts, and observed outcomes.
+
+Both files are required for traceability. Checkins preserve intent; checkouts preserve evidence.
+Together they define the operational loop: **propose -> implement -> observe -> record**.

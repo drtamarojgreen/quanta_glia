@@ -80,3 +80,11 @@ Turns AI into a disciplined, real-world-aware collaborator. Prevents:
 *   Chaotic development
 
 **CDD: The AI coding safety net for real-world environments.**
+
+## **Checkins vs Checkouts (Must Know)**
+
+*   **`chai_checkins.md`** = backlog of not-yet-implemented or deferred work.
+*   **`chai_checkouts.md`** = completed sip history with artifact and observation evidence.
+
+**Rule:** If work is deferred, record it in checkins. If work is completed, record it in checkouts.
+This keeps CDD auditable and prevents hidden or untraceable progress.

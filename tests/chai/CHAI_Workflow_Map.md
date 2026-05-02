@@ -72,3 +72,11 @@ graph LR
 10. **Agent: Continue Loop:** The cycle repeats, with the agent now having an updated set of Facts to inform its planning for the next sip.
 
 This iterative loop ensures that CHAI development is disciplined, empirically grounded, and always moving forward with verified capabilities.
+
+## Checkins and Checkouts in the Workflow
+
+In addition to facts/cards, CDD workflow state is tracked through two companion logs:
+1. **`chai_checkins.md`** for planned/deferred work.
+2. **`chai_checkouts.md`** for completed sips and their empirical outcomes.
+
+A workflow step is not fully closed until completed work is reflected in **checkouts** and any remaining future work is reflected in **checkins**.
