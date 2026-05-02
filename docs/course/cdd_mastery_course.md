@@ -4,6 +4,8 @@ Welcome, Environmental Architect. You are entering the **Greenhouse for Mental H
 
 In this course, you will master **Chai Driven Development (CDD)**, the specialized trellis system that allows AI and human minds to collaborate without descending into architectural decay. In the shifting waters of the mind, structure is your only anchor.
 
+**Course Duration:** 16 Weeks (See [Syllabus](./syllabus_16_weeks_cdd_mastery.md) for full details)
+
 ---
 
 ## Module 1: The Mycelium of Truth (Understanding CDD)
