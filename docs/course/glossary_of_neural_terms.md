@@ -1,12 +1,12 @@
-# The Architect's Lexicon: A Master Glossary for CDD
+# The Architect's Lexicon: A Master Glossary for SDD
 
 ## Technical Primitives
 
 -   **Audit Trail:** A persistent log of changes to the Fact Registry used for debugging environmental "wilting."
--   **Card:** A CDD Class or script that acts as a structural probe.
--   **CDD (Chai Driven Development):** A development methodology prioritizing structural restrictions over behavioral requirements.
+-   **Card:** A SDD Class or script that acts as a structural probe.
+-   **SDD (Sorrel Driven Development):** A development methodology prioritizing structural restrictions over behavioral requirements.
 -   **Fact:** An immutable or state-based unit of truth stored in the Registry.
--   **Green Syntax:** The machine-readable grammar used to define CDD restrictions and reasoning gates.
+-   **Green Syntax:** The machine-readable grammar used to define SDD restrictions and reasoning gates.
 -   **Reasoning Gate:** A validation step where AI-proposed logic is checked against structural constraints before code generation.
 -   **Sip (Small Integration Procedure):** A single, atomic execution of a Card to verify a specific environmental condition.
 -   **Situation:** The global environmental context defining allowed tools, constants, and limits.

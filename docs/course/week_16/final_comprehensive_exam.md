@@ -6,7 +6,7 @@
 
 ## Section 1: Philosophy of the Greenhouse (20 Points)
 
-**Q1:** Explain the lifecycle of a thought in the Greenhouse, from "Seeding" to "Harvesting." How do CDD Restrictions ensure the "Purity of the Source"? (10 Points)
+**Q1:** Explain the lifecycle of a thought in the Greenhouse, from "Seeding" to "Harvesting." How do SDD Restrictions ensure the "Purity of the Source"? (10 Points)
 
 **Q2:** Discuss the ethics of "Knowledge Pruning." When does deletion become a metabolic necessity for a self-regulating system? (10 Points)
 

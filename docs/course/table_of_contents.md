@@ -1,23 +1,23 @@
-# Table of Contents: The CDD Masterclass Greenhouse
+# Table of Contents: The SDD Masterclass Greenhouse
 
 Welcome to the Master Table of Contents. Use this as your primary navigation tool to traverse the various levels of the Neural Greenhouse.
 
 ---
 
 ## Core Reference Materials
--   [CDD Mastery Course Overview](./cdd_mastery_course.md)
--   [16-Week Master Syllabus](./syllabus_16_weeks_cdd_mastery.md)
+-   [SDD Mastery Course Overview](./sdd_mastery_course.md)
+-   [16-Week Master Syllabus](./syllabus_16_weeks_sdd_mastery.md)
 -   [The Architect's Lexicon (Glossary)](./glossary_of_neural_terms.md)
--   [Industry Applications of CDD](./industry_applications_of_cdd.md)
+-   [Industry Applications of SDD](./industry_applications_of_sdd.md)
 
 ---
 
 ## Phase I: Seeding the Intent (Weeks 1-4)
 ### Week 1: Foundations of Intent
 -   [Week 1 Lecture: Failure of Intent](./week_01/week_01_failure_of_intent.md)
--   [Intro to CDD Lecture Notes](./week_01/lecture_notes_intro_to_cdd.md)
+-   [Intro to SDD Lecture Notes](./week_01/lecture_notes_intro_to_sdd.md)
 -   [Masterclass 01: Emergence of Structural Truth](./week_01/masterclass_01_the_emergence_of_structural_truth.md)
--   [Foundation Workshop Itinerary](./week_01/itinerary_cdd_foundations.md)
+-   [Foundation Workshop Itinerary](./week_01/itinerary_sdd_foundations.md)
 
 ### Week 2: Foundation Plates
 -   [Week 2 Lecture: Foundation Plates & Roots](./week_02/week_02_foundation_plates.md)
@@ -29,7 +29,7 @@ Welcome to the Master Table of Contents. Use this as your primary navigation too
 
 ### Week 4: Fact Registry
 -   [Week 4 Lecture: Fact Probes & Protocols](./week_04/week_04_fact_registry_probes.md)
--   [Quiz: CDD Primitives](./week_04/quiz_cdd_primitives.md)
+-   [Quiz: SDD Primitives](./week_04/quiz_sdd_primitives.md)
 -   [Phase I Certification Exam](./week_04/phase_01_seeding_exam.md)
 
 ---

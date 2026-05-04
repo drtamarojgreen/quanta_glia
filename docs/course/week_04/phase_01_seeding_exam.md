@@ -6,11 +6,11 @@
 
 ## Section 1: Intent & Noise (30 Points)
 
-**Q1:** Define the "Signal/Noise Ratio" in the context of CDD. How does high structural noise lead to the "Failure of Intent"? (15 Points)
+**Q1:** Define the "Signal/Noise Ratio" in the context of SDD. How does high structural noise lead to the "Failure of Intent"? (15 Points)
 
 **Q2:** You are given an AI-generated script that uses five levels of nested factories to print "Hello World."
 -   Identify the "Noise" in this script.
--   Propose a CDD Restriction to prevent this specific pattern. (15 Points)
+-   Propose a SDD Restriction to prevent this specific pattern. (15 Points)
 
 ---
 

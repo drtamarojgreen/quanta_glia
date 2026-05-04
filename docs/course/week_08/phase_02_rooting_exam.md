@@ -32,7 +32,7 @@
 
 **Q8:** **Practical Design:** You are tasked with adding a "Euphoria" state to the greenhouse.
 -   Identify three psychological characteristics of Euphoria.
--   Translate these into three CDD Restrictions.
+-   Translate these into three SDD Restrictions.
 -   Describe the 3D visual feedback for this state. (15 Points)
 
 ---

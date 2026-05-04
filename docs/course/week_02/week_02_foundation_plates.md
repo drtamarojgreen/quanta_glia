@@ -14,7 +14,7 @@ The `docs/` and `scripts/` directories are not just files; they are a **Root Sys
 -   `scripts/`: The metabolic process (the code).
 -   `tests/`: The immune system.
 
-### The CDD Connectivity Rule:
+### The SDD Connectivity Rule:
 A "metabolic" script is only healthy if it has a direct "root" in the documentation. If a script exists without a corresponding `.md` restriction file, it is considered a "Parasitic Growth" and must be pruned.
 
 ## 3. 3D Vision: The Spatial Mind-Map

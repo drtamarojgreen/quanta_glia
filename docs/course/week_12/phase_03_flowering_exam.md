@@ -6,7 +6,7 @@
 
 ## Section 1: Probes & Flow (30 Points)
 
-**Q1:** Describe the "Three Sacred Methods" of a CDD Card. Why is high-fidelity reporting prioritized over boolean results? (15 Points)
+**Q1:** Describe the "Three Sacred Methods" of a SDD Card. Why is high-fidelity reporting prioritized over boolean results? (15 Points)
 
 **Q2:** Explain the "Irrigation Rule." What happens downstream when a Sip fails? (15 Points)
 

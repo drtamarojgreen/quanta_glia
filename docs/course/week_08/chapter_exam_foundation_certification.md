@@ -1,6 +1,6 @@
-# Chapter Exam: CDD Foundation Certification
+# Chapter Exam: SDD Foundation Certification
 
-**Objective:** To certify the candidate's understanding of Chai Driven Development principles, structural restrictions, and the "Neural Greenhouse" ecosystem.
+**Objective:** To certify the candidate's understanding of Sorrel Driven Development principles, structural restrictions, and the "Neural Greenhouse" ecosystem.
 
 ---
 
@@ -10,7 +10,7 @@
 
 **Q2:** Explain the "No-Compile" mandate. How does avoiding binary generation protect the artistic fidelity and technical integrity of the mental health simulation? (15 Points)
 
-**Q3:** Define "Environmental Contamination" in the context of CDD. How do Sips prevent it? (10 Points)
+**Q3:** Define "Environmental Contamination" in the context of SDD. How do Sips prevent it? (10 Points)
 
 ---
 
