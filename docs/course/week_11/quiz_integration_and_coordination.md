@@ -5,7 +5,7 @@
 
 ---
 
-## 1. What are the "Three Sacred Methods" of a CDD Card?
+## 1. What are the "Three Sacred Methods" of a SDD Card?
 A) Init, Run, Stop
 B) Setup, Execute, Report
 C) Seed, Root, Harvest

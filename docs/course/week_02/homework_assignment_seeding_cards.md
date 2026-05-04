@@ -1,6 +1,6 @@
 # Homework Assignment: Seeding the Trellis
 
-**Topic:** Translating Abstract Mental States into CDD Restrictions.
+**Topic:** Translating Abstract Mental States into SDD Restrictions.
 
 ## Objective
 To demonstrate your ability to convert a psychological vision into a set of technical structural constraints.
@@ -15,7 +15,7 @@ Describe the 3D environment that represents "Calm." Mention lighting, motion, an
 *(Example: A slow-pulsing bioluminescent sphere in a fog-filled dome.)*
 
 ## Task 2: Structural Restrictions
-Define three CDD Restrictions that would prevent an AI agent from "over-designing" or "polluting" this calm environment. Use the following format:
+Define three SDD Restrictions that would prevent an AI agent from "over-designing" or "polluting" this calm environment. Use the following format:
 1.  **Restriction Name:** (e.g., `max_angular_velocity`)
 2.  **Limit:** (e.g., `0.5 rad/s`)
 3.  **Conceptual Justification:** (e.g., "High-speed rotation triggers vestibular stress.")
@@ -28,5 +28,5 @@ If you were to write a **Card** to verify this environment, what is the single m
 
 ## Submission Guidelines
 -   Save your response as a Markdown file.
--   Ensure all technical terms align with the *CDD Foundations* lecture notes.
+-   Ensure all technical terms align with the *SDD Foundations* lecture notes.
 -   Avoid purely decorative elements; every design choice must have a psychological rationale.

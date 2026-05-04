@@ -19,7 +19,7 @@ A Card should never just return `true` or `false`. It should return **High-Fidel
 -   *Good Report:* `line_count = 24, docstring_presence = 1.0, complexity_score = 4`
 
 ## 4. Lab: Dissecting a Card
-Open `tests/cdd/cards/PrunerClass.cpp`.
+Open `tests/sdd/cards/PrunerClass.cpp`.
 1.  Identify the `Execute()` equivalent (the logic that calculates the composite score).
 2.  Analyze how it uses the "Soil" (the `pruner.facts`).
 3.  Rewrite the `Report()` logic to provide even higher fidelity data (e.g., specific weights used).

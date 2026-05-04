@@ -19,7 +19,7 @@ To build a "Deceleration" module, we must define the transition in technical ter
 -   `EXPECT(user_state, "decelerated")`
 
 ## 3. The Deceleration Bridge
-How do we move from one to the other? In CDD, we create a **Bridge Card**. This Card monitors the Fact Registry and slowly adjusts the `LIMIT` operators over time.
+How do we move from one to the other? In SDD, we create a **Bridge Card**. This Card monitors the Fact Registry and slowly adjusts the `LIMIT` operators over time.
 
 ## 4. 3D Vision: The Pulse
 Visualize the entire environment "breathing." The walls of the greenhouse expand and contract in time with the `rhythmic_pulse` Fact.

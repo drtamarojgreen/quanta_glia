@@ -3,7 +3,7 @@
 ## 1. Visualizing Complexity
 In the Greenhouse, we do not view "Complexity" as a number, but as **Organic Density**. A module with high cyclomatic complexity looks like a tangled, overgrown thicket that prevents light (intent) from reaching the floor.
 
-### The CDD "Pruning" Rule:
+### The SDD "Pruning" Rule:
 If the branching factor exceeds the "L-system" threshold of 3 nodes per branch, the module must be pruned.
 
 ## 2. Technical Restrictions: `LIMIT(complexity, value)`

@@ -1,0 +1,6 @@
+Situation: Default
+Is max_repos = 10
+Is custom_config_path = tests/bdd/custom_config.yaml
+Is repo_prefix = sorrel_test_repo
+Is cache_dir = sorrel_cache
+Is clone_src = sorrel_src_repo

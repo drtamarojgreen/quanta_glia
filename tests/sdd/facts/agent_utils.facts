@@ -1,0 +1,3 @@
+Situation: Default
+Is log_file_path = sorrel_agent_test.log
+Is test_message = SORREL Logging Test Message

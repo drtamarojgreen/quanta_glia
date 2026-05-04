@@ -18,10 +18,10 @@ Sets hard numerical boundaries (e.g., `LIMIT(complexity, 10)`).
 The desired outcome of the reasoning gate.
 
 ## 2. Reasoning Gates
-A **Reasoning Gate** is a CDD check that occurs *before* the code is written. The AI must "explain its work" in Green Syntax.
+A **Reasoning Gate** is a SDD check that occurs *before* the code is written. The AI must "explain its work" in Green Syntax.
 -   **Step 1:** The AI proposes a solution in natural language.
 -   **Step 2:** The AI translates that solution into Green Syntax.
--   **Step 3:** The CDD Parser validates the Syntax.
+-   **Step 3:** The SDD Parser validates the Syntax.
 -   **Step 4:** Only if Syntax is valid does the AI generate the actual code.
 
 ## 3. Lab: Drafting a Reasoning Gate

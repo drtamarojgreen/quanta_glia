@@ -21,5 +21,5 @@ The Registry maintains a history of every Fact change. This is called the **Audi
 -   If the "Greenhouse" wilts (a regression occurs), we trace the trail back to the exact moment a Fact deviated from its expected value.
 
 ## 4. Assignment: Registry Mapping
-Examine `tests/cdd/facts/pruner.facts`. List the five most critical facts and explain how they influence the `scripts/pruner.py` logic.
+Examine `tests/sdd/facts/pruner.facts`. List the five most critical facts and explain how they influence the `scripts/pruner.py` logic.
 -   *Hint:* Look at `delete_threshold` and `usage_weight`.
