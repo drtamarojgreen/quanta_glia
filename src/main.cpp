@@ -8,11 +8,11 @@
 
 int main(int argc, char *argv[]) {
     QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("Glia Standalone");
+    QCoreApplication::setApplicationName("SORREL-SDD Standalone");
     QCoreApplication::setApplicationVersion("1.0.0");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("Standalone Glia Management Application");
+    parser.setApplicationDescription("SORREL Standalone Glia Management Application (SDD)");
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -49,14 +49,11 @@ int main(int argc, char *argv[]) {
         QStringList args;
         args << "scripts/quanta_glia.py";
         if (!configPath.isEmpty()) {
-            // Note: Our Python script expects its own YAML config,
-            // but we demonstrate the integration here.
-            // In a real scenario, we might generate a temporary YAML from our GliaConfig.
             args << "--config" << configPath;
         }
         args << repos;
 
-        qInfo() << "Starting Glia Harvester...";
+        qInfo() << "Starting SORREL Harvester...";
         process.start("python3", args);
         if (!process.waitForStarted()) {
             qCritical() << "Failed to start python3 scripts/quanta_glia.py";
@@ -72,7 +69,7 @@ int main(int argc, char *argv[]) {
         QStringList args;
         args << "scripts/pruner.py";
 
-        qInfo() << "Starting Glia Pruner...";
+        qInfo() << "Starting SORREL Pruner...";
         process.start("python3", args);
         if (!process.waitForStarted()) {
             qCritical() << "Failed to start python3 scripts/pruner.py";

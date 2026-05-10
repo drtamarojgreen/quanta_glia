@@ -1,5 +1,5 @@
-#ifndef GLIA_CONFIG_MANAGER_H
-#define GLIA_CONFIG_MANAGER_H
+#ifndef SDD_CONFIG_MANAGER_H
+#define SDD_CONFIG_MANAGER_H
 
 #include "glia_config.h"
 #include <QString>
@@ -13,4 +13,4 @@ public:
     static bool loadFromJson(GliaConfig &config, const QString &filePath);
 };
 
-#endif // GLIA_CONFIG_MANAGER_H
+#endif // SDD_CONFIG_MANAGER_H

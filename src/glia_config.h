@@ -1,5 +1,5 @@
-#ifndef GLIA_CONFIG_H
-#define GLIA_CONFIG_H
+#ifndef SDD_CONFIG_H
+#define SDD_CONFIG_H
 
 #include <QString>
 #include <QStringList>
@@ -27,4 +27,4 @@ private:
     QStringList m_targetTopics;
 };
 
-#endif // GLIA_CONFIG_H
+#endif // SDD_CONFIG_H

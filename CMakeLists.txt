@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(glia_app VERSION 1.0.0 LANGUAGES CXX)
+project(sorrel VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -24,15 +24,34 @@ set(HEADERS
     src/glia_config_manager.h
 )
 
-# Application binary
-add_executable(glia_app_bin ${SOURCES} ${HEADERS})
-target_link_libraries(glia_app_bin PRIVATE Qt6::Core Qt6::Xml)
+# Main Application binary
+add_executable(sorrel ${SOURCES} ${HEADERS})
+target_link_libraries(sorrel PRIVATE Qt6::Core Qt6::Xml)
 
-# Test binary (including SORREL card for verification)
-add_executable(glia_app_test
+# SDD Test binary
+add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     src/glia_config.cpp
     src/glia_config_manager.cpp
 )
-target_include_directories(glia_app_test PRIVATE src tests/sdd/cpp)
-target_link_libraries(glia_app_test PRIVATE Qt6::Core Qt6::Xml)
+target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp)
+target_link_libraries(sorrel_test PRIVATE Qt6::Core Qt6::Xml)
+
+# Custom clean target to remove artifacts
+set(CLEAN_FILES
+    "${CMAKE_SOURCE_DIR}/test_out.txt"
+    "${CMAKE_SOURCE_DIR}/test_output_1.txt"
+    "${CMAKE_SOURCE_DIR}/test_output_2.txt"
+    "${CMAKE_SOURCE_DIR}/test_out_final.txt"
+    "${CMAKE_SOURCE_DIR}/build_output.txt"
+)
+
+add_custom_target(clean_artifacts
+    COMMAND ${CMAKE_COMMAND} -E remove -f ${CLEAN_FILES}
+    # Portable Python cleanup
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/__pycache__"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/scripts/__pycache__"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/tests/__pycache__"
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    COMMENT "Removing temporary logs and Python caches"
+)

@@ -11,9 +11,9 @@
 #include <QProcess>
 #include <QDir>
 
-// @Card: glia_app_config_serialization
-// @Results glia_app_config_xml_operational == true, glia_app_config_json_operational == true
-void glia_app_config_serialization_card(const std::map<std::string, std::string>& facts) {
+// @Card: sorrel_glia_config_serialization
+// @Results sorrel_glia_config_xml_operational == true, sorrel_glia_config_json_operational == true
+void sorrel_glia_config_serialization_card(const std::map<std::string, std::string>& facts) {
     GliaConfig config;
     config.setKnowledgeBase("/tmp/kb");
     config.setMaxRepos(42);
@@ -31,13 +31,13 @@ void glia_app_config_serialization_card(const std::map<std::string, std::string>
     bool json_loaded = GliaConfigManager::loadFromJson(jsonLoad, jsonPath);
     bool json_op = json_saved && json_loaded && (jsonLoad.maxRepos() == 42) && (jsonLoad.knowledgeBase() == "/tmp/kb");
 
-    std::cout << "glia_app_config_xml_operational = " << (xml_op ? "true" : "false") << std::endl;
-    std::cout << "glia_app_config_json_operational = " << (json_op ? "true" : "false") << std::endl;
+    std::cout << "sorrel_glia_config_xml_operational = " << (xml_op ? "true" : "false") << std::endl;
+    std::cout << "sorrel_glia_config_json_operational = " << (json_op ? "true" : "false") << std::endl;
 }
 
-// @Card: glia_app_qprocess_integration
-// @Results glia_app_qprocess_operational == true
-void glia_app_qprocess_integration_card(const std::map<std::string, std::string>& facts) {
+// @Card: sorrel_sdd_qprocess_integration
+// @Results sorrel_sdd_qprocess_operational == true
+void sorrel_sdd_qprocess_integration_card(const std::map<std::string, std::string>& facts) {
     // Create a dummy python script to test QProcess
     QString scriptPath = "/tmp/dummy_script.py";
     QFile file(scriptPath);
@@ -54,7 +54,7 @@ void glia_app_qprocess_integration_card(const std::map<std::string, std::string>
     QString output = QString::fromUtf8(process.readAllStandardOutput()).trimmed();
 
     bool qprocess_op = started && finished && (output == "success");
-    std::cout << "glia_app_qprocess_operational = " << (qprocess_op ? "true" : "false") << std::endl;
+    std::cout << "sorrel_sdd_qprocess_operational = " << (qprocess_op ? "true" : "false") << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -63,14 +63,14 @@ int main(int argc, char** argv) {
 
     if (argc > 1) {
         std::string card = argv[1];
-        if (card == "glia_app_config_serialization") {
-            glia_app_config_serialization_card(facts);
-        } else if (card == "glia_app_qprocess_integration") {
-            glia_app_qprocess_integration_card(facts);
+        if (card == "sorrel_glia_config_serialization") {
+            sorrel_glia_config_serialization_card(facts);
+        } else if (card == "sorrel_sdd_qprocess_integration") {
+            sorrel_sdd_qprocess_integration_card(facts);
         }
     } else {
-        glia_app_config_serialization_card(facts);
-        glia_app_qprocess_integration_card(facts);
+        sorrel_glia_config_serialization_card(facts);
+        sorrel_sdd_qprocess_integration_card(facts);
     }
 
     return 0;
