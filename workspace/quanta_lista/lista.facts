@@ -1,0 +1,7 @@
+Situation: Quanta_Lista_Initial
+Is Qt_Available = false
+Is CMake_Version = 3.22.1
+Is CXX_Standard = 17
+Is XML_Persistence_Implemented = true
+Is JSON_Persistence_Implemented = true
+Is Structural_Verification_Passed = true

@@ -1,4 +1,4 @@
-# CDD Restrictions: Quanta Lista
+# SDD Restrictions: Quanta Lista
 
 ## 1. Structural Guardrails
 - **FORBID**: Empty catch blocks. All exceptions must be handled or logged.
