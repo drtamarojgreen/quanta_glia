@@ -52,6 +52,7 @@ add_custom_target(clean_artifacts
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/scripts/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/tests/__pycache__"
+    # Note: For full cleanup including binaries, the user should remove the build directory.
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     COMMENT "Removing temporary logs and Python caches"
 )
