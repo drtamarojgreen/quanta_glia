@@ -13,3 +13,7 @@ Is logging_setup_operational = false
 Is keyword_validator_operational = false
 Is citation_validator_operational = false
 Is pruner_logic_operational = false
+Is qt6_available = true
+Is glia_app_config_xml_operational = false
+Is glia_app_config_json_operational = false
+Is glia_app_qprocess_operational = false
