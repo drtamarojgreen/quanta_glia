@@ -13,7 +13,7 @@
 1.  **Define Sip:** What *one capability* are you proving?
 2.  **Code Sip:** Write *minimal C++ code* (no placeholders, no frameworks).
 3.  **Execute Sip:** Run the code. *(Human/System)*
-4.  **Observe Results:** Note empirical outputs (e.g., `key = value`).
+4.  **Observe Results:** Note empirical numeric outputs (e.g., `bytes_written = 128`, `exit_code = 0`).
 5.  **Record Fact:** Update `tests/sorrel/sdd/facts/environment.facts` (append-only).
 6.  **Repeat:** Take the next sip.
 
@@ -30,11 +30,11 @@
 *   **Logical Card (Unit of Work):**
     *   Defined within a Class file.
     *   Uses **Decorators** for prerequisites and validation.
-    *   *Decorators:* `// @Is key == val`, `// @Needs key == val`, `// @Results key == val`, `// @Situation name`.
+    *   *Decorators:* `// @Is key == val`, `// @Needs key == val`, `// @Results measurement_key == number`, `// @Situation name`.
 
 *   **Fact (Line in `tests/sorrel/sdd/facts/*.facts`):**
     *   Structured by **Situation**, **Level**, and **Fact**.
-    *   *Syntax:* `[Level] [key] = [value]`.
+    *   *Syntax:* `[Level] [key] = [value]`; `Results` values should be numeric measurements, not pass/fail or true/false claims.
     *   *Levels:* `Is` (System State), `Needs` (Prerequisite), `Results` (Observation).
     *   *Situations:* Grouped by `Situation: Name` headers.
 
@@ -42,7 +42,7 @@
     *   Discovers Classes and Logical Cards.
     *   Indexes Facts by Situation and Level.
     *   Evaluates decorators before/after execution.
-    *   Reports truth based on empirical observation.
+    *   Reports measured evidence based on empirical observation.
 
 *   **`sorrel_checkins.md`:**
     *   Located in `tests/sorrel/sdd/`.
@@ -66,7 +66,7 @@
 *   **Minimize Write Surface:** Create new files; avoid modifying existing ones.
 *   **Human Verify:** Stop for human checks (compile, run, observe).
 *   **Small Executables:** Favor small, testable programs.
-*   **Fear Silent Failure:** Explicitly observe everything.
+*   **Fear Silent Failure:** Explicitly observe everything as numbers.
 
 ---
 

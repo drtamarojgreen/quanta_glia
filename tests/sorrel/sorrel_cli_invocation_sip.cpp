@@ -37,10 +37,10 @@ int main(int argc, char* argv[]) {
         if (std::string(argv[2]) == "sdd") {
             fs::path sdd_dir = find_sdd_directory();
             if (!sdd_dir.empty()) {
-                std::cout << "sdd_directory_found = true" << std::endl;
+                std::cout << "sdd_directory_found_count = 1" << std::endl;
                 std::cout << "sdd_directory_path = " << sdd_dir << std::endl;
             } else {
-                std::cout << "sdd_directory_found = false" << std::endl;
+                std::cout << "sdd_directory_found_count = 0" << std::endl;
                 std::cout << "sdd_directory_path = (not found)" << std::endl;
             }
         } else if (std::string(argv[2]) == "facts") { // New logic for 'discover facts'
@@ -48,16 +48,16 @@ int main(int argc, char* argv[]) {
             if (!sdd_dir.empty()) {
                 fs::path facts_dir_path = sdd_dir / "facts";
                 if (fs::exists(facts_dir_path) && fs::is_directory(facts_dir_path)) {
-                    std::cout << "facts_directory_found = true" << std::endl;
+                    std::cout << "facts_directory_found_count = 1" << std::endl;
                     std::cout << "facts_directory_path = " << facts_dir_path << std::endl;
                 } else {
-                    std::cout << "facts_directory_found = false" << std::endl;
+                    std::cout << "facts_directory_found_count = 0" << std::endl;
                     std::cout << "facts_directory_path = (not found)" << std::endl;
                 }
             } else {
-                std::cout << "sdd_directory_found = false" << std::endl;
+                std::cout << "sdd_directory_found_count = 0" << std::endl;
                 std::cout << "sdd_directory_path = (not found - cannot check for facts directory)" << std::endl;
-                std::cout << "facts_directory_found = false" << std::endl;
+                std::cout << "facts_directory_found_count = 0" << std::endl;
                 std::cout << "facts_directory_path = (not found)" << std::endl;
             }
         } else { // Handle unknown discover target

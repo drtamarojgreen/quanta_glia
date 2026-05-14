@@ -9,7 +9,7 @@ The first SORREL test answers a few fundamental questions about the remote envir
 3. Can it receive arguments?
 4. Can it produce output?
 
-These are the **first observable facts** an agent can learn.
+These are the **first observable facts** an agent can learn, and Sorrel records them as measurements instead of pass/fail labels.
 
 Instead of writing a program, the agent writes a **probe**.
 
@@ -67,17 +67,17 @@ This test reveals several environmental facts.
 
 After compilation and execution, the agent learns:
 
-**Compilation facts**
+**Compilation measurements**
 
-* compiler exists
-* C++ builds successfully
-* standard library available
+* compiler process exit code
+* output binary byte size
+* compile duration in milliseconds
 
-**Execution facts**
+**Execution measurements**
 
-* program runs
-* arguments are passed correctly
-* stdout is functional
+* program process exit code
+* argument byte count received
+* stdout byte count emitted
 
 These become the **first entries in `sdd/facts/`**.
 
@@ -88,10 +88,11 @@ These become the **first entries in `sdd/facts/`**.
 Example conceptual facts derived from the test:
 
 ```
-compiler=c++
-execution=enabled
-stdout=available
-argv=supported
+compiler_exit_code = 0
+compiled_binary_size_bytes = 16840
+program_exit_code = 0
+argv_bytes_received = 6
+stdout_bytes_emitted = 7
 ```
 
 These facts are not assumptions.
@@ -118,7 +119,7 @@ RESULT
 argument printed to stdout
 ```
 
-If the test compiles and runs, the card succeeds.
+If the test compiles and runs, the card does not simply “succeed”; it emits measurements such as exit codes and byte counts for the fact record.
 
 ---
 

@@ -8,7 +8,7 @@
 
 *   **Sorrel is a testing framework, not a sandbox.**
 *   Agents work in **incremental steps (\u201csips\u201d)**: compile \u2192 run \u2192 observe \u2192 stop.
-*   Success is measured by **real empirical results**, never assumptions or simulated outcomes.
+*   Sorrel does not ask a card to announce success. It records **real empirical measurements**: hard numbers observed from execution, never assumptions, simulated outcomes, pass/fail labels, or true/false claims.
 *   **No placeholders or TODOs** in code; unfinished work is tracked in `sorrel_checkins.md`.
 *   Always act as if the environment is **fragile and irrecoverable**\u2014gloves-on mindset.
 
@@ -19,8 +19,8 @@
 | Concept       | Description                                     | Agent Expectation                                               |
 | ------------- | ----------------------------------------------- | --------------------------------------------------------------- |
 | **Sip**       | Smallest incremental task.                      | Compile, run, and report results before next action.            |
-| **Fact**      | Defines environment conditions or constraints.  | Cards read facts to determine what is executable.               |
-| **Card**      | Executable C++ unit implementing a fact.        | Must compile and produce measurable outputs.                    |
+| **Fact**      | Defines environment conditions, constraints, or measured evidence. | Cards read state facts before execution and emit numeric result facts after execution. |
+| **Card**      | Executable C++ unit producing evidence.         | Must compile and print `key = number` measurements.             |
 | **Runner**    | Executes cards against facts.                   | Prints results, enforces decorators, prevents unsafe execution. |
 | **Checkins**  | Records unfinished work.                        | Only `sorrel_checkins.md`, never in code.                         |
 | **Decorator** | Guard that blocks execution if conditions fail. | Ensure cards do not run if environment/facts unmet.             |
@@ -58,7 +58,7 @@ tests/sorrel/
 
     *   Command: `sorrel sip <card_name>`
     *   Compile \u2192 run \u2192 observe \u2192 stop.
-    *   Produce **empirical outputs**, e.g., `filesystem_write_permission = true`.
+    *   Produce **empirical numeric outputs**, e.g., `filesystem_write_bytes = 128`, `created_file_count = 1`, `write_errno = 0`.
 
 3.  **Record Checkins**
 
@@ -79,7 +79,7 @@ tests/sorrel/
 ## **5. Execution Rules for Agents**
 
 1.  **Compile Before Run** \u2013 Cards must compile successfully before any observation.
-2.  **Observe Results** \u2013 Only recorded empirical results are valid.
+2.  **Observe Results** \u2013 Only recorded numeric empirical results are valid; do not use pass/fail or true/false result facts.
 3.  **No Hardcoding** \u2013 Paths, environment values, or config must reference facts or relative paths.
 4.  **No Placeholders** \u2013 Track unfinished items in `sorrel_checkins.md`.
 5.  **Respect Directory Scope** \u2013 Work only in allowed folders.
@@ -92,7 +92,7 @@ tests/sorrel/
 | Pitfall               | Before Sorrel                                   | After Sorrel                                                   |
 | --------------------- | --------------------------------------------- | ------------------------------------------------------------ |
 | Overengineering       | Agents generate hundreds of unnecessary lines | Sips force incremental coding, only one capability at a time |
-| Silent Failures       | Agents assert `true==true`                    | Cards return measurable empirical results                    |
+| Silent Failures       | Agents assert `true==true`                    | Cards return measurable numeric evidence                     |
 | Hardcoded paths       | `/home/user/...`                              | Facts + relative paths enforce environment flexibility       |
 | Placeholder abuse     | `TODO` comments left in code                  | `sorrel_checkins.md` tracks deferred work                      |
 | Ignoring environment  | Agents assume compiler, libraries exist       | Facts define environment; runner validates before execution  |
@@ -105,8 +105,9 @@ tests/sorrel/
 **Fact (`tests/sorrel/sdd/facts/filesystem.facts`):**
 
 ```text
-filesystem_write_permission = true
-working_directory_exists = true
+filesystem_write_bytes = 128
+created_file_count = 1
+write_errno = 0
 ```
 
 **Card (`tests/sorrel/sdd/cards/filesystem_create_file.cpp`):**
@@ -117,8 +118,11 @@ working_directory_exists = true
 
 int main() {
     std::ofstream file("sorrel_created_file.tmp");
-    if(file) std::cout << "filesystem_create_file_operational = true
-";
+    file << "sorrel";
+    file.close();
+    std::cout << "filesystem_write_bytes = 6\n";
+    std::cout << "created_file_count = 1\n";
+    std::cout << "write_errno = 0\n";
     return 0;
 }
 ```
@@ -130,7 +134,9 @@ Loading facts from tests/sorrel/sdd/facts...
 Loading card filesystem_create_file.cpp...
 Decorators allow execution.
 Executing card...
-filesystem_create_file_operational = true
+filesystem_write_bytes = 6
+created_file_count = 1
+write_errno = 0
 Card execution completed.
 ```
 
@@ -139,7 +145,7 @@ Card execution completed.
 ## **8. Best Practices**
 
 1.  **Incremental Development:** Never write large blocks of code at once.
-2.  **Empirical Reporting:** Every output must be observable and verifiable.
+2.  **Empirical Reporting:** Every result output must be observable, numeric, and verifiable.
 3.  **Environment Awareness:** Facts define real-world conditions.
 4.  **No Shortcuts:** Avoid placeholders, TODOs, or assumptions.
 5.  **Track Deferred Work:** Use `sorrel_checkins.md` for items not implemented yet.

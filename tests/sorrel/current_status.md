@@ -44,8 +44,8 @@ Your recent critique highlighted a critical gap regarding how we manage and reco
 *   **Structured Checkout Entries:** To maximize the value of `sorrel_checkouts.md`, entries will adopt a minimal structure to capture not just what was done, but also key observations and learnings:
     ```
     - card: <card_identifier>
-      sip_result: <operational_status_e.g_operational/not_operational>
-      observation: <key_empirical_observation_e.g_filesystem_create_file_operational=true>
+      sip_measurements: <numeric_measurements_e.g_exit_code_0_duration_ms_12>
+      observation: <key_numeric_observation_e.g_created_file_count=1>
       notes: <any_significant_learnings_or_contextual_details>
     ```
 

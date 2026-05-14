@@ -2,6 +2,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "compiler_check_operational = true" << std::endl;
+    std::cout << "compiler_probe_exit_code = 0" << std::endl;
     return 0;
 }

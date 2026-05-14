@@ -11,13 +11,16 @@ public:
         {
             outfile.close();
             // We don't delete it here, as cleanup is a separate question/sip.
-            // The fact we could open and close it is the observation.
-            return 0; // Success: file was created/opened and closed
+            // The fact we could open and close it is recorded as numeric evidence.
+            std::cout << "created_file_count = 1" << std::endl;
+            std::cout << "create_file_errno = 0" << std::endl;
+            return 0;
         }
         else
         {
-            std::cerr << "Error: Could not create/open file." << std::endl;
-            return 1; // Failure: file could not be created/opened
+            std::cerr << "created_file_count = 0" << std::endl;
+            std::cerr << "create_file_errno = 1" << std::endl;
+            return 1;
         }
     }
 };

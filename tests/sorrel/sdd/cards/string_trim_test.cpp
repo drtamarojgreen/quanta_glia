@@ -12,16 +12,16 @@ int main() {
     // Corrected string literal for test6
     std::string test6 = "\t\nleading and trailing\r\n";
 
-    bool operational = true; // Declare operational here
+    int mismatch_count = 0;
+    if (Sorrel::Cpp::Util::trim(test1) != "hello") mismatch_count++;
+    if (Sorrel::Cpp::Util::trim(test2) != "hello") mismatch_count++;
+    if (Sorrel::Cpp::Util::trim(test3) != "hello world") mismatch_count++;
+    if (Sorrel::Cpp::Util::trim(test4) != "") mismatch_count++;
+    if (Sorrel::Cpp::Util::trim(test5) != "") mismatch_count++;
+    if (Sorrel::Cpp::Util::trim(test6) != "leading and trailing") mismatch_count++;
 
-    if (Sorrel::Cpp::Util::trim(test1) != "hello") operational = false;
-    if (Sorrel::Cpp::Util::trim(test2) != "hello") operational = false;
-    if (Sorrel::Cpp::Util::trim(test3) != "hello world") operational = false;
-    if (Sorrel::Cpp::Util::trim(test4) != "") operational = false;
-    if (Sorrel::Cpp::Util::trim(test5) != "") operational = false;
-    if (Sorrel::Cpp::Util::trim(test6) != "leading and trailing") operational = false;
-
-    std::cout << "string_trim_operational = " << (operational ? "true" : "false") << std::endl;
+    std::cout << "string_trim_case_count = 6" << std::endl;
+    std::cout << "string_trim_mismatch_count = " << mismatch_count << std::endl;
 
     return 0;
 }

@@ -238,18 +238,18 @@ Parameters give agents **structured context** rather than natural language hints
 
 ## Results
 
-Defines expected output patterns.
+Defines expected empirical measurements. Result fields should be hard numbers captured from card execution, not `pass`, `fail`, `true`, or `false`.
 
 Example:
 
 ```
 RESULTS
-strategy
-incremental_analysis
-tool_usage
+files_scanned_count: number
+invalid_import_count: number
+analysis_duration_ms: number
 ```
 
-This allows automated scoring.
+This allows automated scoring without trusting the agent to self-approve.
 
 ---
 

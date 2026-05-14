@@ -63,15 +63,15 @@ graph LR
 1.  **Human: Define Next Sip Objective:** The human developer initiates the cycle by identifying the single, minimal capability to be implemented and verified in the next "sip."
 2.  **Agent: Plan Card to Prove Objective:** The AI agent plans the specific Card (an executable C++ unit) that will demonstrate or test this objective.
 3.  **Agent: Code Card:** The AI agent writes the C++ source code for the Card (e.g., `filesystem_create_file.cpp`), placing it in `tests/sorrel/sdd/cards/`. This code must adhere to all SDD principles (minimal, no placeholders, empirical output only).
-4.  **Runner: Execute Card:** The SORREL Card Runner (the `sorrel` CLI, specifically a future `run-card` command) compiles and executes the agent-generated Card.
-5.  **System: Observe Empirical Results:** The SORREL system observes and captures the precise, measurable outputs from the Card's execution (e.g., `filesystem_create_file_operational = true`, `process_exit_code = 0`). These are the **Empirical Observations**.
+4.  **Runner: Execute Card:** The current SORREL Card Runner discovers a prebuilt executable for the card source and executes it with the card name. Compilation is a separate sip/check before the runner can collect evidence.
+5.  **System: Observe Empirical Results:** The SORREL system observes and captures precise numeric outputs from the Card's execution (e.g., `filesystem_write_bytes = 6`, `created_file_count = 1`, `process_exit_code = 0`). These are the **Empirical Observations**. Boolean labels and pass/fail strings are not evidence.
 6.  **System: Record Observations:** The observed empirical results are formatted and prepared for storage.
-7.  **System: Update Facts:** The verified observations are appended as new lines to the `tests/sorrel/sdd/facts/environment.facts` file. This updates the collective knowledge base of the environment's capabilities.
+7.  **System: Update Facts:** The measured observations are appended as new numeric `Results` lines in the `tests/sorrel/sdd/facts/environment.facts` file. This updates the collective knowledge base of the environment's capabilities without converting evidence into pass/fail labels.
 8.  **System: Update `sorrel_checkins.md`:** If the Card addressed any items from `sorrel_checkins.md`, or revealed new unimplemented work, this file is updated.
 9.  **Human: Review / Verify:** The human reviews the updated Facts, observations, and any changes in the `sorrel_checkins.md` to ensure everything is correct and aligns with the objective. This is a critical human verification point.
 10. **Agent: Continue Loop:** The cycle repeats, with the agent now having an updated set of Facts to inform its planning for the next sip.
 
-This iterative loop ensures that SORREL development is disciplined, empirically grounded, and always moving forward with verified capabilities.
+This iterative loop ensures that SORREL development is disciplined, empirically grounded, and always moving forward from measured capabilities.
 
 ## Checkins and Checkouts in the Workflow
 

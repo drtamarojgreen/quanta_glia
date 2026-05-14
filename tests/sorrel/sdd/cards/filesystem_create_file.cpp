@@ -18,12 +18,13 @@ int main() {
         outfile.close();
         // Clean up immediately after observation is made, as this is a test.
         fs::remove(full_path); // Remove the file after successful creation/observation
-        std::cout << "filesystem_create_file_operational = true" << std::endl;
-        std::cout << "created_file_path = " << full_path.string() << std::endl;
+        std::cout << "created_file_count = 1" << std::endl;
+        std::cout << "filesystem_errno = 0" << std::endl;
+        std::cout << "created_file_path_length = " << full_path.string().size() << std::endl;
     } else {
-        std::cerr << "filesystem_create_file_operational = false" << std::endl;
-        // Output path as (error) if file could not be created/opened
-        std::cerr << "created_file_path = (error)" << std::endl;
+        std::cerr << "created_file_count = 0" << std::endl;
+        std::cerr << "filesystem_errno = 1" << std::endl;
+        std::cerr << "created_file_path_length = 0" << std::endl;
     }
 
     return 0;

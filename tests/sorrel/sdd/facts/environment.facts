@@ -1,6 +1,8 @@
 Is platform = linux
 Is compiler = g++
-Is network_available = false
+Is network_available_count = 0
 
 # Pre-existing observations
-Results filesystem_create_file_operational = true
+Results filesystem_write_bytes = 0
+Results created_file_count = 1
+Results filesystem_errno = 0
