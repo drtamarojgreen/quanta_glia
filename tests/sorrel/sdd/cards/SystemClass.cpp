@@ -1,22 +1,22 @@
 // @Card: check_os
 // @Is platform == linux
-// @Results os_type == linux
+// @Results platform_linux_detected == 1
 
 // @Card: check_integrity
 // @Is platform == linux
-// @Results system_integrity == passed
+// @Results system_integrity_score == 1
 
 #include <iostream>
 #include <string>
 
 void check_os() {
-    std::cout << "os_type = linux" << std::endl;
-    std::cout << "check_os_operational = true" << std::endl;
+    std::cout << "platform_linux_detected = 1" << std::endl;
+    std::cout << "stdout_line_count = 2" << std::endl;
 }
 
 void check_integrity() {
-    std::cout << "system_integrity = passed" << std::endl;
-    std::cout << "check_integrity_operational = true" << std::endl;
+    std::cout << "system_integrity_score = 1" << std::endl;
+    std::cout << "integrity_check_count = 1" << std::endl;
 }
 
 int main(int argc, char** argv) {

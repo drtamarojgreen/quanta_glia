@@ -14,13 +14,14 @@ SORREL is a **development structure** designed to make AI agents **useful collab
 SDD is a methodology for AI collaboration and evaluation, designed **around AI limitations** (context, navigation, tool hallucination, over-editing). It prioritizes **restrictions** over requirements.
 
 -   **Focus:** How code is *allowed to be constructed*, not just what it does.
--   **Core Principle:** AI agents participate by generating small, verifiable artifacts within a controlled environment, learning through observation rather than assumption.
+-   **Core Principle:** AI agents participate by generating small, verifiable artifacts within a controlled environment, learning through observation rather than assumption. A Sorrel result is empirical evidence: a `key = number` measurement captured from the environment, not a self-declared pass/fail or true/false verdict.
 
 ### Why SDD Differs from BDD
 
 -   BDD measures **success of execution** (step completion).
--   SDD measures **truth of observation** (empirical results).
--   SDD removes self-reporting mechanisms for correctness; agents must produce **evidence instead of approval**.
+-   SDD measures **truth of observation** (empirical measurements).
+-   SDD removes self-reporting mechanisms for correctness; agents must produce **numeric evidence instead of approval**.
+-   Sorrel facts should be hard numbers whenever they describe a result, such as `bytes_written = 128`, `exit_code = 0`, or `latency_ms = 14`; avoid result facts like `passed`, `failed`, `true`, or `false`.
 
 ## 3. Green Syntax
 
@@ -43,13 +44,13 @@ A structured format designed for machine reasoning first, replacing natural lang
     ```cpp
     // @Card: check_os
     // @Is platform == linux
-    // @Results os_type == linux
+    // @Results stdout_line_count == 1
     ```
 
 ### c. Fact
 -   **Definition:** A validated, immutable piece of knowledge about the environment or system, derived from empirical observation.
 -   **Structure:** Prefixed by Level (`Is`, `Needs`, `Results`).
--   **Syntax:** `Is key = value`
+-   **Syntax:** `Is key = value` for state/context and `Results measurement_key = number` for observed evidence.
 -   **Location:** `sdd/facts/*.facts`
 -   **Purpose:** Serves as the ground truth for agents, preventing assumptions and hallucinations.
 
@@ -149,17 +150,17 @@ SDD's profitability lies in solving existing business problems by **verifying re
 
 ### 1. Environment Verification Service (`sorrel doctor`)
 - **Problem Solved:** Broken CI environments, inconsistent developer machines, dependency breakage.
-- **Product:** A tool that runs SDD cards as environment probes (`compiler_operational`, `network_dns_resolution`, etc.) and reports a machine-readable list of facts. It answers "why did this build fail?" by showing what is *actually true* about the environment.
+- **Product:** A tool that runs SDD cards as environment probes (`compiler_exit_code`, `dns_lookup_latency_ms`, etc.) and reports a machine-readable list of numeric facts. It answers "why did this build fail?" by showing measured evidence from the environment.
 - **Audience:** Developers, DevOps, Platform Engineering.
 
 ### 2. AI Agent Safety Layer (`Agent Execution Firewall`)
 - **Problem Solved:** Companies want to use AI agents but fear they will break systems.
-- **Product:** A "gloves layer" that requires agents to pass verification cards (`filesystem_safe`, `database_backup_verified`) before being allowed to perform mutations.
+- **Product:** A "gloves layer" that requires agents to produce threshold-satisfying measurements (`filesystem_write_bytes >= 1`, `database_backup_size_bytes > 0`) before being allowed to perform mutations.
 - **Audience:** Companies deploying code-generating or infrastructure-modifying AI agents.
 
 ### 3. Verified Infrastructure Knowledge (`Developer Observability`)
 - **Problem Solved:** Infrastructure knowledge is often tribal, undocumented, or outdated.
-- **Product:** A system that uses SDD to generate a **live, factual system map** (`postgres_version = 15.3`, `docker_available = true`). It monitors development reality, not just runtime metrics.
+- **Product:** A system that uses SDD to generate a **live, factual system map** (`postgres_major_version = 15`, `docker_probe_exit_code = 0`). It monitors development reality, not just runtime metrics.
 - **Audience:** Engineering teams, SREs, architects.
 
 **Core Strategy:** Do not sell SDD. Sell solutions to problems developers already complain about: broken environments, mysterious CI failures, and AI agent safety. SDD is the engine behind the product.

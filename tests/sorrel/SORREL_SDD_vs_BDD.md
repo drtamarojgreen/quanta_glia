@@ -123,7 +123,7 @@ BDD therefore asks AI to generate artifacts that require **human-level conceptua
 
 **Sorrel Driven Development (SDD)** takes a fundamentally different approach.
 
-Instead of expecting AI agents to understand behavioral intent, SDD **constrains the development environment so that invalid structures cannot progress**.
+Instead of expecting AI agents to understand behavioral intent, SDD **constrains the development environment so that invalid structures cannot progress** and requires executed cards to emit measured evidence.
 
 The philosophy shifts from:
 
@@ -134,7 +134,7 @@ Define desired behaviors
 to
 
 ```text
-Define allowable structures and restrictions
+Define allowable structures, restrictions, and numeric evidence
 ```
 
 ---
@@ -190,11 +190,13 @@ CARD
 TOOLS
 PARAMETERS
 RESULTS
+    bytes_written: number
+    exit_code: number
 ```
 
 The runtime system interprets these structures directly.
 
-The agent never writes low-level verification code.
+The agent does not get to replace evidence with `pass`, `fail`, `true`, or `false`; it must expose observed numbers.
 
 ---
 
@@ -213,7 +215,7 @@ When AI generates the tests, this process becomes extremely inefficient because 
 
 SDD eliminates this loop.
 
-Validation occurs at the **grammar and reasoning level**, not through repeated execution failures.
+Validation occurs at the **grammar and reasoning level**, while execution produces numeric observations instead of repeated pass/fail debugging cycles.
 
 This dramatically reduces the amount of debugging required.
 

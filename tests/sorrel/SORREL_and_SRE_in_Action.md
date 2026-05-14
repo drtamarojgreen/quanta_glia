@@ -92,16 +92,16 @@ The compilation output is returned to the agent.
 Example response:
 
 ```
-Compilation successful
-Compiler: GCC 13
-Standard: C++17
+compiler_exit_code = 0
+compiler_major_version = 13
+cpp_standard_year = 2017
 ```
 
 Now the agent knows:
 
 * the compiler
 * the language standard
-* that compilation works
+* the compiler process exit code
 
 ---
 
@@ -177,7 +177,7 @@ These directories represent the core artifacts of the SDD system.
 
 Facts represent **validated knowledge about the environment**.
 
-They are derived from successful tests and environment discovery.
+They are derived from numeric card measurements and environment discovery.
 
 Examples might include:
 

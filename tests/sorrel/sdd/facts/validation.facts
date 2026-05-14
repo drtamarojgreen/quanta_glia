@@ -1,8 +1,8 @@
 Situation: Default
 Is platform = linux
-Is network_available = true
+Is network_available_count = 1
 
 Situation: LowResources
 Is platform = linux
 Is disk_space = low
-Is network_available = false
+Is network_available_count = 0

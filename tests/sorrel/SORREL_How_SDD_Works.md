@@ -24,9 +24,9 @@ Maintenance
 
 The **Restrictions phase** defines structural constraints that control how AI agents are allowed to construct systems.
 
-Instead of verifying **what code does**, SDD verifies **how code is allowed to be constructed**.
+SDD first verifies **how code is allowed to be constructed**, then executes small cards to collect empirical evidence about what happened.
 
-This prevents large categories of errors from ever being produced.
+The card output is a set of hard-number facts, not a pass/fail verdict. This prevents large categories of errors from being hidden behind meaningless success claims.
 
 ---
 
@@ -107,9 +107,9 @@ tool_required: json_parser
 END
 ```
 
-The SORREL parser evaluates the generated structure.
+The SORREL restriction layer evaluates the generated structure before a card is allowed to become evidence.
 
-The code above would fail because:
+The code above would be rejected because:
 
 * empty catch block
 * no parser tool used
@@ -246,26 +246,24 @@ END
 
 The parser detects meaningless assertions.
 
-The agent must generate meaningful verification.
+The agent must replace them with measurable observations such as `records_parsed_count = 25`, `invalid_record_count = 0`, or `parse_duration_ms = 4`.
 
 ---
 
 # How the SDD Parser Works Conceptually
 
-SDD does not run code to validate correctness.
+SDD does not treat runtime as a simple pass/fail correctness oracle.
 
-Instead it performs **structural analysis**.
-
-It evaluates:
+It performs **structural analysis before execution** and then uses card execution to collect measured evidence. The structural layer evaluates:
 
 * tool usage
 * code patterns
 * architectural structure
 * constraint compliance
 
-If violations occur, the system rejects the solution.
+If violations occur, the system rejects the solution before evidence is recorded. If the card runs, its output remains numeric evidence rather than an approval statement.
 
-This prevents broken designs from entering the codebase.
+This prevents broken designs from entering the codebase and prevents weak tests from hiding behind `true` or `passed`.
 
 ---
 
@@ -277,13 +275,14 @@ Traditional development validates behavior:
 Does the code produce the correct result?
 ```
 
-SDD validates construction:
+SDD validates construction and evidence quality:
 
 ```
 Is the code built in an acceptable way?
+What hard numbers did the card observe?
 ```
 
-For AI agents this is far more reliable.
+For AI agents this is far more reliable than asking the agent to declare success.
 
 Agents are good at producing structured artifacts when given explicit constraints.
 
