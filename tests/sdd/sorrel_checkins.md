@@ -7,3 +7,7 @@
 - sorrel_app_main: Developed main application entry point (Sorrel) with QProcess integration for Glia scripts.
 - sorrel_app_build: Created CMake build system with custom clean targets and SDD test framework integration.
 - sorrel_app_verify: Verified system via SDD test cards in tests/sdd/.
+- numeric_refactor_sip: Refactor existing cards to output numeric results (0/1).
+- reporting_coverage_sip: Implement SDD test for reporting.py.
+- audit_coverage_sip: Implement SDD test for audit.py.
+- ethos_integration_sip: Implement SDD test for quanta_ethos.py integration.

@@ -29,8 +29,8 @@ void keyword_validator_verification_card(const std::map<std::string, std::string
     }
     pclose(pipe);
 
-    bool operational = (result.find("True") != std::string::npos);
-    std::cout << "keyword_validator_operational = " << (operational ? "true" : "false") << std::endl;
+    int operational = (result.find("True") != std::string::npos) ? 1 : 0;
+    std::cout << "keyword_validator_operational = " << operational << std::endl;
 }
 
 // @Card: citation_validator_verification
@@ -54,8 +54,8 @@ void citation_validator_verification_card(const std::map<std::string, std::strin
     }
     pclose(pipe);
 
-    bool operational = (result.find("True") != std::string::npos);
-    std::cout << "citation_validator_operational = " << (operational ? "true" : "false") << std::endl;
+    int operational = (result.find("True") != std::string::npos) ? 1 : 0;
+    std::cout << "citation_validator_operational = " << operational << std::endl;
 }
 
 int main(int argc, char* argv[]) {

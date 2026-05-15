@@ -17,3 +17,17 @@
     -   *Observation:* `sorrel_glia_config_json_operational = true`
     -   *Observation:* `sorrel_sdd_qprocess_operational = true`
     -   *Artifacts:* `src/main.cpp`, `src/glia_config.h`, `src/glia_config.cpp`, `src/glia_config_manager.h`, `src/glia_config_manager.cpp`, `CMakeLists.txt`, `tests/sdd/cards/GliaAppClass.cpp`, `tests/sdd/sorrel_checkins.md`, `tests/sdd/sorrel_checkouts.md`.
+
+-   **Numeric Result Refactor:** Refactored all cards in `tests/sdd/cards/` to output numeric values (0/1) instead of boolean strings.
+    -   *Observation:* `numeric_results_operational = 1`
+    -   *Artifacts:* All files in `tests/sdd/cards/` updated.
+
+-   **Extended Coverage:** Added new SDD test classes for Reporting, Auditing, and Ethos integration.
+    -   *Observation:* `reporting_csv_operational = 1`
+    -   *Observation:* `audit_log_operational = 1`
+    -   *Observation:* `ethos_validation_operational = 1`
+    -   *Artifacts:* `tests/sdd/cards/ReportingClass.cpp`, `tests/sdd/cards/AuditClass.cpp`, `tests/sdd/cards/EthosIntegrationClass.cpp`.
+
+-   **Restrictions Definition:** Created `tests/sdd/RESTRICTIONS.md` to enforce structural and validation rules.
+    -   *Observation:* `restrictions_defined = 1`
+    -   *Artifacts:* `tests/sdd/RESTRICTIONS.md`.

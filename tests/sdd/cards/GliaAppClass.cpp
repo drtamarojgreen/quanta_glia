@@ -24,15 +24,15 @@ void sorrel_glia_config_serialization_card(const std::map<std::string, std::stri
     bool xml_saved = GliaConfigManager::saveToXml(config, xmlPath);
     GliaConfig xmlLoad;
     bool xml_loaded = GliaConfigManager::loadFromXml(xmlLoad, xmlPath);
-    bool xml_op = xml_saved && xml_loaded && (xmlLoad.maxRepos() == 42) && (xmlLoad.knowledgeBase() == "/tmp/kb");
+    int xml_op = (xml_saved && xml_loaded && (xmlLoad.maxRepos() == 42) && (xmlLoad.knowledgeBase() == "/tmp/kb")) ? 1 : 0;
 
     bool json_saved = GliaConfigManager::saveToJson(config, jsonPath);
     GliaConfig jsonLoad;
     bool json_loaded = GliaConfigManager::loadFromJson(jsonLoad, jsonPath);
-    bool json_op = json_saved && json_loaded && (jsonLoad.maxRepos() == 42) && (jsonLoad.knowledgeBase() == "/tmp/kb");
+    int json_op = (json_saved && json_loaded && (jsonLoad.maxRepos() == 42) && (jsonLoad.knowledgeBase() == "/tmp/kb")) ? 1 : 0;
 
-    std::cout << "sorrel_glia_config_xml_operational = " << (xml_op ? "true" : "false") << std::endl;
-    std::cout << "sorrel_glia_config_json_operational = " << (json_op ? "true" : "false") << std::endl;
+    std::cout << "sorrel_glia_config_xml_operational = " << xml_op << std::endl;
+    std::cout << "sorrel_glia_config_json_operational = " << json_op << std::endl;
 }
 
 // @Card: sorrel_sdd_qprocess_integration
@@ -53,8 +53,8 @@ void sorrel_sdd_qprocess_integration_card(const std::map<std::string, std::strin
     bool finished = process.waitForFinished();
     QString output = QString::fromUtf8(process.readAllStandardOutput()).trimmed();
 
-    bool qprocess_op = started && finished && (output == "success");
-    std::cout << "sorrel_sdd_qprocess_operational = " << (qprocess_op ? "true" : "false") << std::endl;
+    int qprocess_op = (started && finished && (output == "success")) ? 1 : 0;
+    std::cout << "sorrel_sdd_qprocess_operational = " << qprocess_op << std::endl;
 }
 
 int main(int argc, char** argv) {

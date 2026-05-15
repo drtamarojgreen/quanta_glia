@@ -26,11 +26,11 @@ void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts
     std::string command = "python3 scripts/quanta_glia.py " + repo_name + " > /dev/null 2>&1";
     int result = std::system(command.c_str());
 
-    // Verify: Check if the extracted file exists in the knowledge base
-    fs::path kb_path = fs::path("knowledge_base") / repo_name / "README.md";
-    bool operational = (result == 0) && fs::exists(kb_path);
+    // Verify: Check if the repository analysis JSON exists in the knowledge base
+    fs::path kb_path = fs::path("knowledge_base") / repo_name / "repository_analysis.json";
+    int operational = (result == 0 && fs::exists(kb_path)) ? 1 : 0;
 
-    std::cout << "quanta_glia_extraction_operational = " << (operational ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_extraction_operational = " << operational << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -69,7 +69,8 @@ void max_repos_limit_verification_card(const std::map<std::string, std::string>&
         }
     }
 
-    std::cout << "quanta_glia_max_repos_limit_operational = " << (count == max_repos ? "true" : "false") << std::endl;
+    int operational = (count == max_repos) ? 1 : 0;
+    std::cout << "quanta_glia_max_repos_limit_operational = " << operational << std::endl;
 
     // Cleanup
     for (int i = 1; i <= num_to_create; ++i) {
@@ -106,7 +107,8 @@ void custom_config_verification_card(const std::map<std::string, std::string>& f
     bool important_exists = fs::exists(kb_path / "IMPORTANT_FILE.txt");
     bool readme_exists = fs::exists(kb_path / "README.md");
 
-    std::cout << "quanta_glia_custom_config_operational = " << (important_exists && !readme_exists ? "true" : "false") << std::endl;
+    int operational = (important_exists && !readme_exists) ? 1 : 0;
+    std::cout << "quanta_glia_custom_config_operational = " << operational << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -134,7 +136,8 @@ void no_target_files_verification_card(const std::map<std::string, std::string>&
     fs::path kb_path = fs::path("knowledge_base") / repo_name;
     bool kb_exists = fs::exists(kb_path);
 
-    std::cout << "quanta_glia_no_target_files_operational = " << (!kb_exists ? "true" : "false") << std::endl;
+    int operational = (!kb_exists) ? 1 : 0;
+    std::cout << "quanta_glia_no_target_files_operational = " << operational << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -157,9 +160,9 @@ void repo_cloning_verification_card(const std::map<std::string, std::string>& fa
     std::string python_cmd = "python3 -c \"from scripts import quanta_glia; from pathlib import Path; quanta_glia.clone_repo('" + src_repo + "', Path('" + cache_dir + "'))\"";
     std::system(python_cmd.c_str());
 
-    bool operational = fs::exists(fs::path(cache_dir) / src_repo / "a.txt");
+    int operational = fs::exists(fs::path(cache_dir) / src_repo / "a.txt") ? 1 : 0;
 
-    std::cout << "quanta_glia_clone_repo_operational = " << (operational ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_clone_repo_operational = " << operational << std::endl;
 
     // Cleanup
     fs::remove_all(src_repo);
@@ -181,7 +184,8 @@ void cache_pruning_verification_card(const std::map<std::string, std::string>& f
     bool dir_deleted = !fs::exists(fs::path(cache_dir) / "to_delete");
     bool file_kept = fs::exists(fs::path(cache_dir) / "keep.txt");
 
-    std::cout << "quanta_glia_prune_cache_operational = " << (dir_deleted && file_kept ? "true" : "false") << std::endl;
+    int operational = (dir_deleted && file_kept) ? 1 : 0;
+    std::cout << "quanta_glia_prune_cache_operational = " << operational << std::endl;
 
     // Cleanup
     fs::remove_all(cache_dir);

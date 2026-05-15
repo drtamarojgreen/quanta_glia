@@ -16,8 +16,11 @@ void logging_setup_verification_card(const std::map<std::string, std::string>& f
     std::string log_file = facts.at("log_file_path");
     std::string message = facts.at("test_message");
 
+    // Ensure the log file is in a directory os.path.dirname can handle
+    std::string absolute_log_file = fs::absolute(log_file).string();
+
     // We use a small python snippet to trigger the setup_logging and log a message
-    std::string python_cmd = "python3 -c \"from agent_utils.logging_utils import setup_logging; import logging; setup_logging('" + log_file + "'); logging.info('" + message + "')\"";
+    std::string python_cmd = "python3 -c \"from agent_utils.logging_utils import setup_logging; import logging; setup_logging('" + absolute_log_file + "'); logging.info('" + message + "')\"";
 
     std::system(python_cmd.c_str());
 
@@ -32,7 +35,8 @@ void logging_setup_verification_card(const std::map<std::string, std::string>& f
         fs::remove(log_file);
     }
 
-    std::cout << "logging_setup_operational = " << (operational ? "true" : "false") << std::endl;
+    int op_val = operational ? 1 : 0;
+    std::cout << "logging_setup_operational = " << op_val << std::endl;
 }
 
 int main() {
