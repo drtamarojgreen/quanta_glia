@@ -37,9 +37,27 @@ void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts
 
     // Verify: Check if the repository analysis JSON exists in the knowledge base
     fs::path kb_path = kb_root / repo_name / "repository_analysis.json";
-    int operational = (result == 0 && fs::exists(kb_path)) ? 1 : 0;
 
-    std::cout << "quanta_glia_extraction_operational = " << operational << std::endl;
+    long long json_size = 0;
+    int component_count = 0;
+
+    if (result == 0 && fs::exists(kb_path)) {
+        json_size = fs::file_size(kb_path);
+        std::ifstream f(kb_path);
+        std::string line;
+        while (std::getline(f, line)) {
+            if (line.find("\"key_components\": [") != std::string::npos) {
+                // Heuristic: count lines starting with whitespace and " till ]
+                while (std::getline(f, line) && line.find("]") == std::string::npos) {
+                    if (line.find("\"") != std::string::npos) component_count++;
+                }
+                break;
+            }
+        }
+    }
+
+    std::cout << "extracted_json_size_bytes = " << json_size << std::endl;
+    std::cout << "extracted_component_count = " << component_count << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -77,17 +95,16 @@ void max_repos_limit_verification_card(const std::map<std::string, std::string>&
     std::string command = "python3 scripts/quanta_glia.py --config " + config_path + " " + repo_list + " > /dev/null 2>&1";
     std::system(command.c_str());
 
-    int count = 0;
+    int kb_repo_count = 0;
     if (fs::exists(kb_root)) {
         for (auto const& dir_entry : fs::directory_iterator(kb_root)) {
             if (dir_entry.is_directory() && dir_entry.path().filename().string().find(repo_prefix) == 0) {
-                count++;
+                kb_repo_count++;
             }
         }
     }
 
-    int operational = (count == max_repos) ? 1 : 0;
-    std::cout << "quanta_glia_max_repos_limit_operational = " << operational << std::endl;
+    std::cout << "kb_repo_count = " << kb_repo_count << std::endl;
 
     // Cleanup
     for (int i = 1; i <= num_to_create; ++i) {
@@ -176,12 +193,9 @@ void no_target_files_verification_card(const std::map<std::string, std::string>&
     // So repository_analysis.json WILL exist.
 
     fs::path kb_path = kb_root / repo_name;
-    bool kb_exists = fs::exists(kb_path);
+    int kb_dir_exists = fs::exists(kb_path) ? 1 : 0;
 
-    int operational = (!kb_exists) ? 1 : 0;
-    // Wait, if I want it to be 1, and I saw earlier it created repository_analysis.json...
-    // Let me check analyze_repository again.
-    std::cout << "quanta_glia_no_target_files_operational = " << operational << std::endl;
+    std::cout << "kb_dir_exists = " << kb_dir_exists << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);

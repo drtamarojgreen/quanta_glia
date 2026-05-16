@@ -28,9 +28,17 @@ void ethos_validation_verification_card(const std::map<std::string, std::string>
     }
     int exit_status = pclose(pipe);
 
-    bool operational = (exit_status == 0 && result.find("decision") != std::string::npos && result.find("final_score") != std::string::npos);
+    float final_score = 0.0f;
+    if (exit_status == 0) {
+        size_t score_pos = result.find("\"final_score\":");
+        if (score_pos != std::string::npos) {
+            size_t start = result.find_first_of("0123456789.", score_pos);
+            size_t end = result.find_first_of(", \n}", start);
+            final_score = std::stof(result.substr(start, end - start));
+        }
+    }
 
-    std::cout << "ethos_validation_operational = " << (operational ? 1 : 0) << std::endl;
+    std::cout << "ethos_final_score = " << final_score << std::endl;
 }
 
 int main() {

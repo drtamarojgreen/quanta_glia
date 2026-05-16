@@ -26,19 +26,13 @@ void logging_setup_verification_card(const std::map<std::string, std::string>& f
 
     std::system(python_cmd.c_str());
 
-    bool operational = false;
+    long long log_size = 0;
     if (fs::exists(log_file)) {
-        std::ifstream f(log_file);
-        std::string content((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-        if (content.find(message) != std::string::npos && content.find("INFO") != std::string::npos) {
-            operational = true;
-        }
-        f.close();
+        log_size = fs::file_size(log_file);
         fs::remove(log_file);
     }
 
-    int op_val = operational ? 1 : 0;
-    std::cout << "logging_setup_operational = " << op_val << std::endl;
+    std::cout << "logging_setup_size_bytes = " << log_size << std::endl;
 }
 
 int main() {

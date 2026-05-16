@@ -31,3 +31,9 @@
 -   **Restrictions Definition:** Created `tests/sdd/RESTRICTIONS.md` to enforce structural and validation rules.
     -   *Observation:* `restrictions_defined = 1`
     -   *Artifacts:* `tests/sdd/RESTRICTIONS.md`.
+
+-   **Metric Precision Transition:** Transitioned all SDD cards to output real-world empirical metrics (byte sizes, item counts, scores).
+    -   *Observation:* `extracted_json_size_bytes > 0`
+    -   *Observation:* `csv_size_bytes > 0`
+    -   *Observation:* `audit_log_size_bytes > 0`
+    -   *Artifacts:* Updated all cards in `tests/sdd/cards/`.

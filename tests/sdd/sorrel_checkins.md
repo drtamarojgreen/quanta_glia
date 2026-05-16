@@ -11,3 +11,8 @@
 - reporting_coverage_sip: Implement SDD test for reporting.py.
 - audit_coverage_sip: Implement SDD test for audit.py.
 - ethos_integration_sip: Implement SDD test for quanta_ethos.py integration.
+- utils_coverage_sip: Implement SDD test for utils.py (config loading, json logging).
+- phase_parsing_sip: Implement SDD test for phase.py.
+- enhancement_parsing_sip: Implement SDD test for enhancement.py.
+- io_util_sip: Implement SDD test for agent_utils/io.py.
+- metric_precision_sip: Transition all SDD cards from binary flags to real-world empirical metrics.

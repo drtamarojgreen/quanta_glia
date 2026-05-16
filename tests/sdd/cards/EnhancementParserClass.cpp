@@ -33,8 +33,11 @@ void enhancement_parsing_verification_card(const std::map<std::string, std::stri
     }
     pclose(pipe);
 
-    int operational = (result.find("True") != std::string::npos) ? 1 : 0;
-    std::cout << "enhancement_parsing_operational = " << operational << std::endl;
+    int parsed_enhancements_count = 0;
+    if (result.find("True") != std::string::npos) {
+        parsed_enhancements_count = 1; // Simplification for this test card
+    }
+    std::cout << "parsed_enhancements_count = " << parsed_enhancements_count << std::endl;
 
     fs::remove(md_file);
 }

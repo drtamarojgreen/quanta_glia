@@ -28,8 +28,14 @@ void io_save_load_verification_card(const std::map<std::string, std::string>& fa
     }
     pclose(pipe);
 
-    int operational = (result.find("True") != std::string::npos) ? 1 : 0;
-    std::cout << "io_save_load_operational = " << operational << std::endl;
+    long long saved_file_size = 0;
+    if (result.find("True") != std::string::npos) {
+        fs::path saved_file = test_dir / test_file;
+        if (fs::exists(saved_file)) {
+            saved_file_size = fs::file_size(saved_file);
+        }
+    }
+    std::cout << "saved_file_size_bytes = " << saved_file_size << std::endl;
 
     fs::remove_all(test_dir);
 }

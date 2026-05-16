@@ -30,10 +30,21 @@ void reporting_csv_verification_card(const std::map<std::string, std::string>& f
     int exit_code = std::system(command.c_str());
 
     fs::path csv_path = temp_root / csv_file;
-    bool exists = fs::exists(csv_path);
-    int operational = (exit_code == 0 && exists) ? 1 : 0;
 
-    std::cout << "reporting_csv_operational = " << operational << std::endl;
+    long long csv_size = 0;
+    int csv_row_count = 0;
+
+    if (exit_code == 0 && fs::exists(csv_path)) {
+        csv_size = fs::file_size(csv_path);
+        std::ifstream f(csv_path);
+        std::string line;
+        while (std::getline(f, line)) {
+            if (!line.empty()) csv_row_count++;
+        }
+    }
+
+    std::cout << "csv_size_bytes = " << csv_size << std::endl;
+    std::cout << "csv_row_count = " << csv_row_count << std::endl;
 
     // Cleanup
     fs::remove_all(test_repo);

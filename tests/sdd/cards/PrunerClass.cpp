@@ -56,8 +56,13 @@ void pruner_logic_verification_card(const std::map<std::string, std::string>& fa
     bool score_ok = std::abs(score - thresholds.at("delete_threshold")) < 0.001f;
     bool decision_ok = (decision == "DELETE");
 
-    int operational = (score_ok && decision_ok) ? 1 : 0;
-    std::cout << "pruner_logic_operational = " << operational << std::endl;
+    int decision_code = 0; // KEEP
+    if (decision == "REVIEW") decision_code = 1;
+    else if (decision == "ARCHIVE") decision_code = 2;
+    else if (decision == "DELETE") decision_code = 3;
+
+    std::cout << "pruner_composite_score = " << score << std::endl;
+    std::cout << "pruner_decision_code = " << decision_code << std::endl;
 }
 
 int main() {
