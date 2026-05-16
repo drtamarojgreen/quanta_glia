@@ -13,7 +13,9 @@ using namespace Sorrel::Sdd::Util;
 // @Is python_available == true
 // @Results logging_setup_operational == true
 void logging_setup_verification_card(const std::map<std::string, std::string>& facts) {
-    std::string log_file = facts.at("log_file_path");
+    fs::path temp_root("tests/temp");
+    std::string log_file_name = facts.at("log_file_path");
+    fs::path log_file = temp_root / log_file_name;
     std::string message = facts.at("test_message");
 
     // Ensure the log file is in a directory os.path.dirname can handle
