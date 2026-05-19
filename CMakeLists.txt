@@ -1,43 +1,75 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(sorrel VERSION 1.0.0 LANGUAGES CXX)
+project(glia_app VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Qt6 components
-find_package(Qt6 REQUIRED COMPONENTS Core Xml)
-
-# Auto-generate MOC files
-set(CMAKE_AUTOMOC ON)
-
-# Source files
 set(SOURCES
-    src/main.cpp
-    src/glia_config.cpp
-    src/glia_config_manager.cpp
+    src/app/main.cpp
+    src/app/command.cpp
+    src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
+    src/cli/cli.cpp
+    src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
 
-# Headers
-set(HEADERS
-    src/glia_config.h
-    src/glia_config_manager.h
-)
-
-# Main Application binary
-add_executable(sorrel ${SOURCES} ${HEADERS})
-target_link_libraries(sorrel PRIVATE Qt6::Core Qt6::Xml)
+add_executable(sorrel ${SOURCES})
+target_include_directories(sorrel PRIVATE src)
 
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
-    src/glia_config.cpp
-    src/glia_config_manager.cpp
+    tests/sdd/cards/EnhancementsClass.cpp
+    src/app/command.cpp
+    src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
+    src/cli/cli.cpp
+    src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
-target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp)
-target_link_libraries(sorrel_test PRIVATE Qt6::Core Qt6::Xml)
+target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp tests/sdd/cards)
 
-# Custom clean target to remove artifacts
+# Custom clean target
 set(CLEAN_FILES
     "${CMAKE_SOURCE_DIR}/test_out.txt"
     "${CMAKE_SOURCE_DIR}/test_output_1.txt"
@@ -48,11 +80,9 @@ set(CLEAN_FILES
 
 add_custom_target(clean_artifacts
     COMMAND ${CMAKE_COMMAND} -E remove -f ${CLEAN_FILES}
-    # Portable Python cleanup
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/scripts/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/tests/__pycache__"
-    # Note: For full cleanup including binaries, the user should remove the build directory.
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     COMMENT "Removing temporary logs and Python caches"
 )

@@ -1,7 +1,7 @@
 #ifndef SDD_CONFIG_MANAGER_H
 #define SDD_CONFIG_MANAGER_H
 
-#include "glia_config.h"
+#include "glia/core/glia_config.h"
 #include <QString>
 
 class GliaConfigManager {

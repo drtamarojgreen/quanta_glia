@@ -1,0 +1,23 @@
+Situation: Phase III Empirical Verification
+# Reference measurements for automated agents
+
+Needs config_xml_max_repos = 42
+Needs config_xml_kb = /tmp/kb
+Needs config_xml_log_level = DEBUG
+
+Needs qprocess_output = empirical_success
+
+Needs report_src_files = 1
+Needs report_tech_stack = .py
+Needs report_timestamp_format = 1
+
+Needs harvester_files_extracted = 1
+Needs harvester_line_count = 1
+Needs harvester_forbidden_found = 0
+
+Needs harvester_unique_paths = 2
+Needs harvester_path_a_exists = 1
+Needs harvester_path_b_exists = 1
+
+Needs pruner_deps_count = 1
+Needs pruner_is_dep_protected = 1
