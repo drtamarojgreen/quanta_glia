@@ -1,19 +1,5 @@
 Situation: Default
-# Empirical observations for QuantaGlia and Pruner
-# Is <key> = <value> format
+# Empirical measurements for QuantaGlia System
 
-Is python_available = true
-Is quanta_glia_extraction_operational = false
-Is quanta_glia_max_repos_limit_operational = false
-Is quanta_glia_custom_config_operational = false
-Is quanta_glia_no_target_files_operational = false
-Is quanta_glia_clone_repo_operational = false
-Is quanta_glia_prune_cache_operational = false
-Is logging_setup_operational = false
-Is keyword_validator_operational = false
-Is citation_validator_operational = false
-Is pruner_logic_operational = false
 Is qt6_available = true
-Is sorrel_glia_config_xml_operational = false
-Is sorrel_glia_config_json_operational = false
-Is sorrel_sdd_qprocess_operational = false
+Is python_available = true

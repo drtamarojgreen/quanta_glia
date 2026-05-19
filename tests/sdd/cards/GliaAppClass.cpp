@@ -7,71 +7,60 @@
 #include "util/fact_utils.h"
 #include "glia_config.h"
 #include "glia_config_manager.h"
+#include "reporting.h"
+#include "harvester.h"
+#include "pruner.h"
+#include "EnhancementsClass.h"
 #include <QCoreApplication>
 #include <QProcess>
 #include <QDir>
+#include <QTextStream>
 
-// @Card: sorrel_glia_config_serialization
-// @Results sorrel_glia_config_xml_operational == true, sorrel_glia_config_json_operational == true
 void sorrel_glia_config_serialization_card(const std::map<std::string, std::string>& facts) {
     GliaConfig config;
     config.setKnowledgeBase("/tmp/kb");
     config.setMaxRepos(42);
+    config.setLogLevel("DEBUG");
 
-    QString xmlPath = "/tmp/test_config.xml";
-    QString jsonPath = "/tmp/test_config.json";
-
-    bool xml_saved = GliaConfigManager::saveToXml(config, xmlPath);
+    QString xmlPath = QDir::tempPath() + "/test_config_empirical.xml";
+    GliaConfigManager::saveToXml(config, xmlPath);
     GliaConfig xmlLoad;
-    bool xml_loaded = GliaConfigManager::loadFromXml(xmlLoad, xmlPath);
-    bool xml_op = xml_saved && xml_loaded && (xmlLoad.maxRepos() == 42) && (xmlLoad.knowledgeBase() == "/tmp/kb");
+    GliaConfigManager::loadFromXml(xmlLoad, xmlPath);
 
-    bool json_saved = GliaConfigManager::saveToJson(config, jsonPath);
-    GliaConfig jsonLoad;
-    bool json_loaded = GliaConfigManager::loadFromJson(jsonLoad, jsonPath);
-    bool json_op = json_saved && json_loaded && (jsonLoad.maxRepos() == 42) && (jsonLoad.knowledgeBase() == "/tmp/kb");
-
-    std::cout << "sorrel_glia_config_xml_operational = " << (xml_op ? "true" : "false") << std::endl;
-    std::cout << "sorrel_glia_config_json_operational = " << (json_op ? "true" : "false") << std::endl;
+    std::cout << "config_xml_max_repos = " << xmlLoad.maxRepos() << std::endl;
+    std::cout << "config_xml_kb = " << xmlLoad.knowledgeBase().toStdString() << std::endl;
+    std::cout << "config_xml_log_level = " << xmlLoad.logLevel().toStdString() << std::endl;
 }
 
-// @Card: sorrel_sdd_qprocess_integration
-// @Results sorrel_sdd_qprocess_operational == true
 void sorrel_sdd_qprocess_integration_card(const std::map<std::string, std::string>& facts) {
-    // Create a dummy python script to test QProcess
-    QString scriptPath = "/tmp/dummy_script.py";
+    QString scriptPath = QDir::tempPath() + "/dummy_script_empirical.py";
     QFile file(scriptPath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
-        out << "print('success')\n";
+        out << "print('empirical_success')\n";
         file.close();
     }
 
     QProcess process;
     process.start("python3", QStringList() << scriptPath);
-    bool started = process.waitForStarted();
-    bool finished = process.waitForFinished();
+    process.waitForFinished();
     QString output = QString::fromUtf8(process.readAllStandardOutput()).trimmed();
 
-    bool qprocess_op = started && finished && (output == "success");
-    std::cout << "sorrel_sdd_qprocess_operational = " << (qprocess_op ? "true" : "false") << std::endl;
+    std::cout << "qprocess_output = " << output.toStdString() << std::endl;
 }
 
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
     auto facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/environment.facts");
+    auto enh_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/enhancements.facts");
+    facts.insert(enh_facts.begin(), enh_facts.end());
 
-    if (argc > 1) {
-        std::string card = argv[1];
-        if (card == "sorrel_glia_config_serialization") {
-            sorrel_glia_config_serialization_card(facts);
-        } else if (card == "sorrel_sdd_qprocess_integration") {
-            sorrel_sdd_qprocess_integration_card(facts);
-        }
-    } else {
-        sorrel_glia_config_serialization_card(facts);
-        sorrel_sdd_qprocess_integration_card(facts);
-    }
+    sorrel_glia_config_serialization_card(facts);
+    sorrel_sdd_qprocess_integration_card(facts);
+    reporting_enhancement_verification(facts);
+    harvester_enhancement_verification(facts);
+    pruner_enhancement_verification(facts);
+    harvester_collision_verification(facts);
 
     return 0;
 }

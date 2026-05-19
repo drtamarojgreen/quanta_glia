@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(sorrel VERSION 1.0.0 LANGUAGES CXX)
+project(sorrel VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,12 +16,18 @@ set(SOURCES
     src/main.cpp
     src/glia_config.cpp
     src/glia_config_manager.cpp
+    src/harvester.cpp
+    src/pruner.cpp
+    src/reporting.cpp
 )
 
 # Headers
 set(HEADERS
     src/glia_config.h
     src/glia_config_manager.h
+    src/harvester.h
+    src/pruner.h
+    src/reporting.h
 )
 
 # Main Application binary
@@ -31,8 +37,12 @@ target_link_libraries(sorrel PRIVATE Qt6::Core Qt6::Xml)
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
+    tests/sdd/cards/EnhancementsClass.cpp
     src/glia_config.cpp
     src/glia_config_manager.cpp
+    src/harvester.cpp
+    src/pruner.cpp
+    src/reporting.cpp
 )
 target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp)
 target_link_libraries(sorrel_test PRIVATE Qt6::Core Qt6::Xml)
