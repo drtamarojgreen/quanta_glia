@@ -6,7 +6,7 @@
 #include <QSet>
 #include <QMap>
 #include <QDateTime>
-#include "glia_config.h"
+#include "glia/core/glia_config.h"
 
 struct RepoPruneRecord {
     QString name;

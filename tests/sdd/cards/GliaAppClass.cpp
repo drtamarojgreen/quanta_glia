@@ -5,11 +5,11 @@
 #include <filesystem>
 #include <fstream>
 #include "util/fact_utils.h"
-#include "glia_config.h"
-#include "glia_config_manager.h"
-#include "reporting.h"
-#include "harvester.h"
-#include "pruner.h"
+#include "glia/core/glia_config.h"
+#include "glia/core/glia_config_manager.h"
+#include "glia/modules/reporting/reporting.h"
+#include "glia/modules/harvester/harvester.h"
+#include "glia/modules/pruner/pruner.h"
 #include "EnhancementsClass.h"
 #include <QCoreApplication>
 #include <QProcess>

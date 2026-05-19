@@ -1,4 +1,4 @@
-#include "glia_config.h"
+#include "glia/core/glia_config.h"
 
 GliaConfig::GliaConfig()
     : m_knowledgeBase("./knowledge_base")

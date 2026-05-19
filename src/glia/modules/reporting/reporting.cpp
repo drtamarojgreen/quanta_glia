@@ -1,4 +1,4 @@
-#include "reporting.h"
+#include "glia/modules/reporting/reporting.h"
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>

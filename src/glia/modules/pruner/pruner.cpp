@@ -1,4 +1,4 @@
-#include "pruner.h"
+#include "glia/modules/pruner/pruner.h"
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>

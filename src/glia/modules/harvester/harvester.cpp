@@ -1,4 +1,4 @@
-#include "harvester.h"
+#include "glia/modules/harvester/harvester.h"
 #include <QDir>
 #include <QProcess>
 #include <QDebug>

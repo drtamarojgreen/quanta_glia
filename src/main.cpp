@@ -3,11 +3,11 @@
 #include <QCommandLineParser>
 #include <QFileInfo>
 #include <QDir>
-#include "glia_config.h"
-#include "glia_config_manager.h"
-#include "harvester.h"
-#include "pruner.h"
-#include "reporting.h"
+#include "glia/core/glia_config.h"
+#include "glia/core/glia_config_manager.h"
+#include "glia/modules/harvester/harvester.h"
+#include "glia/modules/pruner/pruner.h"
+#include "glia/modules/reporting/reporting.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication app(argc, argv);

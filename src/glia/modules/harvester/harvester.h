@@ -4,7 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QMap>
-#include "glia_config.h"
+#include "glia/core/glia_config.h"
 
 class Harvester {
 public:

@@ -1,4 +1,4 @@
-#include "glia_config_manager.h"
+#include "glia/core/glia_config_manager.h"
 #include <QFile>
 #include <QDomDocument>
 #include <QJsonDocument>

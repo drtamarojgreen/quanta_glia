@@ -14,37 +14,38 @@ set(CMAKE_AUTOMOC ON)
 # Source files
 set(SOURCES
     src/main.cpp
-    src/glia_config.cpp
-    src/glia_config_manager.cpp
-    src/harvester.cpp
-    src/pruner.cpp
-    src/reporting.cpp
+    src/glia/core/glia_config.cpp
+    src/glia/core/glia_config_manager.cpp
+    src/glia/modules/harvester/harvester.cpp
+    src/glia/modules/pruner/pruner.cpp
+    src/glia/modules/reporting/reporting.cpp
 )
 
 # Headers
 set(HEADERS
-    src/glia_config.h
-    src/glia_config_manager.h
-    src/harvester.h
-    src/pruner.h
-    src/reporting.h
+    src/glia/core/glia_config.h
+    src/glia/core/glia_config_manager.h
+    src/glia/modules/harvester/harvester.h
+    src/glia/modules/pruner/pruner.h
+    src/glia/modules/reporting/reporting.h
 )
 
 # Main Application binary
 add_executable(sorrel ${SOURCES} ${HEADERS})
+target_include_directories(sorrel PRIVATE src)
 target_link_libraries(sorrel PRIVATE Qt6::Core Qt6::Xml)
 
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     tests/sdd/cards/EnhancementsClass.cpp
-    src/glia_config.cpp
-    src/glia_config_manager.cpp
-    src/harvester.cpp
-    src/pruner.cpp
-    src/reporting.cpp
+    src/glia/core/glia_config.cpp
+    src/glia/core/glia_config_manager.cpp
+    src/glia/modules/harvester/harvester.cpp
+    src/glia/modules/pruner/pruner.cpp
+    src/glia/modules/reporting/reporting.cpp
 )
-target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp)
+target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp tests/sdd/cards)
 target_link_libraries(sorrel_test PRIVATE Qt6::Core Qt6::Xml)
 
 # Custom clean target to remove artifacts

@@ -6,10 +6,10 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
-#include "reporting.h"
-#include "harvester.h"
-#include "pruner.h"
-#include "glia_config.h"
+#include "glia/modules/reporting/reporting.h"
+#include "glia/modules/harvester/harvester.h"
+#include "glia/modules/pruner/pruner.h"
+#include "glia/core/glia_config.h"
 #include "util/fact_utils.h"
 
 using namespace Sorrel::Sdd::Util;

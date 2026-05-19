@@ -1,7 +1,7 @@
 # SORREL Checkouts - Phase III Enhancements
 
-- **C++ Migration & Phase III Enhancements:** Successfully migrated Reporting, Harvester, and Pruner logic to C++.
-    - *Artifacts:* src/reporting.cpp, src/harvester.cpp, src/pruner.cpp, src/main.cpp.
+- **C++ Migration & Phase III Enhancements:** Successfully migrated Reporting, Harvester, and Pruner logic to C++ and refactored into a package-based architecture.
+    - *Artifacts:* src/glia/core/, src/glia/modules/, src/main.cpp.
     - *Measurement:* config_xml_max_repos = 42
     - *Measurement:* qprocess_output = empirical_success
     - *Measurement:* report_tech_stack = .py
