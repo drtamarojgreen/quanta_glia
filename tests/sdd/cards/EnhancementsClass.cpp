@@ -2,98 +2,100 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <QDir>
-#include <QFile>
-#include <QTextStream>
-#include <QDateTime>
-#include "glia/modules/reporting/reporting.h"
-#include "glia/modules/harvester/harvester.h"
-#include "glia/modules/pruner/pruner.h"
-#include "glia/core/glia_config.h"
+#include <filesystem>
+#include <fstream>
+#include <chrono>
+#include <iomanip>
+#include "report/reporter.h"
+#include "harvest/harvester.h"
+#include "prune/pruner.h"
+#include "config/config.h"
 #include "util/fact_utils.h"
 
-using namespace Sorrel::Sdd::Util;
+namespace fs = std::filesystem;
 
 void reporting_enhancement_verification(const std::map<std::string, std::string>& facts) {
-    QString repoPath = QDir::tempPath() + "/sdd_report_test_empirical";
-    QDir().mkpath(repoPath + "/src");
-    QFile f(repoPath + "/src/main.py");
-    f.open(QIODevice::WriteOnly); f.write("print('test')"); f.close();
+    fs::path repoPath = fs::temp_directory_path() / "sdd_report_emp";
+    fs::create_directories(repoPath / "src");
+    std::ofstream f(repoPath / "src/main.py");
+    f << "print('test')"; f.close();
 
-    auto data = Reporting::analyzeRepository(repoPath);
+    auto data = glia::report::Reporter::analyze(repoPath.string());
 
     std::cout << "report_src_files = " << data.numSrcFiles << std::endl;
-    std::cout << "report_tech_stack = " << data.techStack.toStdString() << std::endl;
-    std::cout << "report_timestamp_format = " << (data.timestamp.endsWith("Z") ? 1 : 0) << std::endl;
+    std::cout << "report_tech_stack = " << data.techStack << std::endl;
+    std::cout << "report_timestamp_format = " << (data.timestamp.find('Z') != std::string::npos ? 1 : 0) << std::endl;
 
-    QDir(repoPath).removeRecursively();
+    fs::remove_all(repoPath);
 }
 
 void harvester_enhancement_verification(const std::map<std::string, std::string>& facts) {
-    QString repoPath = QDir::tempPath() + "/sdd_harvest_test_empirical";
-    QDir().mkpath(repoPath + "/allowed");
-    QDir().mkpath(repoPath + "/forbidden");
+    fs::path repoPath = fs::temp_directory_path() / "sdd_harvest_emp";
+    fs::create_directories(repoPath / "allowed");
+    fs::create_directories(repoPath / "forbidden");
 
-    QFile f1(repoPath + "/allowed/README.md");
-    f1.open(QIODevice::WriteOnly); f1.write("line 1\nline 2\nline 3\n"); f1.close();
+    std::ofstream f1(repoPath / "allowed/README.md");
+    f1 << "line 1\nline 2\nline 3\n"; f1.close();
 
-    QFile f2(repoPath + "/forbidden/README.md");
-    f2.open(QIODevice::WriteOnly); f2.write("secret"); f2.close();
+    std::ofstream f2(repoPath / "forbidden/README.md");
+    f2 << "secret"; f2.close();
 
-    GliaConfig config;
-    config.setSearchPaths(QStringList() << "/allowed");
-    config.setMaxDepth(1);
-    config.setMaxLinesPerFile(1);
-    config.setTargetTopics(QStringList() << "README");
+    glia::config::Config config;
+    config.searchPaths = {"/allowed"};
+    config.maxDepth = 1;
+    config.maxLinesPerFile = 1;
+    config.targetTopics = {"README"};
 
-    auto extracted = Harvester::extractText(repoPath, config);
+    auto extracted = glia::harvest::Harvester::extractText(repoPath.string(), config);
 
     std::cout << "harvester_files_extracted = " << extracted.size() << std::endl;
-    if (extracted.contains("allowed/README.md")) {
-        std::cout << "harvester_line_count = " << extracted["allowed/README.md"].trimmed().split('\n').size() << std::endl;
+    if (extracted.count("allowed/README.md")) {
+        std::string s = extracted["allowed/README.md"];
+        int lines = 0; std::stringstream ss(s); std::string l; while(std::getline(ss, l)) lines++;
+        std::cout << "harvester_line_count = " << lines << std::endl;
     } else {
         std::cout << "harvester_line_count = 0" << std::endl;
     }
-    std::cout << "harvester_forbidden_found = " << (extracted.contains("forbidden/README.md") ? 1 : 0) << std::endl;
+    std::cout << "harvester_forbidden_found = " << (extracted.count("forbidden/README.md") ? 1 : 0) << std::endl;
 
-    QDir(repoPath).removeRecursively();
+    fs::remove_all(repoPath);
 }
 
 void harvester_collision_verification(const std::map<std::string, std::string>& facts) {
-    QString repoPath = QDir::tempPath() + "/sdd_harvest_collision_empirical";
-    QDir().mkpath(repoPath + "/a");
-    QDir().mkpath(repoPath + "/b");
+    fs::path repoPath = fs::temp_directory_path() / "sdd_harvest_coll";
+    fs::create_directories(repoPath / "a");
+    fs::create_directories(repoPath / "b");
 
-    QFile f1(repoPath + "/a/README.md");
-    f1.open(QIODevice::WriteOnly); f1.write("content a"); f1.close();
+    std::ofstream f1(repoPath / "a/README.md");
+    f1 << "content a"; f1.close();
 
-    QFile f2(repoPath + "/b/README.md");
-    f2.open(QIODevice::WriteOnly); f2.write("content b"); f2.close();
+    std::ofstream f2(repoPath / "b/README.md");
+    f2 << "content b"; f2.close();
 
-    GliaConfig config;
-    config.setTargetTopics(QStringList() << "README");
+    glia::config::Config config;
+    config.targetTopics = {"README"};
 
-    auto extracted = Harvester::extractText(repoPath, config);
+    auto extracted = glia::harvest::Harvester::extractText(repoPath.string(), config);
 
     std::cout << "harvester_unique_paths = " << extracted.size() << std::endl;
-    std::cout << "harvester_path_a_exists = " << (extracted.contains("a/README.md") ? 1 : 0) << std::endl;
-    std::cout << "harvester_path_b_exists = " << (extracted.contains("b/README.md") ? 1 : 0) << std::endl;
+    std::cout << "harvester_path_a_exists = " << (extracted.count("a/README.md") ? 1 : 0) << std::endl;
+    std::cout << "harvester_path_b_exists = " << (extracted.count("b/README.md") ? 1 : 0) << std::endl;
 
-    QDir(repoPath).removeRecursively();
+    fs::remove_all(repoPath);
 }
 
 void pruner_enhancement_verification(const std::map<std::string, std::string>& facts) {
-    QString kbPath = QDir::tempPath() + "/sdd_kb_test_empirical";
-    QDir().mkpath(kbPath + "/repo_main");
-    QDir().mkpath(kbPath + "/repo_dep");
+    fs::path kbPath = fs::temp_directory_path() / "sdd_kb_test_empirical";
+    fs::create_directories(kbPath / "repo_main");
+    fs::create_directories(kbPath / "repo_dep");
 
-    QFile f(kbPath + "/repo_main/requirements.txt");
-    f.open(QIODevice::WriteOnly); f.write("repo_dep\n"); f.close();
+    std::ofstream f(kbPath / "repo_main/requirements.txt");
+    f << "repo_dep\n"; f.close();
 
-    QSet<QString> deps = Pruner::buildDependencyMap(kbPath);
+    auto deps = glia::prune::Pruner::buildDependencyMap(kbPath.string());
 
     std::cout << "pruner_deps_count = " << deps.size() << std::endl;
-    std::cout << "pruner_is_dep_protected = " << (deps.contains("repo_dep") ? 1 : 0) << std::endl;
+    std::cout << "pruner_is_dep_protected = " << (deps.count("repo_dep") ? 1 : 0) << std::endl;
 
-    QDir(kbPath).removeRecursively();
+    fs::remove_all(kbPath);
 }

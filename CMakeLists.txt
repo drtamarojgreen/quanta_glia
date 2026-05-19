@@ -1,54 +1,38 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(sorrel VERSION 1.1.0 LANGUAGES CXX)
+project(glia_app VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Qt6 components
-find_package(Qt6 REQUIRED COMPONENTS Core Xml)
-
-# Auto-generate MOC files
-set(CMAKE_AUTOMOC ON)
-
-# Source files
 set(SOURCES
-    src/main.cpp
-    src/glia/core/glia_config.cpp
-    src/glia/core/glia_config_manager.cpp
-    src/glia/modules/harvester/harvester.cpp
-    src/glia/modules/pruner/pruner.cpp
-    src/glia/modules/reporting/reporting.cpp
+    src/app/main.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
+    src/cli/cli.cpp
+    src/storage/storage.cpp
 )
 
-# Headers
-set(HEADERS
-    src/glia/core/glia_config.h
-    src/glia/core/glia_config_manager.h
-    src/glia/modules/harvester/harvester.h
-    src/glia/modules/pruner/pruner.h
-    src/glia/modules/reporting/reporting.h
-)
-
-# Main Application binary
-add_executable(sorrel ${SOURCES} ${HEADERS})
-target_include_directories(sorrel PRIVATE src)
-target_link_libraries(sorrel PRIVATE Qt6::Core Qt6::Xml)
+add_executable(sorrel ${SOURCES})
 
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     tests/sdd/cards/EnhancementsClass.cpp
-    src/glia/core/glia_config.cpp
-    src/glia/core/glia_config_manager.cpp
-    src/glia/modules/harvester/harvester.cpp
-    src/glia/modules/pruner/pruner.cpp
-    src/glia/modules/reporting/reporting.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
+    src/cli/cli.cpp
+    src/storage/storage.cpp
 )
 target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp tests/sdd/cards)
-target_link_libraries(sorrel_test PRIVATE Qt6::Core Qt6::Xml)
 
-# Custom clean target to remove artifacts
+# Custom clean target
 set(CLEAN_FILES
     "${CMAKE_SOURCE_DIR}/test_out.txt"
     "${CMAKE_SOURCE_DIR}/test_output_1.txt"
@@ -59,11 +43,9 @@ set(CLEAN_FILES
 
 add_custom_target(clean_artifacts
     COMMAND ${CMAKE_COMMAND} -E remove -f ${CLEAN_FILES}
-    # Portable Python cleanup
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/scripts/__pycache__"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_SOURCE_DIR}/tests/__pycache__"
-    # Note: For full cleanup including binaries, the user should remove the build directory.
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     COMMENT "Removing temporary logs and Python caches"
 )
