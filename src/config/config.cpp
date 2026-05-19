@@ -1,6 +1,8 @@
 #include "config.h"
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <filesystem>
 #include "../util/string_utils.h"
 
 namespace glia::config {
@@ -37,7 +39,18 @@ bool Config::load(const std::string& path) {
             else if (key == "log_level") logLevel = value;
             else if (key == "max_depth") maxDepth = std::stoi(value);
             else if (key == "max_lines_per_file") maxLinesPerFile = std::stoi(value);
-            // Simple list handling for target_topics and search_paths
+            else if (key == "target_topics") {
+                targetTopics.clear();
+                std::stringstream ss(value);
+                std::string item;
+                while (std::getline(ss, item, ',')) targetTopics.push_back(glia::util::trim(item));
+            }
+            else if (key == "search_paths") {
+                searchPaths.clear();
+                std::stringstream ss(value);
+                std::string item;
+                while (std::getline(ss, item, ',')) searchPaths.push_back(glia::util::trim(item));
+            }
         }
     }
     return true;

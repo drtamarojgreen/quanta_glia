@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <chrono>
 
 namespace fs = std::filesystem;
 
@@ -46,8 +47,10 @@ std::map<std::string, std::string> Harvester::extractText(const std::string& rep
             fs::path p = dir_entry.path();
             fs::path relP = fs::relative(p, baseRepo);
 
-            // Depth check
-            int depth = std::distance(relP.begin(), relP.end()) - 1;
+            int depth = 0;
+            for (auto it = relP.begin(); it != relP.end(); ++it) depth++;
+            depth--;
+
             if (depth > config.maxDepth) continue;
 
             bool matches = false;
@@ -86,6 +89,14 @@ bool Harvester::persist(const std::string& repoName, const std::map<std::string,
             out << text;
         } else return false;
     }
+
+    // Write freshness signal
+    std::ofstream freshness(baseKb / ".freshness");
+    if (freshness.is_open()) {
+        auto now = std::chrono::system_clock::now();
+        freshness << std::chrono::system_clock::to_time_t(now) << "\n";
+    }
+
     return true;
 }
 

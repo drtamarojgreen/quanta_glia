@@ -7,6 +7,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
     src/app/main.cpp
+    src/app/command.cpp
+    src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp
@@ -14,14 +27,33 @@ set(SOURCES
     src/audit/audit.cpp
     src/cli/cli.cpp
     src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
 
 add_executable(sorrel ${SOURCES})
+target_include_directories(sorrel PRIVATE src)
 
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     tests/sdd/cards/EnhancementsClass.cpp
+    src/app/command.cpp
+    src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp
@@ -29,6 +61,11 @@ add_executable(sorrel_test
     src/audit/audit.cpp
     src/cli/cli.cpp
     src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
 target_include_directories(sorrel_test PRIVATE src tests/sdd/cpp tests/sdd/cards)
 
