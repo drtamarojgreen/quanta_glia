@@ -1,0 +1,15 @@
+# resolutions.yaml
+# Format: ERROR_TYPE: Name | Template | Confidence | atLineZero | findText | replaceText
+TYPE: INT_CAST | static_cast<int>({identifier}) | 10 | false
+TYPE: FLOAT_CAST | static_cast<float>({identifier}) | 8 | false
+VALUE: DEFAULT_INITIALIZE | {identifier} = 0; | 10 | false
+VALUE: NULL_INITIALIZE | {identifier} = nullptr; | 5 | false
+SYNTAX: ADD_SEMICOLON | ; | 10 | false
+IMPORT: ADD_INCLUDE | #include <{identifier}> | 10 | true
+WARNING: DISABLE_WARNING | #pragma GCC diagnostic ignored "-Wall" | 10 | true
+ERROR: ADD_NULL_CHECK | if({identifier} == nullptr) return; | 10 | false
+TYPO: FIX_COLOUR | | 10 | false | color | colour
+LOG: STDERR_TO_STDOUT | | 10 | false | std::cerr | std::cout
+TEXT: FIND_AND_REPLACE | | 10 | false | old_text | new_text
+GLOBAL: GLOBAL_REPLACE | | 10 | false | old_text | new_text
+RANGE_MULTI: REPLACE_RANGE_MULTI | line 1\nline 2\nline 3 | 10 | false

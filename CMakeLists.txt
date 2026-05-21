@@ -34,8 +34,21 @@ set(SOURCES
     src/platform/platform.cpp
 )
 
+set(GLIA_SOURCES
+    src/app/glia_main.cpp
+    src/app/glia_git_cmds.cpp
+    src/app/glia_prune_cmd.cpp
+    src/app/glia_init_cmd.cpp
+    src/app/command.cpp
+    src/app/lifecycle.cpp
+    src/cli/cli.cpp
+)
+
 add_executable(sorrel ${SOURCES})
 target_include_directories(sorrel PRIVATE src)
+
+add_executable(glia ${GLIA_SOURCES})
+target_include_directories(glia PRIVATE src)
 
 # SDD Test binary
 add_executable(sorrel_test

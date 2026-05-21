@@ -1,0 +1,12 @@
+# test/test-alternative_types.yaml
+ADD_SEMICOLON: append
+ADD_INCLUDE: insert_at_top
+DISABLE_WARNING: insert_at_top
+REPLACE_RANGE: replace_range
+REPLACE_LINE: replace_line
+RENAME_SIMILAR: replace_line
+INSERT_DEBUG: replace_line
+FIX_COLOUR: substring_replace
+STDERR_TO_STDOUT: substring_replace
+GLOBAL_REPLACE: substring_replace_global
+REPLACE_RANGE_MULTI: replace_range
