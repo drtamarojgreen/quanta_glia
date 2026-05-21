@@ -75,7 +75,7 @@ add_executable(glia_unit_tests
     src/app/lifecycle.cpp
     src/cli/cli.cpp
 )
-target_include_directories(glia_unit_tests PRIVATE src)
+target_include_directories(glia_unit_tests PRIVATE src include)
 
 # SDD Test binary
 add_executable(sorrel_test
