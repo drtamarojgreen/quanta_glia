@@ -10,6 +10,7 @@
 #include "harvest/harvester.h"
 #include "prune/pruner.h"
 #include "EnhancementsClass.h"
+#include "WorkflowClass.h"
 
 namespace fs = std::filesystem;
 
@@ -39,5 +40,6 @@ int main(int argc, char** argv) {
     audit_verification();
     safety_verification();
     qprocess_verification();
+    workflow_verification();
     return 0;
 }

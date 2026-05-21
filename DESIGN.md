@@ -20,6 +20,12 @@ The Pruner will transition from simple age-based decisions to dependency-aware m
 - **Dependency Graph Awareness:** Before any destructive action (ARCHIVE or DELETE), the Pruner will build a dependency map by scanning repositories for common dependency manifests (`requirements.txt`, `package.json`, `go.mod`, `pom.xml`).
 - **Active Protection:** Repositories identified as dependencies of other projects in the knowledge base will be strictly protected from pruning, regardless of their age or usage scores.
 
+## 4. Developer Workflow Enhancements (C++)
+To improve developer productivity, `glia` will include high-level workspace management commands.
+- **Workspace Status (`workspace-status`):** Iterates through all repositories in the `workspace/` directory and displays their current branch, sync status (ahead/behind), and if they have uncommitted changes.
+- **Workspace Sync (`workspace-sync`):** Synchronizes all repositories in the `workspace/` directory by fetching updates and rebasing local changes, ensuring the developer is always working on the latest state.
+- **Quick Commit (`quick-commit`):** A streamlined command to stage all modified files and commit them with a single message, reducing the friction of frequent commits during development.
+
 ## Implementation Strategy
 Implementation will proceed through the SDD lifecycle:
 1. **Restrictions:** Define formal guardrails in `RESTRICTIONS.md`.

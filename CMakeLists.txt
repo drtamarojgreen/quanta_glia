@@ -20,6 +20,8 @@ set(SOURCES
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
+    src/app/glia_workspace_cmds.cpp
+    src/app/glia_git_cmds.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp
@@ -37,6 +39,7 @@ set(SOURCES
 set(GLIA_SOURCES
     src/app/glia_main.cpp
     src/app/glia_git_cmds.cpp
+    src/app/glia_workspace_cmds.cpp
     src/app/glia_prune_cmd.cpp
     src/app/glia_init_cmd.cpp
     src/app/command.cpp
@@ -54,6 +57,7 @@ target_include_directories(glia PRIVATE src)
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     tests/sdd/cards/EnhancementsClass.cpp
+    tests/sdd/cards/WorkflowClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp
@@ -67,6 +71,8 @@ add_executable(sorrel_test
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
+    src/app/glia_workspace_cmds.cpp
+    src/app/glia_git_cmds.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp

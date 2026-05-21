@@ -19,3 +19,9 @@
 - FORBID destructive actions (ARCHIVE, DELETE) on any repository identified as an active dependency.
 - REQUIRE the Pruner to build a dependency map by scanning for `requirements.txt`, `package.json`, `go.mod`, and `pom.xml` before evaluating repositories.
 - LIMIT dependency identification to exact matches of repository names within manifest files.
+
+## Developer Workflow Enhancements
+- REQUIRE `workspace-status` to use `glia::cli::Terminal::printTable` to ensure a consistent, aligned terminal experience.
+- FORBID `workspace-sync` from performing non-rebase pulls or any operation that causes merge conflicts automatically.
+- REQUIRE `quick-commit` to stage all modified files (`git add .`) before executing the commit command.
+- LIMIT `glia` workspace commands to repositories located within the `workspace/` directory relative to the current working directory.

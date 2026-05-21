@@ -1,5 +1,6 @@
 #include "command.h"
 #include "glia_git_cmds.h"
+#include "glia_workspace_cmds.h"
 #include "glia_prune_cmd.h"
 #include "glia_init_cmd.h"
 #include "../cli/cli.h"
@@ -13,6 +14,9 @@ int main(int argc, char** argv) {
     registry.registerCommand(std::make_unique<glia::app::CheckoutLatestCommand>());
     registry.registerCommand(std::make_unique<glia::app::CommitChangesCommand>());
     registry.registerCommand(std::make_unique<glia::app::UpdateRepoCommand>());
+    registry.registerCommand(std::make_unique<glia::app::QuickCommitCommand>());
+    registry.registerCommand(std::make_unique<glia::app::WorkspaceStatusCommand>());
+    registry.registerCommand(std::make_unique<glia::app::WorkspaceSyncCommand>());
     registry.registerCommand(std::make_unique<glia::app::PruneCurrentCommand>());
     registry.registerCommand(std::make_unique<glia::app::GliaInitCommand>());
 
@@ -41,8 +45,13 @@ int main(int argc, char** argv) {
     }
 
     if (!result.userMessage.empty()) {
-        std::cout << (result.code == glia::core::ExitCode::Success ? "Success: " : "Error: ") 
+        bool isSuccess = (result.code == glia::core::ExitCode::Success || result.code == glia::core::ExitCode::PartialSuccess);
+        std::cout << (isSuccess ? "Success: " : "Error: ")
                   << result.userMessage << std::endl;
+    }
+
+    for (const auto& hint : result.hints) {
+        std::cout << "  * Hint: " << hint << std::endl;
     }
 
     return static_cast<int>(result.code);

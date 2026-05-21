@@ -100,4 +100,33 @@ glia::core::CommandResult UpdateRepoCommand::execute(const std::vector<std::stri
     }
 }
 
+glia::core::CommandResult QuickCommitCommand::execute(const std::vector<std::string>& args) {
+    if (run("git add .") != 0) {
+        return {glia::core::ExitCode::InternalFailure, "git add . failed"};
+    }
+
+    std::string message = "Quick commit";
+    if (args.size() > 1) {
+        message = args[1];
+    } else {
+        message = glia::cli::Prompter::ask("Commit message");
+    }
+
+    if (message.empty()) message = "Quick commit";
+
+    // Escape double quotes for shell safety
+    std::string escapedMessage;
+    for (char c : message) {
+        if (c == '"' || c == '\\' || c == '$' || c == '`') escapedMessage += '\\';
+        escapedMessage += c;
+    }
+
+    std::string commitCmd = "git commit -m \"" + escapedMessage + "\"";
+    if (run(commitCmd) == 0) {
+        return {glia::core::ExitCode::Success, "Successfully committed with message: " + message};
+    } else {
+        return {glia::core::ExitCode::InternalFailure, "git commit failed"};
+    }
+}
+
 }

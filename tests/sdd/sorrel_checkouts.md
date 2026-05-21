@@ -30,3 +30,8 @@
 
 - **Empirical SDD Architecture:** Robustly verified each enhancement through numeric measurements and factual grounding.
     - *Artifacts:* tests/sdd/cards/EnhancementsClass.cpp, tests/sdd/facts/enhancements.facts.
+
+- **Developer Workflow Enhancements:** Implemented and verified workspace management and git helper commands.
+    - *Artifacts:* src/app/glia_workspace_cmds.h/cpp, src/app/glia_git_cmds.h/cpp, tests/sdd/cards/WorkflowClass.cpp.
+    - *Measurement:* workflow_status_code = 0
+    - *Measurement:* workflow_quick_commit_code = 0
