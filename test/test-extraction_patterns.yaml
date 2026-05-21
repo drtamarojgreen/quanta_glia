@@ -1,0 +1,7 @@
+# test/test-extraction_patterns.yaml
+error: : '([^']+)'
+TypeError: : name '([^']+)'
+ValueError: : '([^']+)'
+symbol: : variable ([^\s]+)
+' : '([^']+)'
+" : "([^"]+)"
