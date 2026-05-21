@@ -34,9 +34,15 @@ void test_sample_cpp_log_analysis();   // From test_sample_logs.cpp
 void test_sample_python_log_analysis(); // From test_sample_logs.cpp
 void test_sample_java_log_analysis();   // From test_sample_logs.cpp
 
+void run_glia_arch_tests(); // From test_glia_architecture.cpp
+void run_tui_tests(); // From test_tui.cpp
+
 
 int main() {
     std::cout << "Running tests...\n";
+    
+    run_glia_arch_tests();
+    run_tui_tests();
 
     test_analyze_empty();
     test_analyze_warning_only();
