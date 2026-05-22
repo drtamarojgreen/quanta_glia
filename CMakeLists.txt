@@ -82,6 +82,7 @@ add_executable(sorrel_test
     tests/sdd/cards/EnhancementsClass.cpp
     tests/sdd/cards/WorkflowClass.cpp
     tests/sdd/cards/WasteClass.cpp
+    tests/sdd/cards/RobustnessClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp

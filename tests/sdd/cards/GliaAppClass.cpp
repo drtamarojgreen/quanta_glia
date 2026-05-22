@@ -12,6 +12,7 @@
 #include "EnhancementsClass.h"
 #include "WorkflowClass.h"
 #include "WasteClass.h"
+#include "RobustnessClass.h"
 
 namespace fs = std::filesystem;
 
@@ -43,5 +44,6 @@ int main(int argc, char** argv) {
     qprocess_verification();
     workflow_verification();
     waste_verification();
+    robustness_verification();
     return 0;
 }

@@ -19,6 +19,13 @@ public:
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 
+class AuditRepetitionCommand : public Command {
+public:
+    std::string name() const override { return "audit-repetition"; }
+    std::string description() const override { return "Detect identical code blocks across files"; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+};
+
 }
 
 #endif
