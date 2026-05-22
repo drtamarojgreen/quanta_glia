@@ -5,6 +5,7 @@
 #include <fstream>
 #include <regex>
 #include <set>
+#include <array>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -184,6 +185,65 @@ glia::core::CommandResult AuditRepetitionCommand::execute(const std::vector<std:
 
     glia::cli::Terminal::printTable(headers, rows);
     return {glia::core::ExitCode::Success, "Repetition audit complete. Found " + std::to_string(rows.size()) + " repeated blocks."};
+}
+
+glia::core::CommandResult AuditCommitsCommand::execute(const std::vector<std::string>& args) {
+    std::vector<std::string> keywords = {"final", "robust", "verified", "full", "complete", "perfect", "100%", "optimal"};
+    std::vector<std::string> headers = {"Hash", "Date", "Message"};
+    std::vector<std::vector<std::string>> rows;
+
+    // Use a custom format to get hash, date, and subject
+    std::string logCmd = "git log -n 50 --pretty=format:\"%h|%ad|%s\" --date=short";
+
+    // Using a simpler exec variant that just returns the string
+    auto execLog = [](const char* cmd) -> std::string {
+        std::array<char, 128> buffer;
+        std::string result;
+        FILE* pipe = popen(cmd, "r");
+        if (pipe) {
+            while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) result += buffer.data();
+            pclose(pipe);
+        }
+        return result;
+    };
+
+    std::string logOutput = execLog(logCmd.c_str());
+    std::stringstream ss(logOutput);
+    std::string line;
+
+    while (std::getline(ss, line)) {
+        if (line.empty()) continue;
+
+        std::string lineLower = line;
+        std::transform(lineLower.begin(), lineLower.end(), lineLower.begin(), ::tolower);
+
+        bool suspicious = false;
+        for (const auto& kw : keywords) {
+            if (lineLower.find(kw) != std::string::npos) {
+                suspicious = true;
+                break;
+            }
+        }
+
+        if (suspicious) {
+            size_t p1 = line.find('|');
+            size_t p2 = line.find('|', p1 + 1);
+            if (p1 != std::string::npos && p2 != std::string::npos) {
+                std::string hash = line.substr(0, p1);
+                std::string date = line.substr(p1 + 1, p2 - p1 - 1);
+                std::string msg = line.substr(p2 + 1);
+                if (msg.length() > 40) msg = msg.substr(0, 37) + "...";
+                rows.push_back({hash, date, msg});
+            }
+        }
+    }
+
+    if (rows.empty()) {
+        return {glia::core::ExitCode::Success, "No overconfident commit messages detected in recent history"};
+    }
+
+    glia::cli::Terminal::printTable(headers, rows);
+    return {glia::core::ExitCode::Success, "Commit audit complete. Found " + std::to_string(rows.size()) + " suspicious messages."};
 }
 
 }

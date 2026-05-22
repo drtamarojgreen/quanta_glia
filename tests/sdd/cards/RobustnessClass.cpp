@@ -44,6 +44,10 @@ void robustness_verification() {
     auto res3 = repeatCmd.execute({"audit-repetition"});
     std::cout << "robust_audit_repetition_code = " << static_cast<int>(res3.code) << std::endl;
 
+    glia::app::AuditCommitsCommand commitCmd;
+    auto res4 = commitCmd.execute({"audit-commits"});
+    std::cout << "robust_audit_commits_code = " << static_cast<int>(res4.code) << std::endl;
+
     // Cleanup
     fs::remove(testFile1);
     fs::remove(testFile2);

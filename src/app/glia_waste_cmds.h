@@ -26,6 +26,13 @@ public:
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 
+class AuditCommitsCommand : public Command {
+public:
+    std::string name() const override { return "audit-commits"; }
+    std::string description() const override { return "Audit git history for overconfident commit messages"; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+};
+
 }
 
 #endif

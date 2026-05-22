@@ -31,6 +31,7 @@ int main(int argc, char** argv) {
     registry.registerCommand(std::make_unique<glia::app::WasteScanCommand>());
     registry.registerCommand(std::make_unique<glia::app::VerifyStructureCommand>());
     registry.registerCommand(std::make_unique<glia::app::AuditRepetitionCommand>());
+    registry.registerCommand(std::make_unique<glia::app::AuditCommitsCommand>());
     registry.registerCommand(std::make_unique<glia::app::PruneCurrentCommand>());
     registry.registerCommand(std::make_unique<glia::app::GliaInitCommand>());
 

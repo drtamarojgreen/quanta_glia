@@ -35,3 +35,10 @@
     - *Artifacts:* src/app/glia_workspace_cmds.h/cpp, src/app/glia_git_cmds.h/cpp, tests/sdd/cards/WorkflowClass.cpp.
     - *Measurement:* workflow_status_code = 0
     - *Measurement:* workflow_quick_commit_code = 0
+
+- **Robust LLM Auditing:** Implemented advanced auditing commands to detect LLM waste, structural violations, and overconfident history.
+    - *Artifacts:* src/app/glia_waste_cmds.h/cpp, tests/sdd/cards/WasteClass.cpp, tests/sdd/cards/RobustnessClass.cpp.
+    - *Measurement:* robust_waste_scan_code = 0
+    - *Measurement:* robust_verify_structure_code = 0
+    - *Measurement:* robust_audit_repetition_code = 0
+    - *Measurement:* robust_audit_commits_code = 0
