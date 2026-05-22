@@ -43,9 +43,31 @@ set(GLIA_SOURCES
     src/app/glia_waste_cmds.cpp
     src/app/glia_prune_cmd.cpp
     src/app/glia_init_cmd.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
     src/cli/cli.cpp
+    src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
 
 add_executable(sorrel ${SOURCES})

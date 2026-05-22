@@ -4,6 +4,16 @@
 #include "glia_waste_cmds.h"
 #include "glia_prune_cmd.h"
 #include "glia_init_cmd.h"
+#include "prune_cmd.h"
+#include "harvest_cmd.h"
+#include "report_cmd.h"
+#include "status_cmd.h"
+#include "audit_cmd.h"
+#include "config_cmd.h"
+#include "annotate_cmd.h"
+#include "about.h"
+#include "init.h"
+#include "capabilities.h"
 #include "../cli/cli.h"
 #include "lifecycle.h"
 #include <iostream>
@@ -22,6 +32,18 @@ int main(int argc, char** argv) {
     registry.registerCommand(std::make_unique<glia::app::VerifyStructureCommand>());
     registry.registerCommand(std::make_unique<glia::app::PruneCurrentCommand>());
     registry.registerCommand(std::make_unique<glia::app::GliaInitCommand>());
+
+    // Core functionality from main app
+    registry.registerCommand(std::make_unique<glia::app::PruneCommand>());
+    registry.registerCommand(std::make_unique<glia::app::HarvestCommand>());
+    registry.registerCommand(std::make_unique<glia::app::ReportCommand>());
+    registry.registerCommand(std::make_unique<glia::app::StatusCommand>());
+    registry.registerCommand(std::make_unique<glia::app::AuditCommand>());
+    registry.registerCommand(std::make_unique<glia::app::ConfigCommand>());
+    registry.registerCommand(std::make_unique<glia::app::AnnotateCommand>());
+    registry.registerCommand(std::make_unique<glia::app::AboutCommand>());
+    registry.registerCommand(std::make_unique<glia::app::InitCommand>());
+    registry.registerCommand(std::make_unique<glia::app::CapabilitiesCommand>());
 
     glia::cli::ArgumentParser parser;
     parser.parse(argc, argv);
