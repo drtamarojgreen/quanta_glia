@@ -11,6 +11,7 @@
 #include "prune/pruner.h"
 #include "EnhancementsClass.h"
 #include "WorkflowClass.h"
+#include "WasteClass.h"
 
 namespace fs = std::filesystem;
 
@@ -41,5 +42,6 @@ int main(int argc, char** argv) {
     safety_verification();
     qprocess_verification();
     workflow_verification();
+    waste_verification();
     return 0;
 }

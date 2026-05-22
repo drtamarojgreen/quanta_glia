@@ -1,6 +1,7 @@
 #include "command.h"
 #include "glia_git_cmds.h"
 #include "glia_workspace_cmds.h"
+#include "glia_waste_cmds.h"
 #include "glia_prune_cmd.h"
 #include "glia_init_cmd.h"
 #include "../cli/cli.h"
@@ -17,6 +18,8 @@ int main(int argc, char** argv) {
     registry.registerCommand(std::make_unique<glia::app::QuickCommitCommand>());
     registry.registerCommand(std::make_unique<glia::app::WorkspaceStatusCommand>());
     registry.registerCommand(std::make_unique<glia::app::WorkspaceSyncCommand>());
+    registry.registerCommand(std::make_unique<glia::app::WasteScanCommand>());
+    registry.registerCommand(std::make_unique<glia::app::VerifyStructureCommand>());
     registry.registerCommand(std::make_unique<glia::app::PruneCurrentCommand>());
     registry.registerCommand(std::make_unique<glia::app::GliaInitCommand>());
 
