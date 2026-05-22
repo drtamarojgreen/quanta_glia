@@ -1,6 +1,7 @@
 #include "glia_workspace_cmds.h"
 #include "../cli/cli.h"
 #include <iostream>
+#include <sys/wait.h>
 #include <filesystem>
 #include <vector>
 #include <string>
