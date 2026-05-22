@@ -42,3 +42,8 @@
     - *Measurement:* robust_verify_structure_code = 0
     - *Measurement:* robust_audit_repetition_code = 0
     - *Measurement:* robust_audit_commits_code = 0
+
+- **Modular XML Command Registration:** Successfully refactored glia into a data-driven toolkit.
+    - *Artifacts:* rules/rules.xml, rules/rules.xsd, src/app/command_loader.h/cpp, src/app/command_factory.h/cpp, tests/sdd/cards/DynamicCommandClass.cpp.
+    - *Measurement:* dynamic_cmds_loaded = 1
+    - *Measurement:* dynamic_cmd_created = 1

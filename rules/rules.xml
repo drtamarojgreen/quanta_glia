@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glia_rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="rules.xsd">
+  <!-- Git Management Commands -->
+  <command name="checkout-latest" description="Fetch latest and checkout the most recent branch" type="internal" target="CheckoutLatestCommand"/>
+  <command name="commit-changes" description="Interactively add changes and commit" type="internal" target="CommitChangesCommand"/>
+  <command name="update-repo" description="Fetch, pull --rebase, and push" type="internal" target="UpdateRepoCommand"/>
+  <command name="quick-commit" description="Stage all and commit with message" type="internal" target="QuickCommitCommand"/>
+  <command name="prune-current" description="Interactively delete untracked files and directories" type="internal" target="PruneCurrentCommand"/>
+
+  <!-- Workspace Workflow Commands -->
+  <command name="workspace-status" description="Show status of all repositories in workspace/" type="internal" target="WorkspaceStatusCommand"/>
+  <command name="workspace-sync" description="Sync (fetch &amp; rebase) all repositories in workspace/" type="internal" target="WorkspaceSyncCommand"/>
+
+  <!-- Auditing and Waste Removal Commands -->
+  <command name="waste-scan" description="Scan for LLM-generated waste (TODOs, skeletal logic)" type="internal" target="WasteScanCommand"/>
+  <command name="verify-structure" description="Verify code conforms to SDD structural restrictions" type="internal" target="VerifyStructureCommand"/>
+  <command name="audit-repetition" description="Detect identical code blocks across files" type="internal" target="AuditRepetitionCommand"/>
+  <command name="audit-commits" description="Audit git history for overconfident commit messages" type="internal" target="AuditCommitsCommand"/>
+
+  <!-- Core Management Commands -->
+  <command name="harvest" description="Clone and extract information from repos" type="internal" target="HarvestCommand"/>
+  <command name="report" description="Generate analytics report" type="internal" target="ReportCommand"/>
+  <command name="status" description="Show system status dashboard" type="internal" target="StatusCommand"/>
+  <command name="audit" description="Search and display audit ledger" type="internal" target="AuditCommand"/>
+  <command name="prune" description="Evaluate and prune the knowledge base" type="internal" target="PruneCommand"/>
+  <command name="config" description="Manage system configuration" type="internal" target="ConfigCommand"/>
+  <command name="annotate" description="Generate semantic tags for records" type="internal" target="AnnotateCommand"/>
+  <command name="capabilities" description="List available Glia functions" type="internal" target="CapabilitiesCommand"/>
+
+  <!-- Utility Commands -->
+  <command name="setup-path" description="Add glia to the path in .bashrc" type="internal" target="GliaInitCommand"/>
+  <command name="init" description="Bootstrap the workspace" type="internal" target="InitCommand"/>
+  <command name="about" description="Display application information" type="internal" target="AboutCommand"/>
+
+  <!-- Diagnostic External Commands -->
+  <command name="git-version" description="Show installed git version" type="external" target="git --version"/>
+  <command name="system-check" description="Check system resources" type="external" target="df -h / &amp;&amp; free -m"/>
+</glia_rules>

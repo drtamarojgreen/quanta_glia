@@ -25,3 +25,8 @@
 - FORBID `workspace-sync` from performing non-rebase pulls or any operation that causes merge conflicts automatically.
 - REQUIRE `quick-commit` to stage all modified files (`git add .`) before executing the commit command.
 - LIMIT `glia` workspace commands to repositories located within the `workspace/` directory relative to the current working directory.
+
+## Modularity and Data Integrity
+- REQUIRE all `glia` commands to be defined in `/rules/rules.xml`.
+- FORBID manual command registration in `main.cpp`; registry must use the automated `CommandLoader`.
+- REQUIRE XML schema validation against `/rules/rules.xsd` before registry population.

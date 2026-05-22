@@ -15,3 +15,4 @@
 - **sorrel_app_cli_final_sip:** Final end-to-end manual verification of the console terminal application.
 - **glia_developer_workflow_sip:** Implement and verify workspace-status, workspace-sync, and quick-commit commands.
 - **glia_robust_audit_sip:** Implement and verify waste-scan, verify-structure, audit-repetition, and audit-commits commands.
+- **glia_modular_xml_sip:** Transition to data-driven command registration via rules/rules.xml and CommandFactory.

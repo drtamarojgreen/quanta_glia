@@ -38,6 +38,8 @@ set(SOURCES
 
 set(GLIA_SOURCES
     src/app/glia_main.cpp
+    src/app/command_loader.cpp
+    src/app/command_factory.cpp
     src/app/glia_git_cmds.cpp
     src/app/glia_workspace_cmds.cpp
     src/app/glia_waste_cmds.cpp
@@ -83,6 +85,7 @@ add_executable(sorrel_test
     tests/sdd/cards/WorkflowClass.cpp
     tests/sdd/cards/WasteClass.cpp
     tests/sdd/cards/RobustnessClass.cpp
+    tests/sdd/cards/DynamicCommandClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp
@@ -98,6 +101,8 @@ add_executable(sorrel_test
     src/app/config_cmd.cpp
     src/app/glia_workspace_cmds.cpp
     src/app/glia_git_cmds.cpp
+    src/app/command_loader.cpp
+    src/app/command_factory.cpp
     src/app/glia_waste_cmds.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp

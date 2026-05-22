@@ -75,7 +75,10 @@ glia::core::CommandResult VerifyStructureCommand::execute(const std::vector<std:
         {"Meaningless Assertion", std::regex("assert\\s*\\(\\s*(true|1|!false|!!true)\\s*\\)")},
         {"Raw Pointer Usage", std::regex("\\b(new\\s+[^\\(;]+|delete\\s+[^;]+)\\b")},
         {"Magic String Placeholder", std::regex("\"(test|dummy|example|placeholder|stub)\"")},
-        {"Magic Number Placeholder", std::regex("=\\s*(42|123|999|0xDEADBEEF|0xCAFEBABE)\\b")}
+        {"Magic Number Placeholder", std::regex("=\\s*(42|123|999|0xDEADBEEF|0xCAFEBABE)\\b")},
+        {"System Call Escape", std::regex("std::system\\s*\\(")},
+        {"IO Escape", std::regex("std::cout|std::cerr")},
+        {"Generic Exception", std::regex("throw\\s+std::runtime_error\\s*\\(\\s*\"(error|failed|test)\"\\s*\\)")}
     };
 
     std::vector<std::string> headers = {"File", "Line", "Violation", "Context"};

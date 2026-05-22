@@ -26,6 +26,12 @@ To improve developer productivity, `glia` will include high-level workspace mana
 - **Workspace Sync (`workspace-sync`):** Synchronizes all repositories in the `workspace/` directory by fetching updates and rebasing local changes, ensuring the developer is always working on the latest state.
 - **Quick Commit (`quick-commit`):** A streamlined command to stage all modified files and commit them with a single message, reducing the friction of frequent commits during development.
 
+## 5. Modular XML Command Registration
+To reduce code repetition and improve system modularity, `glia` transitions to a data-driven command registration model.
+- **Rule-Based Definitions:** All commands must be defined in `/rules/rules.xml` and validated against `/rules/rules.xsd`.
+- **Dynamic Loading:** The `CommandRegistry` uses a `CommandLoader` module (based on `QtXml`) to discover and initialize commands at runtime.
+- **Metadata Centralization:** Command names, descriptions, and execution targets are managed centrally in XML, allowing for rapid expansion and easier auditing.
+
 ## Implementation Strategy
 Implementation will proceed through the SDD lifecycle:
 1. **Restrictions:** Define formal guardrails in `RESTRICTIONS.md`.

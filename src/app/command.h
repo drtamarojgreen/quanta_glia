@@ -22,5 +22,19 @@ public:
 private:
     std::vector<std::unique_ptr<Command>> commands;
 };
+
+class ExternalCommand : public Command {
+public:
+    ExternalCommand(std::string name, std::string desc, std::string target)
+        : m_name(name), m_desc(desc), m_target(target) {}
+    std::string name() const override { return m_name; }
+    std::string description() const override { return m_desc; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+private:
+    std::string m_name;
+    std::string m_desc;
+    std::string m_target;
+};
+
 }
 #endif

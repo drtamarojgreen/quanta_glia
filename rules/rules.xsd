@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="glia_rules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="command" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="target" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

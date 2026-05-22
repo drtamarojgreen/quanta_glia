@@ -13,6 +13,7 @@
 #include "WorkflowClass.h"
 #include "WasteClass.h"
 #include "RobustnessClass.h"
+#include "DynamicCommandClass.h"
 
 namespace fs = std::filesystem;
 
@@ -45,5 +46,6 @@ int main(int argc, char** argv) {
     workflow_verification();
     waste_verification();
     robustness_verification();
+    dynamic_command_verification();
     return 0;
 }
