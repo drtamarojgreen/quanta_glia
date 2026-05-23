@@ -16,3 +16,4 @@
 - **glia_developer_workflow_sip:** Implement and verify workspace-status, workspace-sync, and quick-commit commands.
 - **glia_robust_audit_sip:** Implement and verify waste-scan, verify-structure, audit-repetition, and audit-commits commands.
 - **glia_modular_xml_sip:** Transition to data-driven command registration via rules/rules.xml and CommandFactory.
+- **glia_empirical_audit_facts_sip:** Define and verify empirical facts for auditing and workflow modules in `glia_audit.facts`.

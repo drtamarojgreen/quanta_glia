@@ -33,7 +33,9 @@ void sorrel_glia_config_serialization_card(const std::map<std::string, std::stri
 int main(int argc, char** argv) {
     auto facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/environment.facts");
     auto enh_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/enhancements.facts");
+    auto audit_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/glia_audit.facts");
     facts.insert(enh_facts.begin(), enh_facts.end());
+    facts.insert(audit_facts.begin(), audit_facts.end());
 
     sorrel_glia_config_serialization_card(facts);
     reporting_enhancement_verification(facts);
