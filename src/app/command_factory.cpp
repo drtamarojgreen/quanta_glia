@@ -13,10 +13,14 @@ void CommandFactory::registerCreator(const std::string& targetName, Creator crea
 
 std::unique_ptr<Command> CommandFactory::create(const CommandMetadata& meta) {
     if (meta.type == "external") {
-        return std::make_unique<ExternalCommand>(meta.name, meta.description, meta.target);
+        auto cmd = std::make_unique<ExternalCommand>();
+        cmd->configure(meta);
+        return cmd;
     }
     if (creators().count(meta.target)) {
-        return creators()[meta.target]();
+        auto cmd = creators()[meta.target]();
+        cmd->configure(meta);
+        return cmd;
     }
     return nullptr;
 }

@@ -1,38 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glia_rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="rules.xsd">
-  <!-- Git Management Commands -->
-  <command name="checkout-latest" description="Fetch latest and checkout the most recent branch" type="internal" target="CheckoutLatestCommand"/>
-  <command name="commit-changes" description="Interactively add changes and commit" type="internal" target="CommitChangesCommand"/>
-  <command name="update-repo" description="Fetch, pull --rebase, and push" type="internal" target="UpdateRepoCommand"/>
-  <command name="quick-commit" description="Stage all and commit with message" type="internal" target="QuickCommitCommand"/>
-  <command name="prune-current" description="Interactively delete untracked files and directories" type="internal" target="PruneCurrentCommand"/>
+  <globals>
+    <extensions>.cpp,.h,.hpp,.c,.cc,.py,.js,.java,.go,.rs,.ts,.html,.css</extensions>
+    <ignored_dirs>.git,build,node_modules</ignored_dirs>
+    <ui_strings>
+        <string key="msg_success" value="Operation Successful"/>
+        <string key="msg_error" value="Operation Error"/>
+        <string key="msg_done" value="Action Completed"/>
+        <string key="msg_clear" value="No anomalies detected"/>
+        <string key="msg_audit_complete" value="System audit verified"/>
+        <string key="msg_synced" value="Workspace synchronized"/>
+        <string key="msg_partial" value="Partial completion - See hints"/>
+        <string key="msg_none" value="Status Unavailable"/>
+        <string key="msg_ok" value="Operational"/>
+        <string key="msg_ahead" value="Local Ahead"/>
+        <string key="msg_behind" value="Local Behind"/>
+        <string key="msg_div" value="Diverged State"/>
+        <string key="msg_yes" value="Modified"/>
+        <string key="msg_no" value="Clean"/>
+        <string key="help_header" value="Glia Software Architecture &amp; Verification Toolkit"/>
+        <string key="help_available" value="System Command Registry:"/>
+        <string key="col_file" value="Source Entity"/>
+        <string key="col_line" value="Position"/>
+        <string key="col_snippet" value="Evidence Segment"/>
+        <string key="col_type" value="Pattern Class"/>
+        <string key="col_hash" value="Block Identifier"/>
+        <string key="col_files" value="Conflict Origins"/>
+        <string key="col_date" value="Temporal Marker"/>
+        <string key="col_message" value="Assertion Log"/>
+        <string key="col_repo" value="Repository Node"/>
+        <string key="col_branch" value="Active Branch"/>
+        <string key="col_sync" value="Alignment Status"/>
+        <string key="col_diff" value="Mutation Delta"/>
+        <string key="col_module" value="Subsystem Module"/>
+        <string key="col_status" value="Operational State"/>
+        <string key="col_size" value="Byte Magnitude"/>
+        <string key="col_src" value="Source Count"/>
+        <string key="col_doc" value="Asset Documentation"/>
+        <string key="col_stack" value="Technology Stack"/>
+        <string key="app_name" value="Glia Systems Architect v1.1.0"/>
+        <string key="harvest_start" value="Initializing Ingestion"/>
+        <string key="harvest_stored" value="Knowledge persistence complete"/>
+        <string key="report_gen" value="Executing Systems Analysis"/>
+        <string key="prune_skip" value="Bypassing active dependency"/>
+        <string key="prune_eval" value="Executing hygiene evaluation"/>
+        <string key="cfg_active" value="Load active system configuration"/>
+        <string key="init_boot" value="Bootstrapping system workspace"/>
+        <string key="path_added" value="System environment updated"/>
+        <string key="mesh_start" value="Integrating Research Mesh Tools"/>
+    </ui_strings>
+  </globals>
 
-  <!-- Workspace Workflow Commands -->
-  <command name="workspace-status" description="Show status of all repositories in workspace/" type="internal" target="WorkspaceStatusCommand"/>
-  <command name="workspace-sync" description="Sync (fetch &amp; rebase) all repositories in workspace/" type="internal" target="WorkspaceSyncCommand"/>
+  <command name="genome" description="Interface with Genome API for dataset ingestion" type="internal" target="GenomeCommand">
+    <param key="cache_dir" value="cache"/>
+    <param key="filename_prefix" value="genome_"/>
+    <param key="filename_suffix" value=".json"/>
+    <param key="mock_payload" value="{&quot;status&quot;: &quot;ingested&quot;}"/>
+  </command>
 
-  <!-- Auditing and Waste Removal Commands -->
-  <command name="waste-scan" description="Scan for LLM-generated waste (TODOs, skeletal logic)" type="internal" target="WasteScanCommand"/>
-  <command name="verify-structure" description="Verify code conforms to SDD structural restrictions" type="internal" target="VerifyStructureCommand"/>
-  <command name="audit-repetition" description="Detect identical code blocks across files" type="internal" target="AuditRepetitionCommand"/>
-  <command name="audit-commits" description="Audit git history for overconfident commit messages" type="internal" target="AuditCommitsCommand"/>
+  <!-- Git Governance -->
+  <command name="checkout-latest" description="Synchronize and navigate to recent development head" type="internal" target="CheckoutLatestCommand"/>
+  <command name="commit-changes" description="Interactively audit and stage local mutations" type="internal" target="CommitChangesCommand"/>
+  <command name="update-repo" description="Execute fetch-rebase-push synchronization pipeline" type="internal" target="UpdateRepoCommand"/>
+  <command name="quick-commit" description="Automated staging and verified commit execution" type="internal" target="QuickCommitCommand">
+    <param key="default_message" value="Standardize structural implementation"/>
+  </command>
+  <command name="prune-current" description="Remove unmanaged filesystem artifacts" type="internal" target="PruneCurrentCommand"/>
 
-  <!-- Core Management Commands -->
-  <command name="harvest" description="Clone and extract information from repos" type="internal" target="HarvestCommand"/>
-  <command name="report" description="Generate analytics report" type="internal" target="ReportCommand"/>
-  <command name="status" description="Show system status dashboard" type="internal" target="StatusCommand"/>
-  <command name="audit" description="Search and display audit ledger" type="internal" target="AuditCommand"/>
-  <command name="prune" description="Evaluate and prune the knowledge base" type="internal" target="PruneCommand"/>
-  <command name="config" description="Manage system configuration" type="internal" target="ConfigCommand"/>
-  <command name="annotate" description="Generate semantic tags for records" type="internal" target="AnnotateCommand"/>
-  <command name="capabilities" description="List available Glia functions" type="internal" target="CapabilitiesCommand"/>
+  <!-- Workspace Intelligence -->
+  <command name="workspace-status" description="Evaluate health across distributed repository nodes" type="internal" target="WorkspaceStatusCommand">
+    <param key="workspace_dir" value="workspace"/>
+  </command>
+  <command name="workspace-sync" description="Synchronize multi-repository development workspace" type="internal" target="WorkspaceSyncCommand">
+    <param key="workspace_dir" value="workspace"/>
+  </command>
+  <command name="workspace-mesh" description="Integrate cross-repository research graph tools" type="internal" target="WorkspaceMeshCommand">
+    <param key="graph_file" value="graph.csv"/>
+    <param key="graph_header" value="source,target,weight"/>
+    <param key="graph_entry" value="multiple_viewer,greenhouse_org,1.0"/>
+  </command>
 
-  <!-- Utility Commands -->
-  <command name="setup-path" description="Add glia to the path in .bashrc" type="internal" target="GliaInitCommand"/>
-  <command name="init" description="Bootstrap the workspace" type="internal" target="InitCommand"/>
-  <command name="about" description="Display application information" type="internal" target="AboutCommand"/>
+  <!-- Robust Auditing Suite -->
+  <command name="waste-scan" description="Detect LLM-generated structural waste and skeletal markers" type="internal" target="WasteScanCommand">
+    <list name="patterns">
+        <item>TODO|FIXME</item>
+        <item>Implement .* logic|Your logic here|Add implementation</item>
+        <item>// \.\.\.|\/\* \.\.\. \*\/|return \{\}; // placeholder</item>
+        <item>boilerplate|skeletal|placeholder|stub</item>
+        <item>\{\s*return\s*[^;]*;\s*\}</item>
+        <item>as an AI language model|certainly, I can help</item>
+    </list>
+  </command>
 
-  <!-- Diagnostic External Commands -->
-  <command name="git-version" description="Show installed git version" type="external" target="git --version"/>
-  <command name="system-check" description="Check system resources" type="external" target="df -h / &amp;&amp; free -m"/>
+  <command name="verify-structure" description="Enforce SDD structural reality and constraint adherence" type="internal" target="VerifyStructureCommand">
+    <list name="violations">
+        <item>Empty Catch Block|catch\s*\([^\)]*\)\s*\{([^\}]*)\}</item>
+        <item>Meaningless Assertion|assert\s*\(\s*(true|1|!false|!!true)\s*\)</item>
+        <item>Raw Pointer Management|\b(new\s+[^\(;]+|delete\s+[^;]+)\b</item>
+        <item>Magic Prototype Placeholder|&quot;(test|dummy|example|placeholder|stub)&quot;</item>
+        <item>Arbitrary Magic Number|=\s*(42|123|999|0xDEADBEEF|0xCAFEBABE)\b</item>
+    </list>
+  </command>
+
+  <command name="audit-repetition" description="Identify redundant logic and copy-paste laziness" type="internal" target="AuditRepetitionCommand"/>
+
+  <command name="audit-commits" description="Scan history for overconfident or deceptive commit logs" type="internal" target="AuditCommitsCommand">
+    <param key="log_limit" value="50"/>
+    <list name="keywords">
+        <item>final</item>
+        <item>robust</item>
+        <item>verified</item>
+        <item>perfect</item>
+        <item>full</item>
+        <item>complete</item>
+        <item>100%</item>
+        <item>optimal</item>
+    </list>
+  </command>
+
+  <!-- Maintenance & Infrastructure -->
+  <command name="harvest" description="Ingest and extract structured repository knowledge" type="internal" target="HarvestCommand"/>
+  <command name="report" description="Generate codebase analytics and technology signatures" type="internal" target="ReportCommand">
+     <param key="output_csv" value="repository_data.csv"/>
+  </command>
+  <command name="status" description="Visualize system operational dashboard" type="internal" target="StatusCommand"/>
+  <command name="audit" description="Trace system actions through the audit ledger" type="internal" target="AuditCommand">
+     <param key="ledger_file" value="audit.ledger"/>
+  </command>
+  <command name="prune" description="Execute automated knowledge base hygiene routines" type="internal" target="PruneCommand">
+     <param key="archive_dir" value="repo_archive"/>
+  </command>
+  <command name="config" description="Inspect and manage active system configurations" type="internal" target="ConfigCommand"/>
+  <command name="annotate" description="Apply semantic metadata to knowledge assets" type="internal" target="AnnotateCommand"/>
+  <command name="capabilities" description="Introspect available system capabilities" type="internal" target="CapabilitiesCommand"/>
+  <command name="init" description="Initialize development workspace and storage" type="internal" target="InitCommand"/>
+  <command name="about" description="Display system information and standards" type="internal" target="AboutCommand"/>
+  <command name="setup-path" description="Provision system binary paths" type="internal" target="GliaInitCommand"/>
+
+  <!-- External Governance -->
+  <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>
+  <command name="system-check" description="Validate system resource availability" type="external" target="df -h / &amp;&amp; free -m"/>
 </glia_rules>

@@ -15,12 +15,8 @@ std::string exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
+    if (!pipe) throw std::runtime_error("popen");
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) result += buffer.data();
     return result;
 }
 }
@@ -29,26 +25,16 @@ glia::core::CommandResult PruneCurrentCommand::execute(const std::vector<std::st
     std::string untracked = exec("git ls-files --others --exclude-standard");
     std::stringstream ss(untracked);
     std::string item;
-    int deletedCount = 0;
-    
+    int count = 0;
     while (std::getline(ss, item)) {
         if (item.empty()) continue;
-        if (glia::cli::Prompter::confirm("Delete " + item + "?")) {
-            try {
-                if (std::filesystem::is_directory(item)) {
-                    std::filesystem::remove_all(item);
-                } else {
-                    std::filesystem::remove(item);
-                }
-                std::cout << "Deleted: " << item << std::endl;
-                deletedCount++;
-            } catch (const std::filesystem::filesystem_error& e) {
-                std::cerr << "Error deleting " << item << ": " << e.what() << std::endl;
-            }
+        if (glia::cli::Prompter::confirm(item)) {
+            if (std::filesystem::is_directory(item)) std::filesystem::remove_all(item);
+            else std::filesystem::remove(item);
+            count++;
         }
     }
-    
-    return {glia::core::ExitCode::Success, "Pruned " + std::to_string(deletedCount) + " untracked items"};
+    return {glia::core::ExitCode::Success, std::to_string(count)};
 }
 
 }

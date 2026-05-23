@@ -14,6 +14,8 @@ public:
 
     std::string knowledgeBase;
     std::string repoCache;
+    std::string rulesPath;
+    std::string statePath;
     int maxRepos;
     std::string logLevel;
     std::vector<std::string> searchPaths;

@@ -1,12 +1,11 @@
 #ifndef GLIA_APP_FEATURE_FLAGS_H
 #define GLIA_APP_FEATURE_FLAGS_H
-#include <string>
 #include <map>
-
+#include <string>
 namespace glia::app {
 class FeatureFlags {
 public:
-    static bool isEnabled(const std::string& feature);
+    static std::map<std::string, bool> flags();
 };
 }
 #endif

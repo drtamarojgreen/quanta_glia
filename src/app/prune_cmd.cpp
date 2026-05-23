@@ -2,31 +2,27 @@
 #include "../prune/pruner.h"
 #include "../config/config.h"
 #include "../audit/audit.h"
+#include "../util/translator.h"
 #include <iostream>
 #include <filesystem>
 
 namespace glia::app {
 glia::core::CommandResult PruneCommand::execute(const std::vector<std::string>& args) {
+    using glia::util::Translator;
     glia::config::Config config;
     config.load("config.yaml");
 
     bool dryRun = false;
-    std::string strategy = "conservative";
-    for (const auto& arg : args) {
-        if (arg == "--dry-run") dryRun = true;
-        if (arg == "aggressive") strategy = "aggressive";
-    }
+    for (const auto& arg : args) if (arg == "--dry-run") dryRun = true;
 
-    std::cout << "Starting Pruner...\n";
+    std::string archiveDir = m_meta.params.count("archive_dir") ? m_meta.params.at("archive_dir") : "repo_archive";
+
     auto deps = glia::prune::Pruner::buildDependencyMap(config.knowledgeBase);
     if (std::filesystem::exists(config.knowledgeBase)) {
         for (auto const& dir_entry : std::filesystem::directory_iterator(config.knowledgeBase)) {
             if (!dir_entry.is_directory()) continue;
             std::string name = dir_entry.path().filename().string();
-            if (deps.count(name)) {
-                std::cout << "SKIPPING " << name << " (Active Dependency)\n";
-                continue;
-            }
+            if (deps.count(name)) continue;
 
             glia::prune::RepoPruneRecord rec;
             rec.name = name;
@@ -37,13 +33,10 @@ glia::core::CommandResult PruneCommand::execute(const std::vector<std::string>& 
             float score = glia::prune::Pruner::calculateScore(rec, {{"usage", 0.5f}, {"age", 0.2f}});
             std::string decision = glia::prune::Pruner::makeDecision(score, {{"delete", 0.9f}, {"archive", 0.7f}});
 
-            if (decision == "DELETE" && strategy != "aggressive") decision = "ARCHIVE";
-
-            std::cout << "Evaluated " << name << ": " << decision << " (Score: " << score << ")\n";
-            glia::prune::Pruner::execute(rec.path, decision, "repo_archive", dryRun);
-            glia::audit::Audit::log("PRUNE", name, "Decision: " + decision + ", Score: " + std::to_string(score));
+            glia::prune::Pruner::execute(rec.path, decision, archiveDir, dryRun);
+            glia::audit::Audit::log("PRUNE", name, decision);
         }
     }
-    return {glia::core::ExitCode::Success, "Prune complete"};
+    return {glia::core::ExitCode::Success, Translator::t("msg_done")};
 }
 }

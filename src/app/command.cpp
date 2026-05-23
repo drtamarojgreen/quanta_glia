@@ -1,4 +1,5 @@
 #include "command.h"
+#include "../util/translator.h"
 #include <algorithm>
 #include <iostream>
 
@@ -19,9 +20,12 @@ std::vector<std::string> CommandRegistry::listCommands() const {
 }
 
 glia::core::CommandResult ExternalCommand::execute(const std::vector<std::string>& args) {
-    std::cout << "Executing external command: " << m_target << std::endl;
-    int res = std::system(m_target.c_str());
-    if (res == 0) return {glia::core::ExitCode::Success, "External command executed successfully"};
-    return {glia::core::ExitCode::InternalFailure, "External command failed with exit code " + std::to_string(res)};
+    using glia::util::Translator;
+    std::string target = m_meta.target;
+    if (target.empty()) return {glia::core::ExitCode::ConfigError, Translator::t("msg_error")};
+
+    int res = std::system(target.c_str());
+    if (res == 0) return {glia::core::ExitCode::Success, Translator::t("msg_done")};
+    return {glia::core::ExitCode::InternalFailure, std::to_string(res)};
 }
 }
