@@ -17,3 +17,5 @@ Is robust_waste_scan_code = 0
 Is robust_verify_structure_code = 0
 Is robust_audit_repetition_code = 0
 Is robust_audit_commits_code = 0
+
+Is scoring_execution_code = 0
