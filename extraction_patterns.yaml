@@ -1,8 +1,0 @@
-# extraction_patterns.yaml
-# Format: marker: regex_pattern (first capturing group is the identifier)
-error: : '([^']+)'
-TypeError: : name '([^']+)'
-ValueError: : '([^']+)'
-symbol: : variable ([^\s]+)
-' : '([^']+)'
-" : "([^"]+)"

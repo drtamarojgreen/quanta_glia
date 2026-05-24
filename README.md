@@ -4,60 +4,39 @@
 
 ---
 
-## 🛠️ Current Implementation: Glia C++ CLI (v1.1.0)
+## 🚀 Quickstart
 
-QuantaGlia is now a production-grade, self-contained automation engine and developer utility.
+Get up and running with QuantaGlia in a few simple steps.
 
-### 🧠 Standalone & Global Architecture
-- **Zero-Dependency Portability**: The `glia` binary embeds its own default configuration (`rules.xml` and `rules.xsd`).
-- **Dynamic Initialization**: Running `glia init` creates a global `~/.glia` directory and populates it with these rules directly from the binary, ensuring it works in any directory and on any machine.
-- **Data-Driven Logic**: All automation workflows are defined in XML. You can add, modify, or extend the tool's capabilities by editing `~/.glia/rules.xml` without recompiling the source code.
-- **XSD Validation**: All command definitions are validated against a structural schema to ensure reliability.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/drtamarojgreen/quanta_glia.git
+    cd quanta_glia
+    ```
 
-### ⚙️ Advanced Automation Engine
-- **Multi-Step Sequences**: Supports complex workflows defined as a sequence of dependent steps. The engine halts immediately if any step fails, preventing corrupted states.
-- **Complex Command Integration**: seamlessly bridges XML-defined wrappers with specialized C++ logic for interactive or filesystem-heavy operations.
-- **Operational Lifecycle**: Built-in `--version` and `--update` flags, the latter providing a real Git-based migration path for the tool itself.
+2.  **Run the bootstrap script:**
+    This script sets up the necessary environment and dependencies.
+    ```bash
+    bash scripts/bootstrap.sh
+    ```
 
-### 🖥️ Interactive TUI (Node-Graph Editor)
-Launch the TUI with `glia tui` for a visual automation experience:
-- **Node-Graph Workspace**: Visualize your workflows and dependencies in a 2D graph.
-- **Sidebar Command Menu**: Quick access and discovery of all registered tools.
-- **Keyboard Navigation**: Fully interactive, character-at-a-time control using standard terminal ANSI codes (no external UI libraries required).
+3.  **Perform a dry run of the pruner:**
+    This command will simulate the pruning process without making any actual changes.
+    ```bash
+    python3 scripts/pruner.py --dry-run
+    ```
 
-### 📋 Comprehensive Command Reference
+---
 
-#### Core Management
-- `init`: Global setup of `~/.glia` and binary PATH integration.
-- `tui`: Interactive workflow and node-graph editor.
-- `report-status`: Real-time inventory of commands and execution of the `glia_unit_tests` suite.
-
-#### Git Automation
-- `checkout-latest`: Smart branch detection and checkout.
-- `commit-changes`: Interactive staging and committing with real-time feedback.
-- `update-repo`: Safe, multi-stage fetch-rebase-push pipeline.
-- `git-find-commit`: Pattern-based commit history search.
-- `git-cleanup-local`: Interactively delete merged local branches.
-
-#### Environment & Build
-- `env-rebuild`: Multi-step sequence to tear down, rebuild, and verify the Docker environment.
-- `env-doctor`: Full diagnostic of Docker, Git, and CMake environments.
-- `build-lint-cmake`: Static analysis of build configurations.
-- `test-unit`: Execution of the project's ctest suite.
-- `env-shell`: Interactive shell access to containerized services.
-- `env-clean-volumes`: Safe removal of unused Docker volumes.
-
-#### Quality, Documentation & Project
-- `lint-check-format`: Code style verification.
-- `lint-security` / `lint-secrets`: Static security analysis and credential scanning.
-- `doc-todo-list`: Extraction of TODOs/FIXMEs into a markdown report.
-- `doc-update-changelog`: Automatic generation of project history.
-- `proj-estimate`: Algorithmic estimation of project size and complexity.
-- `sys-alias-setup`: Automatic configuration of shell aliases (`g`, `gc`, `gu`).
+QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
 
 ---
 
 ## 🚀 Workspace Setup and Testing
+
+This project serves as the primary entry point for setting up and testing the entire PrismQuanta ecosystem.
+
+### Workflow and Directory Structure
 
 The bootstrapping and testing process is designed to create a clean, multi-repository workspace.
 

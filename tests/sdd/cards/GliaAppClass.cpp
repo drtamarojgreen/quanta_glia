@@ -10,6 +10,10 @@
 #include "harvest/harvester.h"
 #include "prune/pruner.h"
 #include "EnhancementsClass.h"
+#include "WorkflowClass.h"
+#include "WasteClass.h"
+#include "RobustnessClass.h"
+#include "DynamicCommandClass.h"
 
 namespace fs = std::filesystem;
 
@@ -26,21 +30,46 @@ void sorrel_glia_config_serialization_card(const std::map<std::string, std::stri
     fs::remove(p);
 }
 
-void run_glia_automation_card();
-
 int main(int argc, char** argv) {
     auto facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/environment.facts");
     auto enh_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/enhancements.facts");
+    auto audit_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/glia_audit.facts");
     facts.insert(enh_facts.begin(), enh_facts.end());
+    facts.insert(audit_facts.begin(), audit_facts.end());
 
-    sorrel_glia_config_serialization_card(facts);
-    reporting_enhancement_verification(facts);
-    harvester_enhancement_verification(facts);
-    pruner_enhancement_verification(facts);
-    harvester_collision_verification(facts);
-    audit_verification();
-    safety_verification();
-    qprocess_verification();
-    run_glia_automation_card();
+    if (argc < 2) {
+        sorrel_glia_config_serialization_card(facts);
+        reporting_enhancement_verification(facts);
+        harvester_enhancement_verification(facts);
+        pruner_enhancement_verification(facts);
+        harvester_collision_verification(facts);
+        audit_verification();
+        safety_verification();
+        qprocess_verification();
+        workflow_verification();
+        waste_verification();
+        robustness_verification();
+        dynamic_command_verification();
+        return 0;
+    }
+
+    std::string cardName = argv[1];
+    if (cardName == "config_serialization") sorrel_glia_config_serialization_card(facts);
+    else if (cardName == "reporting") reporting_enhancement_verification(facts);
+    else if (cardName == "harvester") harvester_enhancement_verification(facts);
+    else if (cardName == "pruner") pruner_enhancement_verification(facts);
+    else if (cardName == "harvester_collision") harvester_collision_verification(facts);
+    else if (cardName == "audit") audit_verification();
+    else if (cardName == "safety") safety_verification();
+    else if (cardName == "qprocess") qprocess_verification();
+    else if (cardName == "workflow") workflow_verification();
+    else if (cardName == "waste") waste_verification();
+    else if (cardName == "robustness") robustness_verification();
+    else if (cardName == "dynamic_command") dynamic_command_verification();
+    else {
+        std::cerr << "Unknown logical card: " << cardName << std::endl;
+        return 1;
+    }
+
     return 0;
 }

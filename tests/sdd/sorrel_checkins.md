@@ -1,15 +1,9 @@
-# SORREL Checkins - Converted Tests Workspace
+# SORREL Checkins - Glia Architectural Governance
 
-- quanta_glia_extraction_sip: Compile and execute `quanta_glia_extraction_card.cpp` to verify extraction logic.
-- pruner_logic_sip: Compile and execute `pruner_logic_card.cpp` to verify pruning decision logic.
-- sorrel_app_init: Initialized project structure in src/.
-- sorrel_app_config: Implemented GliaConfig and GliaConfigManager with XML/JSON support using native Qt libraries.
-- sorrel_app_main: Developed main application entry point (Sorrel) with QProcess integration for Glia scripts.
-- sorrel_app_build: Created CMake build system with custom clean targets and SDD test framework integration.
-- sorrel_app_verify: Verified system via SDD test cards in tests/sdd/.
-
-# SORREL Checkins - Phase III Enhancements
-
-- **sorrel_action_persistence_sip:** Fully implement and verify C++ persistence for Harvester and full actions for Pruner in main application.
-- **sorrel_empirical_measurement_sip:** Complete the transition to empirical measurements in SDD test cards to prevent agent cheating.
-- **sorrel_app_cli_final_sip:** Final end-to-end manual verification of the console terminal application.
+- glia_modular_xml_sip: Transition glia command registry to data-driven rules/rules.xml.
+- glia_numeric_evidence_sip: Refactor all SDD cards and facts to use 100% numeric empirical measurements.
+- glia_discovery_rule_sip: Implement `discover sdd` and `discover facts` in glia CLI.
+- glia_reasoning_gates_sip: Implement `gate-check` to validate Reasoning Gates.
+- glia_structural_audit_sip: Implement `restrictions` to enforce structural construction rules.
+- glia_health_scoring_sip: Implement `score` to calculate structural health index.
+- glia_shell_consolidation_sip: Consolidate shell execution into shell_utils.h to reduce repetition.

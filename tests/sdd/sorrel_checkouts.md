@@ -1,32 +1,25 @@
-# SORREL Checkouts - Converted Tests Workspace
+# SORREL Checkouts - Glia Architectural Governance
 
--   **Workspace Setup:** Created the `tests/sdd/` structure to keep converted tests separate from the core SORREL framework.
-    -   *Artifacts:* `tests/sdd/cards/`, `tests/sdd/facts/`
-    -   *Observation:* `workspace_created = true`
+- Artifacts: src/app/command_loader.cpp, rules/rules.xml, src/app/command_factory.cpp
+- Measurement: dynamic_cmds_loaded = 1
+- Observation: glia_modular_xml_sip = 1
 
--   **Migration to New SORREL Syntax:** Updated cards and facts to align with the latest SORREL README.
-    -   *Artifacts:* `tests/sdd/cards/QuantaGliaClass.cpp`, `tests/sdd/cards/PrunerClass.cpp`, `tests/sdd/facts/environment.facts`
-    -   *Observation:* `syntax_migration_completed = true`
+- Artifacts: tests/sdd/facts/*.facts, tests/sdd/cards/*.cpp
+- Measurement: waste_scan_code = 0
+- Observation: glia_numeric_evidence_sip = 1
 
--   **Quanta Glia Card Integration:** Integrated extraction verification into `QuantaGliaClass.cpp`.
-    -   *Artifacts:* `tests/sdd/cards/QuantaGliaClass.cpp`
-    -   *Observation:* `quanta_glia_card_migrated = true`
+- Artifacts: src/app/glia_discovery_cmds.cpp
+- Measurement: discovery_sdd_operational = 1
+- Observation: glia_discovery_rule_sip = 1
 
--   **Sorrel Standalone App implementation:** Standalone C++ application implemented, verified, and cleaned.
-    -   *Observation:* `sorrel_glia_config_xml_operational = true`
-    -   *Observation:* `sorrel_glia_config_json_operational = true`
-    -   *Observation:* `sorrel_sdd_qprocess_operational = true`
-    -   *Artifacts:* `src/main.cpp`, `src/glia_config.h`, `src/glia_config.cpp`, `src/glia_config_manager.h`, `src/glia_config_manager.cpp`, `CMakeLists.txt`, `tests/sdd/cards/GliaAppClass.cpp`, `tests/sdd/sorrel_checkins.md`, `tests/sdd/sorrel_checkouts.md`.
+- Artifacts: src/app/glia_discovery_cmds.cpp
+- Measurement: gate_check_count = 6
+- Observation: glia_reasoning_gates_sip = 1
 
-# SORREL Checkouts - Phase III Enhancements
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: total_restrictions_violations = 0
+- Observation: glia_structural_audit_sip = 1
 
-- **C++ Migration & Phase III Enhancements:** Successfully migrated Reporting, Harvester, and Pruner logic to C++ and refactored into a package-based architecture.
-    - *Artifacts:* src/glia/core/, src/glia/modules/, src/main.cpp.
-    - *Measurement:* config_xml_max_repos = 42
-    - *Measurement:* qprocess_output = empirical_success
-    - *Measurement:* report_tech_stack = .py
-    - *Measurement:* harvester_line_count = 1
-    - *Measurement:* pruner_is_dep_protected = 1
-
-- **Empirical SDD Architecture:** Robustly verified each enhancement through numeric measurements and factual grounding.
-    - *Artifacts:* tests/sdd/cards/EnhancementsClass.cpp, tests/sdd/facts/enhancements.facts.
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: health_index = 1.0
+- Observation: glia_health_scoring_sip = 1
