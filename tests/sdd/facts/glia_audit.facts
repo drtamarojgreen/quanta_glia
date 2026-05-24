@@ -18,4 +18,8 @@ Is robust_verify_structure_code = 0
 Is robust_audit_repetition_code = 0
 Is robust_audit_commits_code = 0
 
-Is scoring_execution_code = 0
+Is total_restrictions_violations = 3
+Is restrictions_execution_code = 6
+Is signal_noise_ratio = 10
+Is health_index = 1
+Is score_execution_code = 0

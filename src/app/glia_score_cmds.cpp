@@ -140,7 +140,6 @@ glia::core::CommandResult ScoreCommand::execute(const std::vector<std::string>& 
 
     // 3. Violations Calculation
     std::vector<std::pair<std::string, std::regex>> violationPatterns;
-    // We try to find the 'restrictions' or 'verify-structure' command to get its patterns
     for (const auto& cmd : allCommands) {
         if (cmd.name == "restrictions" || cmd.name == "verify-structure") {
             if (cmd.lists.count("violations")) {
@@ -173,15 +172,23 @@ glia::core::CommandResult ScoreCommand::execute(const std::vector<std::string>& 
     double snr = static_cast<double>(signal) / noise;
     double final_score = snr * health_index;
 
+    // Output for SDD Facts
+    std::cout << "total_restrictions_violations = " << violations << std::endl;
+    std::cout << "glia_signal_noise_ratio = " << snr << std::endl;
+    std::cout << "glia_health_index = " << health_index << std::endl;
+    std::cout << "glia_final_score = " << final_score << std::endl;
+
+    std::string action = (health_index < 0.5) ? "PRUNE_TRIGGERED" : "STABLE";
+    std::cout << "glia_scoring_action = " << action << std::endl;
+
+    // Legacy outputs for compatibility if needed
     std::cout << "SIGNAL = " << signal << std::endl;
     std::cout << "NOISE = " << noise << std::endl;
     std::cout << "SIGNAL_NOISE_RATIO = " << snr << std::endl;
     std::cout << "VIOLATIONS = " << violations << std::endl;
     std::cout << "HEALTH_INDEX = " << health_index << std::endl;
     std::cout << "FINAL_SCORE = " << final_score << std::endl;
-
-    if (health_index < 0.5) std::cout << "ACTION = PRUNE_TRIGGERED" << std::endl;
-    else std::cout << "ACTION = STABLE" << std::endl;
+    std::cout << "ACTION = " << action << std::endl;
 
     return {glia::core::ExitCode::Success, "Scoring complete"};
 }
