@@ -9,8 +9,8 @@ namespace fs = std::filesystem;
 using namespace Sorrel::Sdd::Util;
 
 // @Card: quanta_glia_extraction
-// @Is python_available == true
-// @Results quanta_glia_extraction_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_extraction_operational == 1
 void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts) {
     std::string repo_name = facts.at("repo_prefix") + "_extract";
     fs::path repo_path(repo_name);
@@ -30,7 +30,7 @@ void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts
     fs::path kb_path = fs::path("knowledge_base") / repo_name / "README.md";
     bool operational = (result == 0) && fs::exists(kb_path);
 
-    std::cout << "quanta_glia_extraction_operational = " << (operational ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_extraction_operational = " << (operational ? 1 : 0) << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -40,8 +40,8 @@ void quanta_glia_extraction_card(const std::map<std::string, std::string>& facts
 }
 
 // @Card: max_repos_limit_verification
-// @Is python_available == true
-// @Results quanta_glia_max_repos_limit_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_max_repos_limit_operational == 1
 void max_repos_limit_verification_card(const std::map<std::string, std::string>& facts) {
     int max_repos = std::stoi(facts.at("max_repos"));
     int num_to_create = max_repos + 1;
@@ -69,7 +69,7 @@ void max_repos_limit_verification_card(const std::map<std::string, std::string>&
         }
     }
 
-    std::cout << "quanta_glia_max_repos_limit_operational = " << (count == max_repos ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_max_repos_limit_operational = " << (count == max_repos ? 1 : 0) << std::endl;
 
     // Cleanup
     for (int i = 1; i <= num_to_create; ++i) {
@@ -82,8 +82,8 @@ void max_repos_limit_verification_card(const std::map<std::string, std::string>&
 }
 
 // @Card: custom_config_verification
-// @Is python_available == true
-// @Results quanta_glia_custom_config_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_custom_config_operational == 1
 void custom_config_verification_card(const std::map<std::string, std::string>& facts) {
     std::string repo_name = facts.at("repo_prefix") + "_custom";
     std::string config_file = facts.at("custom_config_path");
@@ -106,7 +106,7 @@ void custom_config_verification_card(const std::map<std::string, std::string>& f
     bool important_exists = fs::exists(kb_path / "IMPORTANT_FILE.txt");
     bool readme_exists = fs::exists(kb_path / "README.md");
 
-    std::cout << "quanta_glia_custom_config_operational = " << (important_exists && !readme_exists ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_custom_config_operational = " << (important_exists && !readme_exists ? 1 : 0) << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -116,8 +116,8 @@ void custom_config_verification_card(const std::map<std::string, std::string>& f
 }
 
 // @Card: no_target_files_verification
-// @Is python_available == true
-// @Results quanta_glia_no_target_files_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_no_target_files_operational == 1
 void no_target_files_verification_card(const std::map<std::string, std::string>& facts) {
     std::string repo_name = facts.at("repo_prefix") + "_no_targets";
     fs::path repo_path(repo_name);
@@ -134,7 +134,7 @@ void no_target_files_verification_card(const std::map<std::string, std::string>&
     fs::path kb_path = fs::path("knowledge_base") / repo_name;
     bool kb_exists = fs::exists(kb_path);
 
-    std::cout << "quanta_glia_no_target_files_operational = " << (!kb_exists ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_no_target_files_operational = " << (!kb_exists ? 1 : 0) << std::endl;
 
     // Cleanup
     fs::remove_all(repo_path);
@@ -144,8 +144,8 @@ void no_target_files_verification_card(const std::map<std::string, std::string>&
 }
 
 // @Card: repo_cloning_verification
-// @Is python_available == true
-// @Results quanta_glia_clone_repo_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_clone_repo_operational == 1
 void repo_cloning_verification_card(const std::map<std::string, std::string>& facts) {
     std::string src_repo = facts.at("clone_src");
     std::string cache_dir = facts.at("cache_dir");
@@ -159,7 +159,7 @@ void repo_cloning_verification_card(const std::map<std::string, std::string>& fa
 
     bool operational = fs::exists(fs::path(cache_dir) / src_repo / "a.txt");
 
-    std::cout << "quanta_glia_clone_repo_operational = " << (operational ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_clone_repo_operational = " << (operational ? 1 : 0) << std::endl;
 
     // Cleanup
     fs::remove_all(src_repo);
@@ -167,8 +167,8 @@ void repo_cloning_verification_card(const std::map<std::string, std::string>& fa
 }
 
 // @Card: cache_pruning_verification
-// @Is python_available == true
-// @Results quanta_glia_prune_cache_operational == true
+// @Is python_available == 1
+// @Results quanta_glia_prune_cache_operational == 1
 void cache_pruning_verification_card(const std::map<std::string, std::string>& facts) {
     std::string cache_dir = facts.at("cache_dir") + "_prune";
     fs::create_directory(cache_dir);
@@ -181,7 +181,7 @@ void cache_pruning_verification_card(const std::map<std::string, std::string>& f
     bool dir_deleted = !fs::exists(fs::path(cache_dir) / "to_delete");
     bool file_kept = fs::exists(fs::path(cache_dir) / "keep.txt");
 
-    std::cout << "quanta_glia_prune_cache_operational = " << (dir_deleted && file_kept ? "true" : "false") << std::endl;
+    std::cout << "quanta_glia_prune_cache_operational = " << (dir_deleted && file_kept ? 1 : 0) << std::endl;
 
     // Cleanup
     fs::remove_all(cache_dir);

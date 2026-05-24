@@ -23,6 +23,8 @@ set(SOURCES
     src/app/glia_workspace_cmds.cpp
     src/app/glia_git_cmds.cpp
     src/app/glia_waste_cmds.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
     src/app/genome_cmd.cpp
     src/app/command_loader.cpp
     src/app/command_factory.cpp
@@ -54,6 +56,8 @@ set(GLIA_SOURCES
     src/app/glia_workspace_cmds.cpp
     src/app/glia_waste_cmds.cpp
     src/app/glia_prune_cmd.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
     src/app/glia_init_cmd.cpp
     src/app/harvest_cmd.cpp
     src/app/prune_cmd.cpp
@@ -112,6 +116,8 @@ add_executable(sorrel_test
     src/app/config_cmd.cpp
     src/app/glia_workspace_cmds.cpp
     src/app/glia_git_cmds.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
     src/util/xml_parser.cpp
     src/util/translator.cpp
     src/core/state.cpp

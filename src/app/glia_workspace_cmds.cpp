@@ -1,47 +1,22 @@
 #include "glia_workspace_cmds.h"
 #include "../cli/cli.h"
 #include "../util/translator.h"
+#include "../util/shell_utils.h"
+#include "../util/string_utils.h"
 #include "command_loader.h"
 #include <iostream>
-#include <sys/wait.h>
 #include <filesystem>
 #include <vector>
 #include <string>
-#include <cstdio>
-#include <memory>
-#include <stdexcept>
-#include <array>
 #include <algorithm>
 #include <fstream>
 
 namespace fs = std::filesystem;
 using glia::util::Translator;
+using glia::util::exec;
+using glia::util::trim;
 
 namespace glia::app {
-
-namespace {
-struct ExecResult {
-    std::string output;
-    int exitCode;
-};
-ExecResult exec(const char* cmd, const std::string& cwd = "") {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::string fullCmd = cmd;
-    if (!cwd.empty()) fullCmd = "cd " + cwd + " && " + fullCmd;
-    FILE* pipe = popen(fullCmd.c_str(), "r");
-    if (!pipe) throw std::runtime_error("popen");
-    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) result += buffer.data();
-    int status = pclose(pipe);
-    int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
-    return {result, exitCode};
-}
-std::string trim(std::string s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
-    return s;
-}
-}
 
 glia::core::CommandResult WorkspaceStatusCommand::execute(const std::vector<std::string>& args) {
     std::string wsName = m_meta.params.count("workspace_dir") ? m_meta.params.at("workspace_dir") : "workspace";

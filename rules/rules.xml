@@ -137,6 +137,18 @@
   <command name="about" description="Display system information and standards" type="internal" target="AboutCommand"/>
   <command name="setup-path" description="Provision system binary paths" type="internal" target="GliaInitCommand"/>
 
+  <!-- SDD Governance & Discovery -->
+  <command name="discover" description="Locate and report SDD environment paths" type="internal" target="DiscoverCommand"/>
+  <command name="gate-check" description="Validate Reasoning Gates before execution" type="internal" target="GateCheckCommand"/>
+  <command name="restrictions" description="Perform structural audit of construction rules" type="internal" target="RestrictionsCommand">
+    <list name="violations">
+        <item>Empty Catch Block|catch\s*\([^\)]*\)\s*\{([^\}]*)\}</item>
+        <item>Meaningless Assertion|assert\s*\(\s*(true|1|!false|!!true)\s*\)</item>
+        <item>Raw Pointer Management|\b(new\s+[^\(;]+|delete\s+[^;]+)\b</item>
+    </list>
+  </command>
+  <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand"/>
+
   <!-- External Governance -->
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>
   <command name="system-check" description="Validate system resource availability" type="external" target="df -h / &amp;&amp; free -m"/>

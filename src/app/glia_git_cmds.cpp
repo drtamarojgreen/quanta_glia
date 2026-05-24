@@ -1,24 +1,14 @@
 #include "glia_git_cmds.h"
 #include "../cli/cli.h"
+#include "../util/shell_utils.h"
 #include <iostream>
-#include <cstdio>
-#include <memory>
-#include <stdexcept>
-#include <array>
 #include <sstream>
+
+using glia::util::exec;
 
 namespace glia::app {
 
 namespace {
-std::string exec(const char* cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) throw std::runtime_error("popen");
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) result += buffer.data();
-    return result;
-}
-
 int run(const std::string& cmd) {
     return std::system(cmd.c_str());
 }
@@ -26,7 +16,7 @@ int run(const std::string& cmd) {
 
 glia::core::CommandResult CheckoutLatestCommand::execute(const std::vector<std::string>& args) {
     if (run("git fetch --all") != 0) return {glia::core::ExitCode::InternalFailure, ""};
-    std::string branches = exec("git branch -a --sort=-committerdate --format='%(refname:short)'");
+    std::string branches = exec("git branch -a --sort=-committerdate --format='%(refname:short)'").output;
     std::stringstream ss(branches);
     std::string latest;
     if (std::getline(ss, latest)) {
@@ -37,7 +27,7 @@ glia::core::CommandResult CheckoutLatestCommand::execute(const std::vector<std::
 }
 
 glia::core::CommandResult CommitChangesCommand::execute(const std::vector<std::string>& args) {
-    std::string changed = exec("git diff --name-only");
+    std::string changed = exec("git diff --name-only").output;
     std::stringstream ss(changed);
     std::string file;
     while (std::getline(ss, file)) {

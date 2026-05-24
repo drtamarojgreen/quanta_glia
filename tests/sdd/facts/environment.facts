@@ -1,5 +1,5 @@
 Situation: Default
 # Empirical measurements for QuantaGlia System
 
-Is qt6_available = true
-Is python_available = true
+Is qt6_available = 1
+Is python_available = 1

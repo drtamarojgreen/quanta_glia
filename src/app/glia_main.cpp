@@ -4,6 +4,8 @@
 #include "glia_git_cmds.h"
 #include "glia_workspace_cmds.h"
 #include "glia_waste_cmds.h"
+#include "glia_discovery_cmds.h"
+#include "glia_score_cmds.h"
 #include "glia_prune_cmd.h"
 #include "glia_init_cmd.h"
 #include "harvest_cmd.h"
@@ -60,6 +62,10 @@ void registerAllCreators() {
     reg("InitCommand", [](){ return std::make_unique<InitCommand>(); });
     reg("CapabilitiesCommand", [](){ return std::make_unique<CapabilitiesCommand>(); });
     reg("GenomeCommand", [](){ return std::make_unique<GenomeCommand>(); });
+    reg("DiscoverCommand", [](){ return std::make_unique<DiscoverCommand>(); });
+    reg("GateCheckCommand", [](){ return std::make_unique<GateCheckCommand>(); });
+    reg("RestrictionsCommand", [](){ return std::make_unique<RestrictionsCommand>(); });
+    reg("ScoreCommand", [](){ return std::make_unique<ScoreCommand>(); });
 }
 
 int main(int argc, char** argv) {
