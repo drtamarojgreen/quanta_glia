@@ -9,6 +9,10 @@
 
 namespace fs = std::filesystem;
 
+// @Card: scoring_system_empirical_verification
+// TOOLS: g++, cmake, rules.xml
+// PARAMETERS: None
+// RESULTS: total_restrictions_violations == 0, signal_noise_ratio == 10, health_index == 1
 void scoring_verification() {
     std::string rules_path = "rules/rules.xml";
     if (!fs::exists(rules_path)) {
