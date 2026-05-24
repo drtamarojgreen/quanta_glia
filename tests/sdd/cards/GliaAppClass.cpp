@@ -30,8 +30,6 @@ void sorrel_glia_config_serialization_card(const std::map<std::string, std::stri
     fs::remove(p);
 }
 
-void run_glia_automation_card();
-
 int main(int argc, char** argv) {
     auto facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/environment.facts");
     auto enh_facts = Sorrel::Sdd::Util::FactReader::readFacts("tests/sdd/facts/enhancements.facts");
@@ -73,17 +71,5 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-<<<<<<< HEAD
-    sorrel_glia_config_serialization_card(facts);
-    reporting_enhancement_verification(facts);
-    harvester_enhancement_verification(facts);
-    pruner_enhancement_verification(facts);
-    harvester_collision_verification(facts);
-    audit_verification();
-    safety_verification();
-    qprocess_verification();
-    run_glia_automation_card();
-=======
->>>>>>> origin/glia-workflow-enhancement-15384845863160463952
     return 0;
 }

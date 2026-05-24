@@ -1,18 +1,25 @@
-# SORREL Checkouts - Converted Tests Workspace
+# SORREL Checkouts - Glia Architectural Governance
 
-- quanta_glia_extraction_sip: Verified extraction logic using empirical measurements.
-- pruner_logic_sip: Verified pruning decision logic via SDD cards.
-- sorrel_app_init: System structure validated and enforced.
-- sorrel_app_config: Configuration serialization verified with XML and JSON facts.
-- sorrel_app_main: Application lifecycle and process integration verified.
-- sorrel_app_verify: All SDD test cards passed with 100% empirical alignment.
+- Artifacts: src/app/command_loader.cpp, rules/rules.xml, src/app/command_factory.cpp
+- Measurement: dynamic_cmds_loaded = 1
+- Observation: glia_modular_xml_sip = 1
 
-# SORREL Checkouts - Phase III Enhancements
+- Artifacts: tests/sdd/facts/*.facts, tests/sdd/cards/*.cpp
+- Measurement: waste_scan_code = 0
+- Observation: glia_numeric_evidence_sip = 1
 
-- **sorrel_action_persistence_sip:** Verified C++ persistence for Harvester and Pruner actions.
-- **sorrel_empirical_measurement_sip:** All facts and card results converted to numeric (1/0) evidence.
-- **glia_developer_workflow_sip:** Verified workspace management commands and shell-safe commit execution.
-- **glia_robust_audit_sip:** Verified LLM waste detection and structural enforcement.
-- **glia_modular_xml_sip:** Dynamic command registry and XML/XSD validation pipeline operational.
-- **glia_discovery_reasoning_sip:** `discover sdd`, `discover facts`, and `gate-check` (6 gates) verified.
-- **glia_structural_scoring_sip:** `restrictions` (structural audit) and `score` (Health Index) verified.
+- Artifacts: src/app/glia_discovery_cmds.cpp
+- Measurement: discovery_sdd_operational = 1
+- Observation: glia_discovery_rule_sip = 1
+
+- Artifacts: src/app/glia_discovery_cmds.cpp
+- Measurement: gate_check_count = 6
+- Observation: glia_reasoning_gates_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: total_restrictions_violations = 0
+- Observation: glia_structural_audit_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: health_index = 1.0
+- Observation: glia_health_scoring_sip = 1

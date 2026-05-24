@@ -1,3 +1,0 @@
-script.py:3: TypeError: can only concatenate str (not "int") to str
-module.py:8: ValueError: invalid literal for int() with base 10: 'abc'
-app.py(12) SyntaxError: invalid syntax

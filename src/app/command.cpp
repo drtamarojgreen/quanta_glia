@@ -7,7 +7,7 @@ namespace glia::app {
 void CommandRegistry::registerCommand(std::unique_ptr<Command> cmd) {
     commands.push_back(std::move(cmd));
 }
-Command* CommandRegistry::getCommand(const std::string& name) const {
+Command* CommandRegistry::getCommand(const std::string& name) {
     for (auto& cmd : commands) {
         if (cmd->name() == name) return cmd.get();
     }

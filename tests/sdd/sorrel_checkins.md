@@ -1,19 +1,9 @@
-# SORREL Checkins - Converted Tests Workspace
+# SORREL Checkins - Glia Architectural Governance
 
-- quanta_glia_extraction_sip: Compile and execute `GliaAppClass.cpp harvester` to verify extraction logic.
-- pruner_logic_sip: Compile and execute `GliaAppClass.cpp pruner` to verify pruning decision logic.
-- sorrel_app_init: Initialized project structure in src/.
-- sorrel_app_config: Implemented GliaConfig and GliaConfigManager with XML/XSD support.
-- sorrel_app_main: Developed main application entry point (Sorrel) with dynamic command loading.
-- sorrel_app_build: Created CMake build system with custom clean targets and SDD test framework integration.
-- sorrel_app_verify: Verified system via SDD test cards and argv-dispatch.
-
-# SORREL Checkins - Phase III Enhancements
-
-- **sorrel_action_persistence_sip:** Verify C++ persistence for Harvester and Pruner actions.
-- **sorrel_empirical_measurement_sip:** Transition all SDD cards to 100% numeric empirical measurements.
-- **glia_developer_workflow_sip:** Implement and verify workspace management commands.
-- **glia_robust_audit_sip:** Implement and verify waste-scan and structural enforcement.
-- **glia_modular_xml_sip:** Transition to data-driven command registration.
-- **glia_discovery_reasoning_sip:** Implement SDD discovery commands and Reasoning Gate validation.
-- **glia_structural_scoring_sip:** Implement Restrictions Engine and Health Index scoring commands.
+- glia_modular_xml_sip: Transition glia command registry to data-driven rules/rules.xml.
+- glia_numeric_evidence_sip: Refactor all SDD cards and facts to use 100% numeric empirical measurements.
+- glia_discovery_rule_sip: Implement `discover sdd` and `discover facts` in glia CLI.
+- glia_reasoning_gates_sip: Implement `gate-check` to validate Reasoning Gates.
+- glia_structural_audit_sip: Implement `restrictions` to enforce structural construction rules.
+- glia_health_scoring_sip: Implement `score` to calculate structural health index.
+- glia_shell_consolidation_sip: Consolidate shell execution into shell_utils.h to reduce repetition.

@@ -21,7 +21,7 @@ protected:
 class CommandRegistry {
 public:
     void registerCommand(std::unique_ptr<Command> cmd);
-    Command* getCommand(const std::string& name) const;
+    Command* getCommand(const std::string& name);
     std::vector<std::string> listCommands() const;
 private:
     std::vector<std::unique_ptr<Command>> commands;
