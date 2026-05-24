@@ -20,6 +20,17 @@ set(SOURCES
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
+    src/app/glia_workspace_cmds.cpp
+    src/app/glia_git_cmds.cpp
+    src/app/glia_waste_cmds.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
+    src/app/genome_cmd.cpp
+    src/app/command_loader.cpp
+    src/app/command_factory.cpp
+    src/core/state.cpp
+    src/util/xml_parser.cpp
+    src/util/translator.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp
@@ -36,12 +47,44 @@ set(SOURCES
 
 set(GLIA_SOURCES
     src/app/glia_main.cpp
+    src/util/xml_parser.cpp
+    src/util/translator.cpp
+    src/core/state.cpp
+    src/app/command_loader.cpp
+    src/app/command_factory.cpp
     src/app/glia_git_cmds.cpp
+    src/app/glia_workspace_cmds.cpp
+    src/app/glia_waste_cmds.cpp
     src/app/glia_prune_cmd.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
     src/app/glia_init_cmd.cpp
+    src/app/harvest_cmd.cpp
+    src/app/prune_cmd.cpp
+    src/app/report_cmd.cpp
+    src/app/status_cmd.cpp
+    src/app/audit_cmd.cpp
+    src/app/config_cmd.cpp
+    src/app/annotate_cmd.cpp
+    src/app/about.cpp
+    src/app/init.cpp
+    src/app/capabilities.cpp
+    src/app/genome_cmd.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
+    src/app/feature_flags.cpp
+    src/config/config.cpp
+    src/harvest/harvester.cpp
+    src/prune/pruner.cpp
+    src/report/reporter.cpp
+    src/audit/audit.cpp
     src/cli/cli.cpp
+    src/storage/storage.cpp
+    src/annotate/annotator.cpp
+    src/curate/curator.cpp
+    src/trigger/trigger.cpp
+    src/safety/safety.cpp
+    src/platform/platform.cpp
 )
 
 add_executable(sorrel ${SOURCES})
@@ -82,6 +125,10 @@ add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
     tests/sdd/cards/GliaAutomationClass.cpp
     tests/sdd/cards/EnhancementsClass.cpp
+    tests/sdd/cards/WorkflowClass.cpp
+    tests/sdd/cards/WasteClass.cpp
+    tests/sdd/cards/RobustnessClass.cpp
+    tests/sdd/cards/DynamicCommandClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp
@@ -95,6 +142,17 @@ add_executable(sorrel_test
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
+    src/app/glia_workspace_cmds.cpp
+    src/app/glia_git_cmds.cpp
+    src/app/glia_discovery_cmds.cpp
+    src/app/glia_score_cmds.cpp
+    src/util/xml_parser.cpp
+    src/util/translator.cpp
+    src/core/state.cpp
+    src/app/command_loader.cpp
+    src/app/command_factory.cpp
+    src/app/glia_waste_cmds.cpp
+    src/app/genome_cmd.cpp
     src/config/config.cpp
     src/harvest/harvester.cpp
     src/prune/pruner.cpp

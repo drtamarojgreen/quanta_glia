@@ -1,5 +1,9 @@
 #include "glia_init_cmd.h"
+<<<<<<< HEAD
 #include "default_rules.h"
+=======
+#include "../util/translator.h"
+>>>>>>> origin/glia-workflow-enhancement-15384845863160463952
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -8,12 +12,21 @@
 namespace glia::app {
 
 glia::core::CommandResult GliaInitCommand::execute(const std::vector<std::string>& args) {
+<<<<<<< HEAD
     char* home = std::getenv("HOME");
     if (!home) {
         return {glia::core::ExitCode::InternalFailure, "Could not find HOME directory"};
     }
     std::string homeDir(home);
     std::string gliaDir = homeDir + "/.glia";
+=======
+    using glia::util::Translator;
+    std::string buildDir = std::filesystem::current_path().string();
+    if (buildDir.find("/build") == std::string::npos) buildDir += "/build";
+    
+    char* home = std::getenv("HOME");
+    if (!home) return {glia::core::ExitCode::InternalFailure, Translator::t("msg_error")};
+>>>>>>> origin/glia-workflow-enhancement-15384845863160463952
     
     // Create ~/.glia directory
     try {
@@ -47,18 +60,19 @@ glia::core::CommandResult GliaInitCommand::execute(const std::vector<std::string
     
     std::string bashrcPath = homeDir + "/.bashrc";
     std::ofstream bashrc(bashrcPath, std::ios::app);
-    if (!bashrc) {
-        return {glia::core::ExitCode::InternalFailure, "Could not open .bashrc for writing"};
-    }
+    if (!bashrc) return {glia::core::ExitCode::InternalFailure, Translator::t("msg_error")};
     
-    bashrc << "\n# Glia Path\n";
-    bashrc << "export PATH=\"$PATH:" << buildDir << "\"\n";
+    bashrc << "\n# Glia\n" << "export PATH=\"$PATH:" << buildDir << "\"\n";
     bashrc.close();
     
+<<<<<<< HEAD
     std::cout << "Added " << buildDir << " to PATH in .bashrc" << std::endl;
     std::cout << "Please run 'source ~/.bashrc' to apply changes." << std::endl;
     
     return {glia::core::ExitCode::Success, "Glia initialized globally at " + gliaDir};
+=======
+    return {glia::core::ExitCode::Success, Translator::t("path_added")};
+>>>>>>> origin/glia-workflow-enhancement-15384845863160463952
 }
 
 }

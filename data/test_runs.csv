@@ -1,0 +1,54 @@
+Type,Filename,StartLine,EndLine,Success
+COMMENT_LINE,main.cpp,0,0,true
+REPLACE_LINE,main.cpp,1,1,true
+REPLACE_RANGE,main.cpp,1,2,true
+COMMENT_LINE,main.cpp,1,1,true
+REPLACE_LINE,main.cpp,2,2,true
+REPLACE_RANGE,main.cpp,3,5,true
+COMMENT_LINE,main.cpp,0,0,true
+REPLACE_LINE,main.cpp,1,1,true
+REPLACE_RANGE,main.cpp,1,2,true
+REPLACE_LINE,main.cpp,1,1,true
+REPLACE_LINE,main.cpp,2,2,true
+REPLACE_RANGE,main.cpp,3,5,true
+REPLACE_LINE,main.cpp,0,0,true
+REPLACE_LINE,main.cpp,0,0,true
+RENAME_SIMILAR,main.cpp,0,0,true
+INSERT_DEBUG,main.cpp,0,0,true
+ADD_STATIC_CAST,main.cpp,0,0,true
+COMMENT_LINE,"",0,main.cpp,0,0,true
+REPLACE_LINE,"",8,main.cpp,1,1,true
+REPLACE_RANGE,"",8,main.cpp,1,2,true
+REPLACE_LINE,"",0,main.cpp,1,1,true
+REPLACE_LINE,"",21,main.cpp,2,2,true
+REPLACE_RANGE,"",0,main.cpp,3,5,true
+REPLACE_LINE,"",21,main.cpp,0,0,true
+REPLACE_LINE,"",17,main.cpp,0,0,true
+RENAME_SIMILAR,"Rename to similar",7,main.cpp,0,0,true
+INSERT_DEBUG,"Insert debug statement",5,main.cpp,0,0,true
+INT_CAST,"INT_CAST",10,main.cpp,0,0,true
+FLOAT_CAST,"FLOAT_CAST",8,main.cpp,0,0,true
+COMMENT_LINE,"",0,main.cpp,0,0,true
+REPLACE_LINE,"",6,main.cpp,1,1,true
+REPLACE_RANGE,"",6,main.cpp,1,2,true
+REPLACE_LINE,"",0,main.cpp,1,1,true
+REPLACE_LINE,"",21,main.cpp,2,2,true
+REPLACE_RANGE,"",0,main.cpp,3,5,true
+REPLACE_LINE,"",21,main.cpp,0,0,true
+REPLACE_LINE,"",17,main.cpp,0,0,true
+RENAME_SIMILAR,"Rename to similar",7,main.cpp,0,0,true
+INSERT_DEBUG,"Insert debug statement",5,main.cpp,0,0,true
+INT_CAST,"INT_CAST",10,main.cpp,0,0,true
+FLOAT_CAST,"FLOAT_CAST",8,main.cpp,0,0,true
+COMMENT_LINE,"",0,main.cpp,0,0,true
+REPLACE_LINE,"",8,main.cpp,1,1,true
+REPLACE_RANGE,"",8,main.cpp,1,2,true
+REPLACE_LINE,"",0,main.cpp,1,1,true
+REPLACE_LINE,"",21,main.cpp,2,2,true
+REPLACE_RANGE,"",0,main.cpp,3,5,true
+REPLACE_LINE,"",21,main.cpp,0,0,true
+REPLACE_LINE,"",17,main.cpp,0,0,true
+RENAME_SIMILAR,"Rename to similar",7,main.cpp,0,0,true
+INSERT_DEBUG,"Insert debug statement",5,main.cpp,0,0,true
+INT_CAST,"INT_CAST",10,main.cpp,0,0,true
+FLOAT_CAST,"FLOAT_CAST",8,main.cpp,0,0,true

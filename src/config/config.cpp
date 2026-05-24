@@ -10,6 +10,8 @@ namespace glia::config {
 Config::Config()
     : knowledgeBase("./knowledge_base")
     , repoCache("./repo_cache")
+    , rulesPath("rules/rules.xml")
+    , statePath("state.json")
     , maxRepos(10)
     , logLevel("INFO")
     , maxDepth(5)
@@ -35,6 +37,8 @@ bool Config::load(const std::string& path) {
 
             if (key == "knowledge_base") knowledgeBase = value;
             else if (key == "repo_cache") repoCache = value;
+            else if (key == "rules_path") rulesPath = value;
+            else if (key == "state_path") statePath = value;
             else if (key == "max_repos") maxRepos = std::stoi(value);
             else if (key == "log_level") logLevel = value;
             else if (key == "max_depth") maxDepth = std::stoi(value);

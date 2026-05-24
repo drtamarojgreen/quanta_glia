@@ -26,6 +26,13 @@ public:
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 
+class QuickCommitCommand : public Command {
+public:
+    std::string name() const override { return "quick-commit"; }
+    std::string description() const override { return "Stage all and commit with message"; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+};
+
 }
 
 #endif

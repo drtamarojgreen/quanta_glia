@@ -7,8 +7,8 @@ namespace glia::app {
 
 class GliaInitCommand : public Command {
 public:
-    std::string name() const override { return "init"; }
-    std::string description() const override { return "Add glia to the path"; }
+    std::string name() const override { return "setup-path"; }
+    std::string description() const override { return "Add glia to the path in .bashrc"; }
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 

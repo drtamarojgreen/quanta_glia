@@ -1,16 +1,18 @@
 #include "status_cmd.h"
 #include "../cli/cli.h"
+#include "../util/translator.h"
 #include <iostream>
-#include <filesystem>
+#include <vector>
+
 namespace glia::app {
 glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>& args) {
-    std::vector<std::string> headers = {"Module", "Status", "Records"};
+    using glia::util::Translator;
+    std::vector<std::string> headers = {Translator::t("col_module"), Translator::t("col_status")};
     std::vector<std::vector<std::string>> rows = {
-        {"Knowledge Base", "Active", "0"},
-        {"Audit Log", "Enabled", "N/A"},
-        {"Pruner", "Conservative", "0"}
+        {"KB", Translator::t("msg_ok")},
+        {"Audit", Translator::t("msg_ok")}
     };
     glia::cli::Terminal::printTable(headers, rows);
-    return {glia::core::ExitCode::Success, "Status displayed"};
+    return {glia::core::ExitCode::Success, ""};
 }
 }
