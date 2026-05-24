@@ -23,3 +23,7 @@
 - Artifacts: src/app/glia_score_cmds.cpp
 - Measurement: health_index = 1.0
 - Observation: glia_health_scoring_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp, rules/rules.xml, tests/sdd/cards/ScoringClass.cpp
+- Measurement: scoring_execution_code = 0
+- Observation: Update scoring to meet scoring requirements
