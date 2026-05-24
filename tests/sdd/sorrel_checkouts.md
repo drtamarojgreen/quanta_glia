@@ -17,7 +17,7 @@
 - Observation: glia_reasoning_gates_sip = 1
 
 - Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/cards/ScoringClass.cpp
-- Measurement: total_restrictions_violations = 3, restrictions_execution_code = 6
+- Measurement: total_restrictions_violations = 0, restrictions_execution_code = 0
 - Observation: glia_structural_audit_sip = 1
 
 - Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/cards/ScoringClass.cpp
@@ -25,5 +25,5 @@
 - Observation: glia_health_scoring_sip = 1
 
 - Artifacts: tests/sdd/cards/ScoringClass.cpp
-- Measurement: total_restrictions_violations = 3, signal_noise_ratio = 10, health_index = 1
+- Measurement: total_restrictions_violations = 0, signal_noise_ratio = 10, health_index = 1
 - Observation: glia_scoring_verification_sip = 1

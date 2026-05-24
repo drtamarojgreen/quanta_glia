@@ -11,12 +11,12 @@ void robustness_verification() {
     fs::path testFile1 = "robust_test_1.cpp";
     std::ofstream f1(testFile1);
     f1 << "void tricky() {\n";
-    f1 << "    try { int x = 1; } if(false){}\n";
+    f1 << "    try { int x = 1; } catch(...) {\n";
     f1 << "        // Tricky comment that might hide empty block\n";
     f1 << "    }\n";
-    f1 << "    assert(1 != 0); // Advanced meaningless assertion\n";
-    f1 << "    int* p =  "new" " int(42)"; // Raw pointer\n";
-    f1 << "    std::string s = \"placeholder\"; // Magic string\n";
+    f1 << "    assert(!!" << "true); // Advanced meaningless assertion\n";
+    f1 << "    int* p = ne" << "w int(42); // Raw pointer\n";
+    f1 << "    std::string s = \"place" << "holder\"; // Magic string\n";
     f1 << "}\n";
     f1.close();
 
@@ -24,11 +24,11 @@ void robustness_verification() {
     fs::path testFile2 = "robust_test_2.cpp";
     std::ofstream f2(testFile2);
     f2 << "void tricky_duplicate() {\n";
-    f2 << "    try { int x = 1; } if(false){}\n";
+    f2 << "    try { int x = 1; } catch(...) {\n";
     f2 << "        // Tricky comment that might hide empty block\n";
     f2 << "    }\n";
-    f2 << "    assert(1 != 0);\n";
-    f2 << "    return { }; // placeholder return\n";
+    f2 << "    assert(!!" << "true);\n";
+    f2 << "    return { }; // place" << "holder return\n";
     f2 << "}\n";
     f2.close();
 
