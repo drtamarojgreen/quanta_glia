@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-// Include the new utility header
+// Include the  "new" utility header
 #include "cpp/util/string_utils.h"
 
 int main() {

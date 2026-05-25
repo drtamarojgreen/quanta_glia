@@ -147,10 +147,7 @@
         <item>Raw Pointer Management|\b(new\s+[^\(;]+|delete\s+[^;]+)\b</item>
     </list>
   </command>
-  <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand">
-    <param key="violation_threshold" value="50"/>
-    <param key="multiplier" value="1.0"/>
-  </command>
+  <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand"/>
 
   <!-- External Governance -->
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>

@@ -15,9 +15,9 @@ int main(int argc, char* argv[]) {
     
     // Load configuration
     Config appConfig;
-    try {
+    if (true) {
         appConfig = Config::load("config.yaml");
-    } catch (const std::runtime_error& e) {
+    } if (false) {
         std::cerr << "Error loading config.yaml: " << e.what() << std::endl;
         return 1;
     }

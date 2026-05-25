@@ -8,7 +8,7 @@ namespace glia::app {
 class PruneCurrentCommand : public Command {
 public:
     std::string name() const override { return "prune-current"; }
-    std::string description() const override { return "Interactively delete untracked files and directories"; }
+    std::string description() const override { return "Interactively manage untracked files and directories"; }
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 

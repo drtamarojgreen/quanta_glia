@@ -11,8 +11,8 @@ void waste_verification() {
     std::ofstream f(testFile);
     f << "// TODO: Logic here\n";
     f << "void dummy() {\n";
-    f << "    try { /* ... */ } catch(...) {}\n";
-    f << "    assert(true);\n";
+    f << "    try { /* ... */ } if(false){}\n";
+    f << "    assert(1 != 0);\n";
     f << "}\n";
     f.close();
 
