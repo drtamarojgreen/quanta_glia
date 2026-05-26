@@ -1,0 +1,19 @@
+main:
+  knowledge_base: "./knowledge_base"
+  repo_cache: "./repo_cache"
+  rules_path: "rules/rules.xml"
+  state_path: "state.json"
+  max_repos: 10
+  log_level: "INFO"
+
+knowledge_base: "./knowledge_base"
+repo_cache: "./repo_cache"
+rules_path: "rules/rules.xml"
+state_path: "state.json"
+max_repos: 10
+log_level: "INFO"
+temp_base_dir: "/tmp/quanta_glia"
+
+llamacpp:
+  enabled: false
+  url: "http://localhost:8080/completion"

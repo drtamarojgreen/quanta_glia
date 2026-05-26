@@ -30,10 +30,16 @@ bool Config::load(const std::string& path) {
         line = glia::util::trim(line);
         if (line.empty() || line[0] == '#') continue;
 
-        size_t eqPos = line.find('=');
-        if (eqPos != std::string::npos) {
-            std::string key = glia::util::trim(line.substr(0, eqPos));
-            std::string value = glia::util::trim(line.substr(eqPos + 1));
+        size_t sepPos = line.find('=');
+        if (sepPos == std::string::npos) sepPos = line.find(':');
+
+        if (sepPos != std::string::npos) {
+            std::string key = glia::util::trim(line.substr(0, sepPos));
+            std::string value = glia::util::trim(line.substr(sepPos + 1));
+
+            if (value.size() >= 2 && ((value.front() == '"' && value.back() == '"') || (value.front() == '\'' && value.back() == '\''))) {
+                value = value.substr(1, value.size() - 2);
+            }
 
             if (key == "knowledge_base") knowledgeBase = value;
             else if (key == "repo_cache") repoCache = value;
