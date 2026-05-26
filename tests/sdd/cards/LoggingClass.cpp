@@ -11,7 +11,7 @@ using namespace Sorrel::Sdd::Util;
 
 // @Card: logging_setup_verification
 // @Is python_available == 1
-// @Results logging_setup_operational == 1
+// @Results logging_setup_operational_score == 100
 void logging_setup_verification_card(const std::map<std::string, std::string>& facts) {
     std::string log_file = facts.at("log_file_path");
     std::string message = facts.at("test_message");
@@ -32,7 +32,7 @@ void logging_setup_verification_card(const std::map<std::string, std::string>& f
         fs::remove(log_file);
     }
 
-    std::cout << "logging_setup_operational = " << (operational ? 1 : 0) << std::endl;
+    std::cout << "logging_setup_operational_score = " << (operational ? 100 : 0) << std::endl;
 }
 
 int main() {

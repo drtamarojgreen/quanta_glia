@@ -30,3 +30,9 @@
 - REQUIRE all `glia` commands to be defined in `/rules/rules.xml`.
 - FORBID manual command registration in `main.cpp`; registry must use the automated `CommandLoader`.
 - REQUIRE XML schema validation against `/rules/rules.xsd` before registry population.
+
+## Scoring and Structural Integrity
+- REQUIRE a 10-point penalty for each SDD test card using "lazy" binary logic (1/0) instead of descriptive numeric metrics (e.g., scores 0-100).
+- FORBID "fallback logic" in source code, requiring robust error propagation instead.
+- REQUIRE the scoring command to apply these penalties to the structural Health Index empirically.
+- FORBID the use of raw pointers (`new`/`delete`) and empty catch blocks across the repository.

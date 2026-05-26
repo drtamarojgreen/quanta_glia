@@ -33,7 +33,7 @@ std::string make_pruning_decision(float score, const std::map<std::string, float
 }
 
 // @Card: pruner_logic_verification
-// @Results pruner_logic_operational == 1
+// @Results pruner_logic_operational_score == 100
 void pruner_logic_verification_card(const std::map<std::string, std::string>& facts) {
     std::map<std::string, float> weights = {
         {"usage_weight", std::stof(facts.at("usage_weight"))},
@@ -56,7 +56,7 @@ void pruner_logic_verification_card(const std::map<std::string, std::string>& fa
     bool score_ok = std::abs(score - thresholds.at("delete_threshold")) < 0.001f;
     bool decision_ok = (decision == "DELETE");
 
-    std::cout << "pruner_logic_operational = " << (score_ok && decision_ok ? 1 : 0) << std::endl;
+    std::cout << "pruner_logic_operational_score = " << (score_ok && decision_ok ? 100 : 0) << std::endl;
 }
 
 int main() {

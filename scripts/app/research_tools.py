@@ -40,8 +40,8 @@ def create_evaluation_points(topic: str) -> List[Dict[str, Any]]:
         # "Explain the concept of TissLang and provide two code examples."
         concept_name = topic.split(" of ", 1)[1].split(" and ", 1)[0].strip()
     except IndexError:
-        logging.warning("Could not parse concept name from topic. Using 'concept' as a fallback.")
-        concept_name = "concept"
+        logging.error("Failed to parse concept name from topic.")
+        raise ValueError("Invalid topic format: ' of ' separator expected.")
 
     points = [
         {"text": f"The answer clearly defines {concept_name}'s purpose.",

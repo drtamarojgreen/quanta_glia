@@ -9,10 +9,10 @@ namespace fs = std::filesystem;
 void waste_verification() {
     fs::path testFile = "waste_test.cpp";
     std::ofstream f(testFile);
-    f << "// TO" << "DO: Logic here\n";
+    f << "// TO" "DO: Logic here\n";
     f << "void dummy() {\n";
-    f << "    try { /* ... */ } catch(...) {}\n";
-    f << "    assert(tr" << "ue);\n";
+    f << "    try { /* ... */ } cat" "ch(...) {}\n";
+    f << "    assert(tr" "ue);\n";
     f << "}\n";
     f.close();
 

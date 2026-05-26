@@ -9,7 +9,7 @@ using namespace Sorrel::Sdd::Util;
 
 // @Card: keyword_validator_verification
 // @Is python_available == 1
-// @Results keyword_validator_operational == 1
+// @Results keyword_validator_operational_score == 100
 void keyword_validator_verification_card(const std::map<std::string, std::string>& facts) {
     std::string text = facts.at("keyword_text");
     std::string keyword = facts.at("keyword_target");
@@ -30,12 +30,12 @@ void keyword_validator_verification_card(const std::map<std::string, std::string
     pclose(pipe);
 
     bool operational = (result.find("True") != std::string::npos);
-    std::cout << "keyword_validator_operational = " << (operational ? 1 : 0) << std::endl;
+    std::cout << "keyword_validator_operational_score = " << (operational ? 100 : 0) << std::endl;
 }
 
 // @Card: citation_validator_verification
 // @Is python_available == 1
-// @Results citation_validator_operational == 1
+// @Results citation_validator_operational_score == 100
 void citation_validator_verification_card(const std::map<std::string, std::string>& facts) {
     std::string text = facts.at("citation_text");
     std::string min_count = facts.at("citation_min_count");
@@ -55,7 +55,7 @@ void citation_validator_verification_card(const std::map<std::string, std::strin
     pclose(pipe);
 
     bool operational = (result.find("True") != std::string::npos);
-    std::cout << "citation_validator_operational = " << (operational ? 1 : 0) << std::endl;
+    std::cout << "citation_validator_operational_score = " << (operational ? 100 : 0) << std::endl;
 }
 
 int main(int argc, char* argv[]) {
