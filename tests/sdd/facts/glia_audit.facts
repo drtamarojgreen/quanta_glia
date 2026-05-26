@@ -23,3 +23,7 @@ Is total_restrictions_violations = 0
 Is glia_health_index = 0.6
 Is glia_signal_noise_ratio = 10
 Is glia_scoring_action = STABLE
+
+Is tui_name = status
+Is tui_desc_size = 28
+Is tui_logic_marker_count = 7

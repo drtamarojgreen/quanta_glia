@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
         robustness_verification();
         dynamic_command_verification();
         scoring_verification();
+        tui_verification();
         return 0;
     }
 
@@ -69,6 +70,7 @@ int main(int argc, char** argv) {
     else if (cardName == "robustness") robustness_verification();
     else if (cardName == "dynamic_command") dynamic_command_verification();
     else if (cardName == "scoring") scoring_verification();
+    else if (cardName == "tui") tui_verification();
     else {
         std::cerr << "Unknown logical card: " << cardName << std::endl;
         return 1;
