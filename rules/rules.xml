@@ -145,9 +145,13 @@
         <item>Empty Catch Block|catch\s*\([^\)]*\)\s*\{([^\}]*)\}</item>
         <item>Meaningless Assertion|assert\s*\(\s*(true|1|!false|!!true)\s*\)</item>
         <item>Raw Pointer Management|\b(new\s+[^\(;]+|delete\s+[^;]+)\b</item>
+        <item>Lazy SDD Evidence|@Results\s+\w+\s*==\s*(0|1)\b</item>
+        <item>Fallback Logic|\b(fallback|fall\s*back|default_value|handle_error_default)\b</item>
     </list>
   </command>
-  <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand"/>
+  <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand">
+    <param key="penalty_per_violation" value="10.0"/>
+  </command>
 
   <!-- External Governance -->
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>

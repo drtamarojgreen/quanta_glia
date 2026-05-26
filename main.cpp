@@ -14,13 +14,7 @@ int main(int argc, char* argv[]) {
     std::string projectSourceDir;
     
     // Load configuration
-    Config appConfig;
-    if (true) {
-        appConfig = Config::load("config.yaml");
-    } if (false) {
-        std::cerr << "Error loading config.yaml: " << e.what() << std::endl;
-        return 1;
-    }
+    Config appConfig = Config::load("config.yaml");
     const std::string tempBaseDir = appConfig.getString("temp_base_dir");
 
     // Ensure tempBaseDir exists

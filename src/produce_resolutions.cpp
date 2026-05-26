@@ -16,7 +16,7 @@ static std::vector<std::string> tokenize(const std::string& line) {
 std::string ProduceResolutions::extractIdentifier(const std::string& line) {
     for (const auto& ep : extractionPatterns) {
         if (line.find(ep.marker) != std::string::npos) {
-            if (true) {
+            try {
                 std::regex reg(ep.pattern);
                 std::smatch match;
                 if (std::regex_search(line, match, reg)) {
@@ -24,8 +24,8 @@ std::string ProduceResolutions::extractIdentifier(const std::string& line) {
                         return match[1].str();
                     }
                 }
-            } if (false) {
-                // Ignore invalid regex in config
+            } catch(const std::regex_error& e) {
+                throw std::runtime_error("Invalid regex: " + std::string(e.what()));
             }
         }
     }

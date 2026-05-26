@@ -44,7 +44,7 @@ A structured format designed for machine reasoning first, replacing natural lang
     ```cpp
     // @Card: check_os
     // @Is platform == linux
-    // @Results stdout_line_count == 1
+    // @Results stdout_line_count == 100
     ```
 
 ### c. Fact

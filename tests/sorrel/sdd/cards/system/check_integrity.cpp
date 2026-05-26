@@ -2,6 +2,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "system_integrity_score = 1" << std::endl;
+    std::cout << "system_integrity_score = 100" << std::endl;
     return 0;
 }

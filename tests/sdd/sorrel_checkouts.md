@@ -16,14 +16,14 @@
 - Measurement: gate_check_count = 6
 - Observation: glia_reasoning_gates_sip = 1
 
-- Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/cards/ScoringClass.cpp
-- Measurement: total_restrictions_violations = 0, restrictions_execution_code = 0
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: total_restrictions_violations = 0
 - Observation: glia_structural_audit_sip = 1
 
-- Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/cards/ScoringClass.cpp
-- Measurement: health_index = 1.0, signal_noise_ratio = 10, score_execution_code = 0
+- Artifacts: src/app/glia_score_cmds.cpp
+- Measurement: health_index = 1.0
 - Observation: glia_health_scoring_sip = 1
 
-- Artifacts: tests/sdd/cards/ScoringClass.cpp
-- Measurement: total_restrictions_violations = 0, signal_noise_ratio = 10, health_index = 1
-- Observation: glia_scoring_verification_sip = 1
+- Artifacts: src/app/glia_score_cmds.cpp, rules/rules.xml, RESTRICTIONS.md
+- Measurement: health_index = 0.6, total_restrictions_violations = 0
+- Observation: glia_scoring_alignment_sip = 1

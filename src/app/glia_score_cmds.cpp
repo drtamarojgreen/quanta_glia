@@ -22,18 +22,18 @@ int countViolations(const RuleGlobals& globals, const std::vector<std::pair<std:
         if (!entry.is_regular_file()) continue;
 
         bool ignored = false;
-        for (const auto& idir : globals.ignoredDirs) {
-            if (entry.path().string().find("/" + idir + "/") != std::string::npos ||
-                entry.path().string().find("./" + idir + "/") == 0) {
-                ignored = true;
-                break;
-            }
-        }
-        if (ignored) continue;
+for (const auto& idir : globals.ignoredDirs) {
+    if (entry.path().string().find("/" + idir + "/") != std::string::npos ||
+        entry.path().string().find("./" + idir + "/") == 0) {
+        ignored = true;
+        break;
+    }
+}
+if (ignored) continue;
 
-        std::string ext = entry.path().extension().string();
-        bool validExt = false;
-        for (const auto& e : globals.extensions) if (e == ext) { validExt = true; break; }
+std::string ext = entry.path().extension().string();
+bool validExt = false;
+for (const auto& e : globals.extensions) if (e == ext) { validExt = true; break; }
         if (!validExt) continue;
 
         std::ifstream file(entry.path());
@@ -104,7 +104,6 @@ glia::core::CommandResult RestrictionsCommand::execute(const std::vector<std::st
 glia::core::CommandResult ScoreCommand::execute(const std::vector<std::string>& args) {
     auto globals = CommandLoader::loadGlobals("rules/rules.xml");
     auto allCommands = CommandLoader::loadFromXml("rules/rules.xml");
-
     // 1. Signal Calculation (LOC in src/ and include/)
     long long signal = 0;
     std::vector<std::string> scanDirs = {"src", "include"};
