@@ -15,7 +15,7 @@ void robustness_verification() {
     f1 << "        // Tricky comment that might hide empty block\n";
     f1 << "    }\n";
     f1 << "    assert(1 != 0); // Advanced meaningless assertion\n";
-    f1 << "    int* p =  "new" " int(42)"; // Raw pointer\n";
+    f1 << "    int* p =  new int(42); // Raw pointer\n";
     f1 << "    std::string s = \"placeholder\"; // Magic string\n";
     f1 << "}\n";
     f1.close();

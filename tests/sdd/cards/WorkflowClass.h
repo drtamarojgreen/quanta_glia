@@ -3,4 +3,5 @@
 #include <map>
 #include <string>
 void workflow_verification();
+void tui_verification();
 #endif

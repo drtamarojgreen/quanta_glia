@@ -7,6 +7,9 @@
 #include <memory>
 
 namespace glia::app {
+
+class CommandRegistry;
+
 class Command {
 public:
     virtual ~Command() = default;
@@ -14,8 +17,10 @@ public:
     virtual std::string description() const = 0;
     virtual glia::core::CommandResult execute(const std::vector<std::string>& args) = 0;
     virtual void configure(const CommandMetadata& meta) { m_meta = meta; }
+    void setRegistry(CommandRegistry* reg) { m_registry = reg; }
 protected:
     CommandMetadata m_meta;
+    CommandRegistry* m_registry = nullptr;
 };
 
 class CommandRegistry {
