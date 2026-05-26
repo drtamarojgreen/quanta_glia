@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 // We create a minimal ./src with a main.cpp and a dummy Makefile so that execute()
 // can run without throwing from filesystem or make.
 void test_try_alternatives_basic_execute() {
-    const std::string testSrcPath = "data/src/basic_execute_src";
+    const std::string testSrcPath = "src/basic_execute_src";
     const std::string mainContent = "int main(){return 0;}\n";
     const std::string makefileContent = "all:\n\t@echo Building\n";
 
@@ -24,7 +24,7 @@ void test_try_alternatives_basic_execute() {
     alt.filename = "main.cpp"; // Now populate filename
     alt.startLine = 0;
     alt.endLine = 0;
-    alt.type = "COMMENT_LINE";
+    alt.type = "REPLACE_LINE";
     alt.newText = "// replaced line";
 
     std::vector<Alternative> alts = {alt};
@@ -52,7 +52,7 @@ void test_try_alternatives_basic_execute() {
 }
 
 void test_try_alternatives_replace_line() {
-    const std::string testSrcPath = "data/src/replace_line_src";
+    const std::string testSrcPath = "src/replace_line_src";
     const std::string mainContent = "line 1\nline 2 to be replaced\nline 3\n";
     const std::string makefileContent = "all:\n\t@echo Building\n";
 
@@ -95,7 +95,7 @@ void test_try_alternatives_replace_line() {
 }
 
 void test_try_alternatives_replace_range() {
-    const std::string testSrcPath = "data/src/replace_range_src";
+    const std::string testSrcPath = "src/replace_range_src";
     const std::string mainContent = "line 1\nline 2 to be replaced\nline 3 to be replaced\nline 4\n";
     const std::string makefileContent = "all:\n\t@echo Building\n";
 
@@ -140,7 +140,7 @@ void test_try_alternatives_replace_range() {
 }
 
 void test_try_alternatives_multiple_alternatives() {
-    const std::string testSrcPath = "data/src/multiple_alts_src";
+    const std::string testSrcPath = "src/multiple_alts_src";
     const std::string mainContent = "line 1 - original\nline 2 - to be commented\nline 3 - to be replaced\nline 4 - start of range\nline 5 - middle of range\nline 6 - end of range\nline 7 - original\n";
     const std::string makefileContent = "all:\n\t@echo Building\n";
 
@@ -218,13 +218,13 @@ void test_try_alternatives_multiple_alternatives() {
     assert(run_in.eof());
 
     // Verify CSV report exists
-    assert(fs::exists("data/test_runs.csv"));
+    assert(fs::exists("test_runs.csv"));
 
     cleanupTestSrcDir(testSrcPath);
 }
 
 void test_try_alternatives_multiple_runs() {
-    const std::string testSrcPath = "data/src/multiple_runs_src";
+    const std::string testSrcPath = "src/multiple_runs_src";
     const std::string mainContent = "initial line\n";
     const std::string makefileContent = "all:\n\t@echo Building\n";
 

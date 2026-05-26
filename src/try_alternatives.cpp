@@ -204,7 +204,7 @@ void TryAlternatives::execute(const std::string& tempBaseDir, const std::string&
         if (applied) {
             int status = env.runCommand("make");
             bool success = (status == 0);
-            CreateReports::appendReport("data/test_runs.csv", alt, success);
+            CreateReports::appendReport("test_runs.csv", alt, success);
         }
     }
 }

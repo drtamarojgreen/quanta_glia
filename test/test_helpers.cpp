@@ -7,11 +7,11 @@
 std::string getTestRunBaseDir() {
     std::string baseDir;
     try {
-        Config testConfig = Config::load("data/config-test.yaml"); // Correct initialization
+        Config testConfig = Config::load("config-test.yaml"); // Correct initialization
         baseDir = testConfig.getString("temp_base_dir");
     } catch (const std::runtime_error& e) {
-        std::cerr << "Error loading data/config-test.yaml: " << e.what() << std::endl;
-        baseDir = "data/test_runs"; // Fallback
+        std::cerr << "Error loading config-test.yaml: " << e.what() << std::endl;
+        baseDir = "test_runs"; // Fallback
     }
 
     if (!fs::exists(baseDir)) {

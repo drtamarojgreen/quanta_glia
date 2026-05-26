@@ -150,6 +150,8 @@
   <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand"/>
 
   <!-- External Governance -->
+  <command name="lint-security" description="Static security analysis (SAST)" type="external" target="bandit -r ."/>
+  <command name="lint-secrets" description="Scan for accidentally committed secrets" type="external" target="python3 ./scripts/secret_scanner.py"/>
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>
   <command name="system-check" description="Validate system resource availability" type="external" target="df -h / &amp;&amp; free -m"/>
 </glia_rules>

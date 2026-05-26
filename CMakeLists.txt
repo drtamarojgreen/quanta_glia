@@ -93,6 +93,29 @@ target_include_directories(sorrel PRIVATE src)
 add_executable(glia ${GLIA_SOURCES})
 target_include_directories(glia PRIVATE src)
 
+set(VISION_LINT_SOURCES
+    src/analyze_lines.cpp
+    src/environment.cpp
+    src/error_object.cpp
+    src/log_reader.cpp
+    src/produce_resolutions.cpp
+    src/try_alternatives.cpp
+    src/config.cpp
+    src/create_reports.cpp
+    test/test_analyze_lines.cpp
+    test/test_environment.cpp
+    test/test_log_reader.cpp
+    test/test_main.cpp
+    test/test_produce_resolutions.cpp
+    test/test_try_alternatives.cpp
+    test/test_integration.cpp
+    test/test_sample_logs.cpp
+    test/test_helpers.cpp
+)
+
+add_executable(VisionLintTest ${VISION_LINT_SOURCES})
+target_include_directories(VisionLintTest PRIVATE include src)
+
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp

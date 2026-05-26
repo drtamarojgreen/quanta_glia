@@ -51,8 +51,8 @@ void test_produce_string_replacement() {
 }
 
 void test_produce_multiple_value_errors() {
-    auto resolutions = Config::loadResolutions("resolutions.yaml");
-    auto patterns = Config::loadExtractionPatterns("extraction_patterns.yaml");
+    auto resolutions = Config::loadResolutions("test/test-resolutions.yaml");
+    auto patterns = Config::loadExtractionPatterns("test/test-extraction_patterns.yaml");
     ErrorObject obj;
     obj.entries.push_back({"VALUE", "script1.js", 1, "error: 'varA' is undefined"});
     obj.entries.push_back({"VALUE", "script2.js", 3, "error: 'varB' is null"});

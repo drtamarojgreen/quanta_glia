@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 void test_sample_cpp_log_analysis() {
     LogReader reader;
-    std::vector<std::string> lines = reader.readFromFile("data/sample_cpp.log");
+    std::vector<std::string> lines = reader.readFromFile("sample_cpp.log");
 
     AnalyzeLines analyzer;
     ErrorObject obj = analyzer.analyze(lines);
@@ -123,7 +123,7 @@ void test_sample_cpp_log_analysis() {
 
 void test_sample_python_log_analysis() {
     LogReader reader;
-    std::vector<std::string> lines = reader.readFromFile("data/sample_python.log");
+    std::vector<std::string> lines = reader.readFromFile("sample_python.log");
 
     AnalyzeLines analyzer;
     ErrorObject obj = analyzer.analyze(lines);
@@ -222,7 +222,7 @@ void test_sample_python_log_analysis() {
 
 void test_sample_java_log_analysis() {
     LogReader reader;
-    std::vector<std::string> lines = reader.readFromFile("data/sample_java.log");
+    std::vector<std::string> lines = reader.readFromFile("sample_java.log");
 
     AnalyzeLines analyzer;
     ErrorObject obj = analyzer.analyze(lines);

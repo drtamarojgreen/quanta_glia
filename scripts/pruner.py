@@ -216,7 +216,7 @@ def run_pruning(args):
                                 print(f"DELETED {repo_record.name}")
                                 logger.info(f"Deleted {repo_record.name}", extra=log_extra)
                             except Exception as e:
-                                logger.error(f"Failed to  "delete" {repo_record.name}: {e}", extra=log_extra)
+                                logger.error(f"Failed to  'delete' {repo_record.name}: {e}", extra=log_extra)
                     else:
                         logger.warning(f"DELETE action for {repo_record.name} blocked. Strategy is '{strategy}', not 'aggressive'.", extra=log_extra)
                         print(f"SKIPPED DELETE of {repo_record.name} (strategy is '{strategy}')")
