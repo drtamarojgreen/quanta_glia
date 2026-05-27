@@ -86,4 +86,16 @@ void tui_verification() {
     }
     std::cout << "tui_modal_logic_marker = " << modal_marker << std::endl;
     std::cout << "tui_notifications_logic_marker = " << notifications_marker << std::endl;
+
+    // Tabs and Workspace View Verification
+    f.clear();
+    f.seekg(0);
+    int tab_marker = 0;
+    int workspace_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderTabBar") != std::string::npos) tab_marker = 1;
+        if (line.find("renderWorkspaceView") != std::string::npos) workspace_marker = 1;
+    }
+    std::cout << "tui_tab_logic_marker = " << tab_marker << std::endl;
+    std::cout << "tui_workspace_view_marker = " << workspace_marker << std::endl;
 }

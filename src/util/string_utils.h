@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
+#include <iterator>
 
 namespace glia::util {
     inline std::string trim(const std::string& s) {

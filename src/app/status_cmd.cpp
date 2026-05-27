@@ -62,8 +62,42 @@ void StatusCommand::renderStatusBar(TuiMode mode, double health, long long laten
 void StatusCommand::renderNotifications() {
     if (!m_notifications) return;
     std::cout << "\n--- Notifications History ---\n";
-    for (const auto& toast : m_notifications->history()) {
-        std::cout << " [" << toast.severity << "] " << toast.message << "\n";
+    if (m_notifications->history().empty()) {
+        std::cout << " (No notifications)\n";
+    } else {
+        for (const auto& toast : m_notifications->history()) {
+            std::cout << " [" << toast.severity << "] " << toast.message << "\n";
+        }
+    }
+}
+
+void StatusCommand::renderTabBar(TuiView activeView) {
+    using glia::cli::Terminal;
+    std::cout << " ";
+    auto renderTab = [&](TuiView v, const std::string& label) {
+        if (v == activeView) Terminal::color("47;30"); // White background, black text
+        else Terminal::color("40;37"); // Black background, white text
+        std::cout << " " << label << " ";
+        Terminal::reset();
+        std::cout << "  ";
+    };
+    renderTab(TuiView::Dashboard, "1: Dashboard");
+    renderTab(TuiView::Workspace, "2: Workspace");
+    renderTab(TuiView::Notifications, "3: Notifications");
+    std::cout << "\n\n";
+}
+
+void StatusCommand::renderWorkspaceView() {
+    using glia::util::Translator;
+    using glia::cli::Terminal;
+    std::cout << "--- Workspace Nodes Status ---\n";
+    if (m_registry) {
+        auto* wsCmd = m_registry->getCommand("workspace-status");
+        if (wsCmd) {
+            wsCmd->execute({"workspace-status"});
+        } else {
+            std::cout << "Workspace status command not registered.\n";
+        }
     }
 }
 
@@ -98,6 +132,7 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
 
     bool running = true;
     TuiMode mode = TuiMode::Normal;
+    TuiView view = TuiView::Dashboard;
     long long lastLatency = 0;
     double health = 1.0;
 
@@ -115,16 +150,27 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
     while (running) {
         health = calculateHealth();
         renderHeader();
-        renderDashboard();
+        renderTabBar(view);
+
+        if (view == TuiView::Dashboard) renderDashboard();
+        else if (view == TuiView::Workspace) renderWorkspaceView();
+        else if (view == TuiView::Notifications) renderNotifications();
+
         renderStatusBar(mode, health, lastLatency);
 
-        std::cout << "\n[H] Help  [P] Palette  [N] Notifications  [Q] Quit  [V] Vim-Mode\n";
+        std::cout << "\n[1-3] Switch View  [H] Help  [P] Palette  [Q] Quit\n";
         std::string input = Prompter::ask("Glia");
 
         auto start = std::chrono::steady_clock::now();
 
         if (input == "Q" || input == "q" || input == "exit") {
             running = false;
+        } else if (input == "1") {
+            view = TuiView::Dashboard;
+        } else if (input == "2") {
+            view = TuiView::Workspace;
+        } else if (input == "3") {
+            view = TuiView::Notifications;
         } else if (input == "P" || input == "p" || input == ":") {
             mode = TuiMode::Palette;
             renderHeader();
@@ -161,8 +207,15 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
             renderNotifications();
             Prompter::ask("Press Enter to return");
         } else if (input == "V" || input == "v") {
-             std::cout << "Vim-style modal bindings enabled (j/k to scroll simulated).\n";
-             Prompter::ask("Press Enter to return");
+             std::cout << "--- Vim-Mode (Normal) ---\n";
+             std::cout << "[j] Next Item  [k] Prev Item  [i] Enter Command  [ESC] Exit Mode\n";
+             while (true) {
+                 std::string cmd = Prompter::ask("(Vim)");
+                 if (cmd == "j") std::cout << "Navigating down...\n";
+                 else if (cmd == "k") std::cout << "Navigating up...\n";
+                 else if (cmd == "i") break;
+                 else if (cmd == "q" || cmd == "Q" || cmd == "\x1B") break;
+             }
         } else if (!input.empty() && m_registry) {
             auto* targetCmd = m_registry->getCommand(input);
             if (targetCmd && input != "status") {

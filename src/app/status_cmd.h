@@ -5,6 +5,7 @@
 
 namespace glia::app {
 enum class TuiMode { Normal, Palette, Command };
+enum class TuiView { Dashboard, Workspace, Notifications };
 
 struct Toast {
     std::string message;
@@ -33,6 +34,8 @@ private:
     void renderStatusBar(TuiMode mode, double health, long long latency_ms);
     void renderPalette(const std::string& query);
     void renderNotifications();
+    void renderTabBar(TuiView activeView);
+    void renderWorkspaceView();
     std::unique_ptr<NotificationCenter> m_notifications;
 };
 }
