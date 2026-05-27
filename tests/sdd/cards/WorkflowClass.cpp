@@ -65,4 +65,25 @@ void tui_verification() {
         if (line.find("fuzzyMatch") != std::string::npos) palette_marker = 1;
     }
     std::cout << "tui_command_palette_logic_marker = " << palette_marker << std::endl;
+
+    // Status Bar Verification
+    f.clear();
+    f.seekg(0);
+    int status_bar_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderStatusBar") != std::string::npos) status_bar_marker = 1;
+    }
+    std::cout << "tui_status_bar_logic_marker = " << status_bar_marker << std::endl;
+
+    // Modal and Notifications Verification
+    f.clear();
+    f.seekg(0);
+    int modal_marker = 0;
+    int notifications_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("TuiMode") != std::string::npos) modal_marker = 1;
+        if (line.find("m_notifications") != std::string::npos) notifications_marker = 1;
+    }
+    std::cout << "tui_modal_logic_marker = " << modal_marker << std::endl;
+    std::cout << "tui_notifications_logic_marker = " << notifications_marker << std::endl;
 }

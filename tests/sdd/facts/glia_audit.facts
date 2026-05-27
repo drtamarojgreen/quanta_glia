@@ -28,3 +28,6 @@ Is tui_name = status
 Is tui_desc_size = 28
 Is tui_logic_marker_count = 7
 Is tui_command_palette_logic_marker = 1
+Is tui_status_bar_logic_marker = 1
+Is tui_modal_logic_marker = 1
+Is tui_notifications_logic_marker = 1

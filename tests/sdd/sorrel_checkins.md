@@ -9,3 +9,4 @@
 - glia_shell_consolidation_sip: Consolidate shell execution into shell_utils.h to reduce repetition.
 - glia_tui_advancement_sip: Advance the TUI to integrate all glia commands and provide descriptive help.
 - glia_tui_command_palette_sip: Implement global command palette with fuzzy matching in status TUI.
+- glia_tui_status_bar_sip: Implement always-visible status bar with mode and health indicators.
