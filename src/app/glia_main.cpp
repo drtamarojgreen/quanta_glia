@@ -19,6 +19,7 @@
 #include "init.h"
 #include "capabilities.h"
 #include "genome_cmd.h"
+#include "glia_qtl_cmd.h"
 #include "../cli/cli.h"
 #include "../util/translator.h"
 #include "../core/state.h"
@@ -66,6 +67,7 @@ void registerAllCreators() {
     reg("GateCheckCommand", [](){ return std::make_unique<GateCheckCommand>(); });
     reg("RestrictionsCommand", [](){ return std::make_unique<RestrictionsCommand>(); });
     reg("ScoreCommand", [](){ return std::make_unique<ScoreCommand>(); });
+    reg("QtlCommand", [](){ return std::make_unique<QtlCommand>(); });
 }
 
 int main(int argc, char** argv) {

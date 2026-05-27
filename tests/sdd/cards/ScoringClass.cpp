@@ -15,8 +15,8 @@ namespace fs = std::filesystem;
 // PARAMETERS: None
 // RESULTS: total_restrictions_violations == 0, signal_noise_ratio == 10, health_index == 100
 void scoring_verification() {
-    std::string rules_path = "rules/rules.xml";
-    std::vector<std::string> search_paths = {"rules/rules.xml", "../rules/rules.xml", "../../rules/rules.xml"};
+    std::string rules_path = "data/rules.xml";
+    std::vector<std::string> search_paths = {"data/rules.xml", "../data/rules.xml", "../../data/rules.xml"};
     bool found = false;
     for (const auto& p : search_paths) {
         if (fs::exists(p)) {
@@ -27,7 +27,7 @@ void scoring_verification() {
     }
 
     if (!found) {
-        std::cerr << "Discovery Error: rules/rules.xml not found." << std::endl;
+        std::cerr << "Discovery Error: data/rules.xml not found." << std::endl;
         return;
     }
 

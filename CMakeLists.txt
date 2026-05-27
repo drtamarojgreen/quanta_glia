@@ -25,6 +25,7 @@ set(SOURCES
     src/app/glia_waste_cmds.cpp
     src/app/glia_discovery_cmds.cpp
     src/app/glia_score_cmds.cpp
+    src/app/glia_qtl_cmd.cpp
     src/app/genome_cmd.cpp
     src/app/command_loader.cpp
     src/app/command_factory.cpp
@@ -45,8 +46,7 @@ set(SOURCES
     src/platform/platform.cpp
 )
 
-set(GLIA_SOURCES
-    src/app/glia_main.cpp
+set(GLIA_SOURCES_NO_MAIN
     src/util/xml_parser.cpp
     src/util/translator.cpp
     src/core/state.cpp
@@ -58,6 +58,7 @@ set(GLIA_SOURCES
     src/app/glia_prune_cmd.cpp
     src/app/glia_discovery_cmds.cpp
     src/app/glia_score_cmds.cpp
+    src/app/glia_qtl_cmd.cpp
     src/app/glia_init_cmd.cpp
     src/app/harvest_cmd.cpp
     src/app/prune_cmd.cpp
@@ -87,8 +88,19 @@ set(GLIA_SOURCES
     src/platform/platform.cpp
 )
 
+set(GLIA_SOURCES
+    src/app/glia_main.cpp
+    ${GLIA_SOURCES_NO_MAIN}
+)
+
 add_executable(sorrel ${SOURCES})
 target_include_directories(sorrel PRIVATE src)
+
+add_executable(test_qtl test/test_qtl.cpp ${GLIA_SOURCES_NO_MAIN})
+target_include_directories(test_qtl PRIVATE src)
+
+add_executable(test_rules test/test_rules.cpp ${GLIA_SOURCES_NO_MAIN})
+target_include_directories(test_rules PRIVATE src)
 
 add_executable(glia ${GLIA_SOURCES})
 target_include_directories(glia PRIVATE src)
@@ -102,6 +114,7 @@ add_executable(sorrel_test
     tests/sdd/cards/RobustnessClass.cpp
     tests/sdd/cards/DynamicCommandClass.cpp
     tests/sdd/cards/ScoringClass.cpp
+    tests/sdd/cards/QtlClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp
@@ -119,6 +132,7 @@ add_executable(sorrel_test
     src/app/glia_git_cmds.cpp
     src/app/glia_discovery_cmds.cpp
     src/app/glia_score_cmds.cpp
+    src/app/glia_qtl_cmd.cpp
     src/util/xml_parser.cpp
     src/util/translator.cpp
     src/core/state.cpp

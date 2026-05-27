@@ -10,7 +10,7 @@ namespace glia::config {
 Config::Config()
     : knowledgeBase("./knowledge_base")
     , repoCache("./repo_cache")
-    , rulesPath("rules/rules.xml")
+    , rulesPath("data/rules.xml")
     , statePath("state.json")
     , maxRepos(10)
     , logLevel("INFO")

@@ -154,6 +154,7 @@
   <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand">
     <param key="penalty_per_violation" value="10.0"/>
   </command>
+  <command name="qtl" description="Analyze repository for QTL violations and generate task list" type="internal" target="QtlCommand"/>
 
   <!-- External Governance -->
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>

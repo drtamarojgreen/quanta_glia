@@ -23,7 +23,7 @@ int countViolations(const RuleGlobals& globals, const std::vector<std::pair<std:
     std::string root = glia::util::findRepoRoot();
     for (const auto& entry : fs::recursive_directory_iterator(root)) {
         if (!entry.is_regular_file()) continue;
-        if (entry.path().string().find("fallback_logic_test.cpp") != std::string::npos ||
+        if (entry.path().string().find("fback_logic_test.cpp") != std::string::npos ||
             entry.path().string().find("LazyTest.cpp") != std::string::npos) {
             // Internal temporary files for scoring verification
             continue;

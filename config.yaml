@@ -1,14 +1,18 @@
-main:
-  knowledge_base: "./knowledge_base"
-  repo_cache: "./repo_cache"
-  rules_path: "rules/rules.xml"
+glia:
+  knowledge_base: "knowledge_base"
+  repo_cache: "repo_cache"
+  rules_path: "data/rules.xml"
   state_path: "state.json"
   max_repos: 10
   log_level: "INFO"
+  max_depth: 5
+  max_lines_per_file: 500
+  target_topics: "README,LICENSE,CONTRIBUTING"
+  search_paths: "/"
 
+rules_path: "data/rules.xml"
 knowledge_base: "./knowledge_base"
 repo_cache: "./repo_cache"
-rules_path: "rules/rules.xml"
 state_path: "state.json"
 max_repos: 10
 log_level: "INFO"
