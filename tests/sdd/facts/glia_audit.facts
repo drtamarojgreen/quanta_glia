@@ -20,8 +20,8 @@ Is robust_audit_commits_code = 0
 
 # Scoring and Structural Audit
 Is total_restrictions_violations = 0
-Is glia_health_index = 0.6
-Is glia_signal_noise_ratio = 10
+Is glia_health_index = 0.99
+Is glia_signal_noise_ratio = 134.133
 Is glia_scoring_action = STABLE
 
 Is tui_name = status

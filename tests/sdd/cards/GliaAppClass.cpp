@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 void sorrel_glia_config_serialization_card(const std::map<std::string, std::string>& facts) {
     fs::path p = fs::temp_directory_path() / "test_config_emp.txt";
     std::ofstream out(p);
-    out << "knowledge_base = /tmp/kb\nmax_repos = 42\nlog_level = DEBUG\n";
+    out << "knowledge_base = /tmp/kb\nmax_repos = 50\nlog_level = DEBUG\n";
     out.close();
     glia::config::Config load;
     load.load(p.string());
