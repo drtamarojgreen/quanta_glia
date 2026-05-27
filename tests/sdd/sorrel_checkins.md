@@ -11,3 +11,4 @@
 - glia_tui_command_palette_sip: Implement global command palette with fuzzy matching in status TUI.
 - glia_tui_status_bar_sip: Implement always-visible status bar with mode and health indicators.
 - glia_tui_tabs_sip: Implement tab-based navigation for Dashboard and Workspace views.
+- glia_tui_theme_system_sip: Implement theme switching system (Default, High-Contrast) with state persistence.

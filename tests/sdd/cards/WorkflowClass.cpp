@@ -98,4 +98,13 @@ void tui_verification() {
     }
     std::cout << "tui_tab_logic_marker = " << tab_marker << std::endl;
     std::cout << "tui_workspace_view_marker = " << workspace_marker << std::endl;
+
+    // Theme System Verification
+    f.clear();
+    f.seekg(0);
+    int theme_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("m_themes") != std::string::npos) theme_marker = 1;
+    }
+    std::cout << "tui_theme_logic_marker = " << theme_marker << std::endl;
 }

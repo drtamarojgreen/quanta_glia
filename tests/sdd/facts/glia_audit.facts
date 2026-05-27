@@ -33,3 +33,4 @@ Is tui_modal_logic_marker = 1
 Is tui_notifications_logic_marker = 1
 Is tui_tab_logic_marker = 1
 Is tui_workspace_view_marker = 1
+Is tui_theme_logic_marker = 1

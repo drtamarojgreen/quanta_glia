@@ -3,6 +3,7 @@
 #include "../cli/cli.h"
 #include "../util/translator.h"
 #include "../util/string_utils.h"
+#include "../core/state.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -15,7 +16,7 @@ void StatusCommand::renderHeader() {
     using glia::util::Translator;
     using glia::cli::Terminal;
     std::cout << "\033[2J\033[H"; // Clear screen and home
-    Terminal::color("36;1");
+    Terminal::color(m_themes->current().header);
     std::cout << "==========================================================\n";
     std::cout << "  " << Translator::t("app_name") << "\n";
     std::cout << "  " << Translator::t("tui_header") << "\n";
@@ -52,9 +53,9 @@ void StatusCommand::renderStatusBar(TuiMode mode, double health, long long laten
     std::string modeStr = (mode == TuiMode::Normal) ? Translator::t("tui_mode_normal") :
                           (mode == TuiMode::Palette) ? Translator::t("tui_mode_palette") : "COMMAND";
 
-    Terminal::color("44;37"); // Blue background, white text
+    Terminal::color(m_themes->current().bar);
     std::cout << "\n[" << modeStr << "] | " << Translator::t("tui_health_label")
-              << std::fixed << std::setprecision(0) << (health * 100) << "% | Latency: " << latency_ms << "ms";
+              << std::fixed << std::setprecision(0) << (health * 100) << "% | Latency: " << latency_ms << "ms | Theme: " << m_themes->currentName();
     Terminal::reset();
     std::cout << "\n";
 }
@@ -128,7 +129,12 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
         return {glia::core::ExitCode::Success, ""};
     }
 
+    using glia::core::State;
     if (!m_notifications) m_notifications = std::make_unique<NotificationCenter>();
+    if (!m_themes) {
+        m_themes = std::make_unique<ThemeManager>();
+        m_themes->setTheme(State::get("tui_theme", "default"));
+    }
 
     bool running = true;
     TuiMode mode = TuiMode::Normal;
@@ -158,7 +164,7 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
 
         renderStatusBar(mode, health, lastLatency);
 
-        std::cout << "\n[1-3] Switch View  [H] Help  [P] Palette  [Q] Quit\n";
+        std::cout << "\n[1-3] Switch View  [T] Toggle Theme  [H] Help  [P] Palette  [Q] Quit\n";
         std::string input = Prompter::ask("Glia");
 
         auto start = std::chrono::steady_clock::now();
@@ -206,6 +212,11 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
             renderHeader();
             renderNotifications();
             Prompter::ask("Press Enter to return");
+        } else if (input == "T" || input == "t") {
+            std::string next = (m_themes->currentName() == "default") ? "high-contrast" : "default";
+            m_themes->setTheme(next);
+            State::set("tui_theme", next);
+            m_notifications->add("Theme switched to " + next, "INFO");
         } else if (input == "V" || input == "v") {
              std::cout << "--- Vim-Mode (Normal) ---\n";
              std::cout << "[j] Next Item  [k] Prev Item  [i] Enter Command  [ESC] Exit Mode\n";
