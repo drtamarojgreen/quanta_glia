@@ -56,4 +56,13 @@ void tui_verification() {
         if (line.find("tui_header") != std::string::npos) marker_count++;
     }
     std::cout << "tui_logic_marker_count = " << marker_count << std::endl;
+
+    // Command Palette Verification
+    f.clear();
+    f.seekg(0);
+    int palette_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("fuzzyMatch") != std::string::npos) palette_marker = 1;
+    }
+    std::cout << "tui_command_palette_logic_marker = " << palette_marker << std::endl;
 }

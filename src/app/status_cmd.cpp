@@ -1,6 +1,7 @@
 #include "status_cmd.h"
 #include "../cli/cli.h"
 #include "../util/translator.h"
+#include "../util/string_utils.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -53,10 +54,46 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
             }
         }
 
-        std::cout << "\n[H] Help/Manual  [Q] Quit  [Command Name] to Run\n";
+        std::cout << "\n[H] Help/Manual  [P] Palette  [Q] Quit  [Command Name] to Run\n";
         std::string input = Prompter::ask("Glia");
 
-        if (input == "Q" || input == "q" || input == "exit") {
+        if (input == "P" || input == "p" || input == ":") {
+            std::string query = Prompter::ask("Palette Search");
+            std::vector<std::string> matches;
+            std::cout << "\n--- Matching Commands ---\n";
+            if (m_registry) {
+                auto allCmds = m_registry->listCommands();
+                std::sort(allCmds.begin(), allCmds.end());
+                for (const auto& name : allCmds) {
+                    if (glia::util::fuzzyMatch(query, name)) {
+                        matches.push_back(name);
+                        auto* c = m_registry->getCommand(name);
+                        std::cout << " [" << matches.size() << "] " << std::left << std::setw(20) << name << c->description() << "\n";
+                    }
+                }
+            }
+
+            if (matches.empty()) {
+                std::cout << "No matches found.\n";
+                Prompter::ask("Press Enter to return");
+            } else {
+                std::string selection = Prompter::ask("Select number to run or [Enter] to cancel");
+                if (!selection.empty()) {
+                    try {
+                        int idx = std::stoi(selection);
+                        if (idx > 0 && idx <= static_cast<int>(matches.size())) {
+                            std::string cmdName = matches[idx - 1];
+                            auto* targetCmd = m_registry->getCommand(cmdName);
+                            if (targetCmd && cmdName != "status") {
+                                std::cout << "\n--- Executing: " << cmdName << " ---\n";
+                                targetCmd->execute({cmdName});
+                                Prompter::ask("\nPress Enter to return to Dashboard");
+                            }
+                        }
+                    } catch (...) {}
+                }
+            }
+        } else if (input == "Q" || input == "q" || input == "exit") {
             running = false;
         } else if (input == "H" || input == "h" || input == "help") {
             std::cout << "\n--- Glia Systems Manual ---\n";

@@ -31,3 +31,7 @@
 - Artifacts: src/app/status_cmd.cpp, src/app/command.h, src/app/glia_main.cpp
 - Measurement: tui_integrated = 1, tui_description_coverage = 1
 - Observation: glia_tui_advancement_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/util/string_utils.h, RESTRICTIONS.md, tests/sdd/cards/WorkflowClass.cpp, tests/sdd/facts/glia_audit.facts
+- Measurement: tui_command_palette_logic_marker = 1
+- Observation: glia_tui_command_palette_sip = 1

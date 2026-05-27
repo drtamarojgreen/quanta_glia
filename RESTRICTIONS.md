@@ -36,3 +36,8 @@
 - FORBID "fallback logic" in source code, requiring robust error propagation instead.
 - REQUIRE the scoring command to apply these penalties to the structural Health Index empirically.
 - FORBID the use of raw pointers (`new`/`delete`) and empty catch blocks across the repository.
+
+## TUI Enhancements
+- REQUIRE all TUI enhancements to utilize smart pointers (`std::unique_ptr`, `std::shared_ptr`) for resource management; FORBID raw pointers.
+- FORBID the usage of external TUI libraries beyond standard C++ and Qt components.
+- REQUIRE fuzzy matching logic to be implemented natively within the toolkit utilities.

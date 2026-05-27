@@ -27,3 +27,4 @@ Is glia_scoring_action = STABLE
 Is tui_name = status
 Is tui_desc_size = 28
 Is tui_logic_marker_count = 7
+Is tui_command_palette_logic_marker = 1
