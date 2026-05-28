@@ -56,4 +56,67 @@ void tui_verification() {
         if (line.find("tui_header") != std::string::npos) marker_count++;
     }
     std::cout << "tui_logic_marker_count = " << marker_count << std::endl;
+
+    // Command Palette Verification
+    f.clear();
+    f.seekg(0);
+    int palette_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("fuzzyMatch") != std::string::npos) palette_marker = 1;
+    }
+    std::cout << "tui_command_palette_logic_marker = " << palette_marker << std::endl;
+
+    // Status Bar Verification
+    f.clear();
+    f.seekg(0);
+    int status_bar_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderStatusBar") != std::string::npos) status_bar_marker = 1;
+    }
+    std::cout << "tui_status_bar_logic_marker = " << status_bar_marker << std::endl;
+
+    // Modal and Notifications Verification
+    f.clear();
+    f.seekg(0);
+    int modal_marker = 0;
+    int notifications_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("TuiMode") != std::string::npos) modal_marker = 1;
+        if (line.find("m_notifications") != std::string::npos) notifications_marker = 1;
+    }
+    std::cout << "tui_modal_logic_marker = " << modal_marker << std::endl;
+    std::cout << "tui_notifications_logic_marker = " << notifications_marker << std::endl;
+
+    // Tabs and Workspace View Verification
+    f.clear();
+    f.seekg(0);
+    int tab_marker = 0;
+    int workspace_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderTabBar") != std::string::npos) tab_marker = 1;
+        if (line.find("renderWorkspaceView") != std::string::npos) workspace_marker = 1;
+    }
+    std::cout << "tui_tab_logic_marker = " << tab_marker << std::endl;
+    std::cout << "tui_workspace_view_marker = " << workspace_marker << std::endl;
+
+    // Theme System Verification
+    f.clear();
+    f.seekg(0);
+    int theme_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("m_themes") != std::string::npos) theme_marker = 1;
+    }
+    std::cout << "tui_theme_logic_marker = " << theme_marker << std::endl;
+
+    // Help Pane and Breadcrumbs Verification
+    f.clear();
+    f.seekg(0);
+    int help_marker = 0;
+    int breadcrumb_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderHelpPane") != std::string::npos) help_marker = 1;
+        if (line.find("renderBreadcrumbs") != std::string::npos) breadcrumb_marker = 1;
+    }
+    std::cout << "tui_help_pane_logic_marker = " << help_marker << std::endl;
+    std::cout << "tui_breadcrumbs_logic_marker = " << breadcrumb_marker << std::endl;
 }

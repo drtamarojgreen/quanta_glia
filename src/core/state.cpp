@@ -13,6 +13,11 @@ void State::set(const std::string& key, const std::string& val) {
     data()[key] = val;
 }
 
+std::string State::get(const std::string& key, const std::string& defaultVal) {
+    if (data().count(key)) return data().at(key);
+    return defaultVal;
+}
+
 void State::save(const std::string& path) {
     std::ofstream out(path);
     out << "{\n";

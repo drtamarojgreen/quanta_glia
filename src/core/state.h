@@ -10,6 +10,7 @@ public:
     static void save(const std::string& path);
     static void load(const std::string& path);
     static void set(const std::string& key, const std::string& val);
+    static std::string get(const std::string& key, const std::string& defaultVal = "");
 private:
     static std::map<std::string, std::string>& data();
 };

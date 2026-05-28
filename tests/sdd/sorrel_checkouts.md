@@ -35,3 +35,19 @@
 - Artifacts: src/app/glia_score_cmds.cpp, src/app/glia_waste_cmds.cpp, src/util/string_utils.h, src/util/fs_utils.h, tests/sdd/cards/ScoringClass.cpp, rules/rules.xml
 - Measurement: total_restrictions_violations = 0, glia_health_index = 1.0
 - Observation: glia_scoring_refinement_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/util/string_utils.h, RESTRICTIONS.md, tests/sdd/cards/WorkflowClass.cpp, tests/sdd/facts/glia_audit.facts
+- Measurement: tui_command_palette_logic_marker = 1
+- Observation: glia_tui_command_palette_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/WorkflowClass.cpp
+- Measurement: tui_status_bar_logic_marker = 1, tui_modal_logic_marker = 1, tui_notifications_logic_marker = 1
+- Observation: glia_tui_status_bar_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, src/core/state.h, src/core/state.cpp
+- Measurement: tui_tab_logic_marker = 1, tui_workspace_view_marker = 1, tui_theme_logic_marker = 1
+- Observation: glia_tui_tabs_sip = 1, glia_tui_theme_system_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/WorkflowClass.cpp
+- Measurement: tui_help_pane_logic_marker = 1, tui_breadcrumbs_logic_marker = 1
+- Observation: glia_tui_help_breadcrumbs_sip = 1

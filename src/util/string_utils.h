@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <cctype>
+#include <iterator>
 
 namespace glia::util {
 
@@ -53,6 +54,19 @@ namespace glia::util {
             }
         }
         return violations;
+    }
+
+    inline bool fuzzyMatch(const std::string& query, const std::string& target) {
+        if (query.empty()) return true;
+        size_t queryIdx = 0;
+        size_t targetIdx = 0;
+        while (queryIdx < query.length() && targetIdx < target.length()) {
+            if (std::tolower(query[queryIdx]) == std::tolower(target[targetIdx])) {
+                queryIdx++;
+            }
+            targetIdx++;
+        }
+        return queryIdx == query.length();
     }
 }
 #endif

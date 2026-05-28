@@ -9,3 +9,8 @@
 - glia_shell_consolidation_sip: Consolidate shell execution into shell_utils.h to reduce repetition.
 - glia_tui_advancement_sip: Advance the TUI to integrate all glia commands and provide descriptive help.
 - glia_scoring_refinement_sip: Resolve rules discovery and fix false positives in structural auditing.
+- glia_tui_command_palette_sip: Implement global command palette with fuzzy matching in status TUI.
+- glia_tui_status_bar_sip: Implement always-visible status bar with mode and health indicators.
+- glia_tui_tabs_sip: Implement tab-based navigation for Dashboard and Workspace views.
+- glia_tui_theme_system_sip: Implement theme switching system (Default, High-Contrast) with state persistence.
+- glia_tui_help_breadcrumbs_sip: Implement contextual help pane and breadcrumb navigation.
