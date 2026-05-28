@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:qtl:schema:v1"
+           xmlns:qtl="urn:qtl:schema:v1"
+           elementFormDefault="qualified">
+
+  <!-- ============================================================
+       Queued Task List (QTL) Schema  –  v1.0
+       Stores AI-code-error remediation tasks with priority queue
+       ordering, status tracking, and structured evidence.
+  ============================================================ -->
+
+  <!-- ── Enumerations ─────────────────────────────────────── -->
+
+  <xs:simpleType name="StatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="QUEUED"/>
+      <xs:enumeration value="IN_PROGRESS"/>
+      <xs:enumeration value="BLOCKED"/>
+      <xs:enumeration value="COMPLETE"/>
+      <xs:enumeration value="REJECTED"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PriorityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CRITICAL"/>
+      <xs:enumeration value="HIGH"/>
+      <xs:enumeration value="MEDIUM"/>
+      <xs:enumeration value="LOW"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CategoryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="API_CORRECTNESS"/>
+      <xs:enumeration value="BUILD_QUALITY"/>
+      <xs:enumeration value="CODE_COMPLETENESS"/>
+      <xs:enumeration value="VERIFICATION"/>
+      <xs:enumeration value="CONFIGURATION"/>
+      <xs:enumeration value="ARCHITECTURE"/>
+      <xs:enumeration value="TESTING"/>
+      <xs:enumeration value="OBSERVABILITY"/>
+      <xs:enumeration value="SCHEMA"/>
+      <xs:enumeration value="DISTRIBUTED_SYSTEMS"/>
+      <xs:enumeration value="GOVERNANCE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ── Shared Simple Types ──────────────────────────────── -->
+
+  <xs:simpleType name="NonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TaskIdType">
+    <!-- Format: TASK-NNN -->
+    <xs:restriction base="xs:string">
+      <xs:pattern value="TASK-[0-9]{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ── Symptom ───────────────────────────────────────────── -->
+
+  <xs:complexType name="SymptomType">
+    <xs:simpleContent>
+      <xs:extension base="qtl:NonEmptyString">
+        <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="SymptomsType">
+    <xs:sequence>
+      <xs:element name="Symptom" type="qtl:SymptomType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Remediation Task ──────────────────────────────────── -->
+
+  <xs:complexType name="RemediationTaskType">
+    <xs:simpleContent>
+      <xs:extension base="qtl:NonEmptyString">
+        <xs:attribute name="id"       type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="status"   type="qtl:StatusType"     default="QUEUED"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="RemediationTasksType">
+    <xs:sequence>
+      <xs:element name="RemediationTask" type="qtl:RemediationTaskType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Evidence (optional execution proof) ──────────────── -->
+
+  <xs:complexType name="EvidenceType">
+    <xs:sequence>
+      <xs:element name="ExitCode"        type="xs:integer"           minOccurs="0"/>
+      <xs:element name="ExecutionLog"    type="xs:string"            minOccurs="0"/>
+      <xs:element name="MetricReport"    type="xs:string"            minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="capturedAt" type="xs:dateTime" use="optional"/>
+  </xs:complexType>
+
+  <!-- ── Single Task Entry ─────────────────────────────────── -->
+
+  <xs:complexType name="TaskType">
+    <xs:sequence>
+      <xs:element name="Title"              type="qtl:NonEmptyString"/>
+      <xs:element name="ErrorDescription"   type="qtl:NonEmptyString"/>
+      <xs:element name="Category"           type="qtl:CategoryType"/>
+      <xs:element name="Priority"           type="qtl:PriorityType"/>
+      <xs:element name="Symptoms"           type="qtl:SymptomsType"/>
+      <xs:element name="RemediationTasks"   type="qtl:RemediationTasksType"/>
+      <xs:element name="Evidence"           type="qtl:EvidenceType"  minOccurs="0"/>
+      <xs:element name="Notes"              type="xs:string"         minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id"         type="qtl:TaskIdType"  use="required"/>
+    <xs:attribute name="status"     type="qtl:StatusType"  default="QUEUED"/>
+    <xs:attribute name="queueIndex" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="createdAt"  type="xs:date"         use="optional"/>
+    <xs:attribute name="updatedAt"  type="xs:date"         use="optional"/>
+  </xs:complexType>
+
+  <!-- ── Root Element ──────────────────────────────────────── -->
+
+  <xs:complexType name="QueuedTaskListType">
+    <xs:sequence>
+      <xs:element name="Task" type="qtl:TaskType" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="version"     type="xs:string"   fixed="1.0"/>
+    <xs:attribute name="description" type="xs:string"   use="optional"/>
+    <xs:attribute name="createdAt"   type="xs:date"     use="optional"/>
+  </xs:complexType>
+
+  <xs:element name="QueuedTaskList" type="qtl:QueuedTaskListType"/>
+
+</xs:schema>

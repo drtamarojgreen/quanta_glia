@@ -200,7 +200,7 @@ def setup_pruner_logger(log_path='quantaglia.log', level=logging.INFO):
     """
     Sets up a dedicated logger for the pruner that uses the PrunerJsonFormatter.
 
-    This creates a new logger instance to avoid interfering with the root
+    This creates a  "new" logger instance to avoid interfering with the root
     logger or other loggers that may be in use.
 
     Args:

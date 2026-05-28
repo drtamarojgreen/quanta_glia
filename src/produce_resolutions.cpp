@@ -24,8 +24,8 @@ std::string ProduceResolutions::extractIdentifier(const std::string& line) {
                         return match[1].str();
                     }
                 }
-            } catch (...) {
-                // Ignore invalid regex in config
+            } catch(const std::regex_error& e) {
+                throw std::runtime_error("Invalid regex: " + std::string(e.what()));
             }
         }
     }

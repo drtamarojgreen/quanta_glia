@@ -4,6 +4,7 @@
 #include <fstream>
 #include "app/glia_workspace_cmds.h"
 #include "app/glia_git_cmds.h"
+#include "app/status_cmd.h"
 
 namespace fs = std::filesystem;
 
@@ -33,4 +34,26 @@ void workflow_verification() {
 
     // Cleanup
     fs::remove_all(testRepo);
+}
+
+void tui_verification() {
+    glia::app::StatusCommand statusCmd;
+    std::cout << "tui_name = " << statusCmd.name() << std::endl;
+    std::cout << "tui_desc_size = " << statusCmd.description().size() << std::endl;
+
+    std::ifstream f("src/app/status_cmd.cpp");
+    if (!f.is_open()) f.open("../src/app/status_cmd.cpp");
+    if (!f.is_open()) f.open("../../src/app/status_cmd.cpp");
+    if (!f.is_open()) {
+        std::cout << "tui_logic_marker_count = -1" << std::endl;
+        return;
+    }
+    std::string line;
+    int marker_count = 0;
+    while (std::getline(f, line)) {
+        if (line.find("stringstream") != std::string::npos) marker_count++;
+        if (line.find("targetArgs") != std::string::npos) marker_count++;
+        if (line.find("tui_header") != std::string::npos) marker_count++;
+    }
+    std::cout << "tui_logic_marker_count = " << marker_count << std::endl;
 }

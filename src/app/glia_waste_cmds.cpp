@@ -93,34 +93,9 @@ glia::core::CommandResult VerifyStructureCommand::execute(const std::vector<std:
         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
         for (const auto& [name, regex] : violations) {
-            if (name.find("Catch") != std::string::npos) {
-                auto catch_begin = std::sregex_iterator(content.begin(), content.end(), regex);
-                auto catch_end = std::sregex_iterator();
-                for (std::sregex_iterator i = catch_begin; i != catch_end; ++i) {
-                    std::smatch match = *i;
-                    std::string body = match[1].str();
-                    std::string stripped = std::regex_replace(body, std::regex("\\/\\/[^\\n]*|\\/\\*.*?\\*\\/"), "");
-                    stripped.erase(std::remove_if(stripped.begin(), stripped.end(), ::isspace), stripped.end());
-                    if (stripped.empty()) {
-                        int lineNum = std::count(content.begin(), content.begin() + match.position(), '\n') + 1;
-                        rows.push_back({entry.path().filename().string(), std::to_string(lineNum), name, match.str().substr(0, 40)});
-                    }
-                }
-            }
-        }
-
-        file.clear();
-        file.seekg(0);
-        std::string line;
-        int lineNum = 0;
-        while (std::getline(file, line)) {
-            lineNum++;
-            for (const auto& [name, regex] : violations) {
-                if (name.find("Catch") != std::string::npos) continue;
-                if (std::regex_search(line, regex)) {
-                    rows.push_back({entry.path().filename().string(), std::to_string(lineNum), name, glia::util::trim(line)});
-                    break;
-                }
+            auto found = glia::util::findViolations(name, content, regex);
+            for (const auto& v : found) {
+                rows.push_back({entry.path().filename().string(), std::to_string(v.line), name, v.snippet});
             }
         }
     }

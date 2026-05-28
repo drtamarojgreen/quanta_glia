@@ -5,14 +5,8 @@
 
 // Helper to get the base directory for test run files
 std::string getTestRunBaseDir() {
-    std::string baseDir;
-    try {
-        Config testConfig = Config::load("data/config-test.yaml"); // Correct initialization
-        baseDir = testConfig.getString("temp_base_dir");
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Error loading data/config-test.yaml: " << e.what() << std::endl;
-        baseDir = "data/test_runs"; // Fallback
-    }
+    Config testConfig = Config::load("data/config-test.yaml"); // Correct initialization
+    std::string baseDir = testConfig.getString("temp_base_dir");
 
     if (!fs::exists(baseDir)) {
         fs::create_directories(baseDir);

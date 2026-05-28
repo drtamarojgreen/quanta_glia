@@ -7,3 +7,5 @@
 - glia_structural_audit_sip: Implement `restrictions` to enforce structural construction rules.
 - glia_health_scoring_sip: Implement `score` to calculate structural health index.
 - glia_shell_consolidation_sip: Consolidate shell execution into shell_utils.h to reduce repetition.
+- glia_tui_advancement_sip: Advance the TUI to integrate all glia commands and provide descriptive help.
+- glia_scoring_refinement_sip: Resolve rules discovery and fix false positives in structural auditing.

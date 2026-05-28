@@ -62,7 +62,7 @@ The class implementation is responsible for reading `argv[1]` and dispatching to
 // @Card: check_integrity
 // @Situation Default
 // @Is platform == linux
-// @Results system_integrity_score == 1
+// @Results system_integrity_score == 100
 
 #include <iostream>
 int main(int argc, char** argv) {

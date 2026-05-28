@@ -14,13 +14,14 @@
 #include "WasteClass.h"
 #include "RobustnessClass.h"
 #include "DynamicCommandClass.h"
+#include "ScoringClass.h"
 
 namespace fs = std::filesystem;
 
 void sorrel_glia_config_serialization_card(const std::map<std::string, std::string>& facts) {
     fs::path p = fs::temp_directory_path() / "test_config_emp.txt";
     std::ofstream out(p);
-    out << "knowledge_base = /tmp/kb\nmax_repos = 42\nlog_level = DEBUG\n";
+    out << "knowledge_base = /tmp/kb\nmax_repos = 50\nlog_level = DEBUG\n";
     out.close();
     glia::config::Config load;
     load.load(p.string());
@@ -50,6 +51,8 @@ int main(int argc, char** argv) {
         waste_verification();
         robustness_verification();
         dynamic_command_verification();
+        scoring_verification();
+        tui_verification();
         return 0;
     }
 
@@ -66,6 +69,8 @@ int main(int argc, char** argv) {
     else if (cardName == "waste") waste_verification();
     else if (cardName == "robustness") robustness_verification();
     else if (cardName == "dynamic_command") dynamic_command_verification();
+    else if (cardName == "scoring") scoring_verification();
+    else if (cardName == "tui") tui_verification();
     else {
         std::cerr << "Unknown logical card: " << cardName << std::endl;
         return 1;

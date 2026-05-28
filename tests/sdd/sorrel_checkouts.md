@@ -23,3 +23,15 @@
 - Artifacts: src/app/glia_score_cmds.cpp
 - Measurement: health_index = 1.0
 - Observation: glia_health_scoring_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp, rules/rules.xml, RESTRICTIONS.md
+- Measurement: health_index = 0.6, total_restrictions_violations = 0
+- Observation: glia_scoring_alignment_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/app/command.h, src/app/glia_main.cpp
+- Measurement: tui_integrated = 1, tui_description_coverage = 1
+- Observation: glia_tui_advancement_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp, src/app/glia_waste_cmds.cpp, src/util/string_utils.h, src/util/fs_utils.h, tests/sdd/cards/ScoringClass.cpp, rules/rules.xml
+- Measurement: total_restrictions_violations = 0, glia_health_index = 1.0
+- Observation: glia_scoring_refinement_sip = 1

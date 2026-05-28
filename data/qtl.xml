@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qtl:QueuedTaskList
+  xmlns:qtl="urn:qtl:schema:v1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:qtl:schema:v1 qtl.xsd"
+  version="1.0"
+  description="AI Code Generation Error Remediation – Master Task Queue"
+  createdAt="2026-05-27">
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-001  Hallucinated APIs or Libraries
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-001" queueIndex="1" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Hallucinated APIs or Libraries</qtl:Title>
+    <qtl:ErrorDescription>The model references functions, classes, packages, or APIs that do not exist.</qtl:ErrorDescription>
+    <qtl:Category>API_CORRECTNESS</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Invented framework methods</qtl:Symptom>
+      <qtl:Symptom id="2">Nonexistent SDK calls</qtl:Symptom>
+      <qtl:Symptom id="3">Incorrect library namespaces</qtl:Symptom>
+      <qtl:Symptom id="4">Fake command-line flags</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Verify all APIs against official documentation</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Build minimal compilation tests for every imported dependency</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Create interface validation cards that instantiate referenced APIs</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Enforce tool existence checks through a Restrictions Engine</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Add schema-driven dependency manifests</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Require compilation before continuation of implementation sips</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-002  Uncompilable Code
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-002" queueIndex="2" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Uncompilable Code</qtl:Title>
+    <qtl:ErrorDescription>Generated code does not compile due to syntax errors, missing includes, invalid templates, or unresolved symbols.</qtl:ErrorDescription>
+    <qtl:Category>BUILD_QUALITY</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Missing headers</qtl:Symptom>
+      <qtl:Symptom id="2">Invalid generic syntax</qtl:Symptom>
+      <qtl:Symptom id="3">Broken inheritance chains</qtl:Symptom>
+      <qtl:Symptom id="4">Incorrect namespace usage</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Introduce compile-only verification cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Enforce one-sip compilation validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Add static analysis stages</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Create repository-wide build orchestration scripts</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Require compiler output capture as numeric evidence</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Add mandatory warning-level enforcement (-Wall -Wextra -Werror)</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-003  Placeholder Logic
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-003" queueIndex="3" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Placeholder Logic</qtl:Title>
+    <qtl:ErrorDescription>The model inserts TODOs, stubs, fake implementations, or dummy return values.</qtl:ErrorDescription>
+    <qtl:Category>CODE_COMPLETENESS</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">return true;</qtl:Symptom>
+      <qtl:Symptom id="2">return nullptr;</qtl:Symptom>
+      <qtl:Symptom id="3">TODO comments</qtl:Symptom>
+      <qtl:Symptom id="4">Mock behavior disguised as production logic</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add forbidden pattern restrictions</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Scan repositories for TODO/FIXME markers</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Require empirical outputs instead of placeholder returns</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Reject incomplete execution paths</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Enforce checkout evidence before marking work complete</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-004  Fabricated Completion Claims
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-004" queueIndex="4" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Fabricated Completion Claims</qtl:Title>
+    <qtl:ErrorDescription>The model claims code was tested, compiled, benchmarked, or verified without execution evidence.</qtl:ErrorDescription>
+    <qtl:Category>VERIFICATION</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">"The system now works" without logs</qtl:Symptom>
+      <qtl:Symptom id="2">"Tests passed" without output</qtl:Symptom>
+      <qtl:Symptom id="3">"Benchmark successful" without metrics</qtl:Symptom>
+      <qtl:Symptom id="4">Missing logs or outputs</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Require execution logs for all claims</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Store measurements in structured verification reports</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Enforce numeric evidence outputs</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Require exit_code observations</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Capture benchmark metrics automatically</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Add replayable execution scripts</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-005  Hardcoded Configuration
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-005" queueIndex="5" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Hardcoded Configuration</qtl:Title>
+    <qtl:ErrorDescription>Runtime configuration is embedded directly into source code.</qtl:ErrorDescription>
+    <qtl:Category>CONFIGURATION</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Embedded file paths</qtl:Symptom>
+      <qtl:Symptom id="2">Fixed ports</qtl:Symptom>
+      <qtl:Symptom id="3">Hardcoded credentials</qtl:Symptom>
+      <qtl:Symptom id="4">Static runtime behavior</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Externalize configuration into JSON/XML/YAML</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Create schema validation layers</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Implement runtime configuration loaders</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add configuration audit cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Enforce separation of logic and configuration</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Create environment-specific situation files</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-006  Monolithic Architecture
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-006" queueIndex="6" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Monolithic Architecture</qtl:Title>
+    <qtl:ErrorDescription>Excessively large classes or functions with tightly coupled responsibilities.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Giant switch statements</qtl:Symptom>
+      <qtl:Symptom id="2">Massive controller classes</qtl:Symptom>
+      <qtl:Symptom id="3">Rendering and logic mixed together</qtl:Symptom>
+      <qtl:Symptom id="4">Shared mutable global state</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Introduce package boundaries</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Separate orchestration from execution</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Split rendering from state management</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Implement modular service layers</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Add structural complexity restrictions</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Enforce maximum file and function sizes</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-007  Duplicate Logic Generation
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-007" queueIndex="7" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Duplicate Logic Generation</qtl:Title>
+    <qtl:ErrorDescription>Similar logic is regenerated repeatedly instead of abstracted.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Repeated validation functions</qtl:Symptom>
+      <qtl:Symptom id="2">Copy-pasted command handlers</qtl:Symptom>
+      <qtl:Symptom id="3">Duplicated serialization logic</qtl:Symptom>
+      <qtl:Symptom id="4">Multiple near-identical classes</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Run duplication audits</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Extract reusable modules</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Introduce shared utility libraries</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add structural similarity scanners</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Enforce declarative workflow definitions</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Replace repeated logic with schema-driven orchestration</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-008  Speculative Overengineering
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-008" queueIndex="8" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Speculative Overengineering</qtl:Title>
+    <qtl:ErrorDescription>The model introduces unnecessary abstractions or enterprise patterns.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Factories for trivial objects</qtl:Symptom>
+      <qtl:Symptom id="2">Deep inheritance hierarchies</qtl:Symptom>
+      <qtl:Symptom id="3">Premature plugin systems</qtl:Symptom>
+      <qtl:Symptom id="4">Unused dependency injection layers</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Enforce minimalism restrictions</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Require measurable justification for abstractions</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Limit abstraction layers</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add architecture complexity scoring</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Implement sip-size enforcement</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Validate feature necessity empirically</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-009  Invalid Assumptions About Environment
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-009" queueIndex="9" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Invalid Assumptions About Environment</qtl:Title>
+    <qtl:ErrorDescription>The model assumes tools, files, operating systems, or dependencies exist without verification.</qtl:ErrorDescription>
+    <qtl:Category>CONFIGURATION</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Assuming Linux-only commands</qtl:Symptom>
+      <qtl:Symptom id="2">Assuming package managers exist</qtl:Symptom>
+      <qtl:Symptom id="3">Assuming directories are present</qtl:Symptom>
+      <qtl:Symptom id="4">Assuming GPU availability</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Implement discovery-first execution</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Add environment capability cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Use runtime detection scripts</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Create situation-aware fact systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Require tool validation before use</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Record discovered capabilities as immutable facts</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-010  Meaningless Assertions
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-010" queueIndex="10" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Meaningless Assertions</qtl:Title>
+    <qtl:ErrorDescription>Assertions validate nothing useful.</qtl:ErrorDescription>
+    <qtl:Category>TESTING</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">assert(true)</qtl:Symptom>
+      <qtl:Symptom id="2">Comparing identical values</qtl:Symptom>
+      <qtl:Symptom id="3">Mock-only validation</qtl:Symptom>
+      <qtl:Symptom id="4">Assertions disconnected from runtime behavior</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Enforce assertion quality restrictions</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Require observable evidence</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Introduce metric-based validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Validate side effects and outputs</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Add assertion linting cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Reject tautological comparisons</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-011  Broken Error Handling
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-011" queueIndex="11" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Broken Error Handling</qtl:Title>
+    <qtl:ErrorDescription>Exceptions and failures are silently ignored.</qtl:ErrorDescription>
+    <qtl:Category>CODE_COMPLETENESS</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Empty catch blocks</qtl:Symptom>
+      <qtl:Symptom id="2">Ignored return codes</qtl:Symptom>
+      <qtl:Symptom id="3">Silent fallback behavior</qtl:Symptom>
+      <qtl:Symptom id="4">Missing recovery logic</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Ban empty catch blocks</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Require structured error propagation</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Log all failures explicitly</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add failure injection tests</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Implement crash recovery verification</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Measure filesystem_errno and exit_code outputs</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-012  Fake Asynchronous Systems
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-012" queueIndex="12" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Fake Asynchronous Systems</qtl:Title>
+    <qtl:ErrorDescription>The model claims concurrency or async behavior without actual synchronization design.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Threads without synchronization</qtl:Symptom>
+      <qtl:Symptom id="2">Async labels without async execution</qtl:Symptom>
+      <qtl:Symptom id="3">Shared state races</qtl:Symptom>
+      <qtl:Symptom id="4">No locking strategy</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add concurrency audit cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Implement deterministic replay tests</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Verify thread safety empirically</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add lock contention metrics</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Require synchronization documentation</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Use structured task orchestration</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-013  Incomplete Refactors
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-013" queueIndex="13" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Incomplete Refactors</qtl:Title>
+    <qtl:ErrorDescription>The model partially renames or restructures systems, leaving inconsistent artifacts.</qtl:ErrorDescription>
+    <qtl:Category>CODE_COMPLETENESS</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Broken imports</qtl:Symptom>
+      <qtl:Symptom id="2">Old identifiers remaining</qtl:Symptom>
+      <qtl:Symptom id="3">Dead code paths</qtl:Symptom>
+      <qtl:Symptom id="4">Mixed naming conventions</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add repository-wide symbol audits</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Implement dependency graph validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Create orphan detection scans</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add full rebuild validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Use AST-based rename tooling</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Verify serialization compatibility</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-014  Hidden State and Side Effects
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-014" queueIndex="14" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Hidden State and Side Effects</qtl:Title>
+    <qtl:ErrorDescription>Runtime behavior depends on invisible mutable state.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Global singletons</qtl:Symptom>
+      <qtl:Symptom id="2">Implicit caches</qtl:Symptom>
+      <qtl:Symptom id="3">Static mutable variables</qtl:Symptom>
+      <qtl:Symptom id="4">Undocumented environment dependencies</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Enforce explicit state injection</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Add state serialization systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Implement deterministic replay</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add runtime introspection tools</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Audit global variable usage</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Externalize runtime state</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-015  Weak Testing Coverage
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-015" queueIndex="15" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Weak Testing Coverage</qtl:Title>
+    <qtl:ErrorDescription>Tests validate trivial scenarios while ignoring edge cases and failure modes.</qtl:ErrorDescription>
+    <qtl:Category>TESTING</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Happy-path-only tests</qtl:Symptom>
+      <qtl:Symptom id="2">No malformed input handling</qtl:Symptom>
+      <qtl:Symptom id="3">No concurrency tests</qtl:Symptom>
+      <qtl:Symptom id="4">No crash recovery testing</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add fuzz testing</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Add fault injection systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Implement stress tests</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Create malformed input suites</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Add concurrency verification</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Require coverage of failure recovery paths</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-016  Fake Modularity
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-016" queueIndex="16" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Fake Modularity</qtl:Title>
+    <qtl:ErrorDescription>The system appears modular structurally but remains tightly coupled internally.</qtl:ErrorDescription>
+    <qtl:Category>ARCHITECTURE</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Cross-module dependencies everywhere</qtl:Symptom>
+      <qtl:Symptom id="2">Shared mutable state across packages</qtl:Symptom>
+      <qtl:Symptom id="3">Circular imports</qtl:Symptom>
+      <qtl:Symptom id="4">Hidden compile-time coupling</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Build dependency graph analyzers</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Enforce module boundary restrictions</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Detect circular dependencies</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Separate interfaces from implementations</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Introduce capability declarations</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Add package isolation tests</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-017  Non-Deterministic Execution
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-017" queueIndex="17" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Non-Deterministic Execution</qtl:Title>
+    <qtl:ErrorDescription>The same input produces inconsistent outputs.</qtl:ErrorDescription>
+    <qtl:Category>TESTING</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Unordered container iteration</qtl:Symptom>
+      <qtl:Symptom id="2">Race conditions</qtl:Symptom>
+      <qtl:Symptom id="3">Time-dependent logic</qtl:Symptom>
+      <qtl:Symptom id="4">Randomized execution without seeding</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add deterministic replay systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Seed all random generators</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Capture execution traces</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add reproducibility audits</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Record environment fingerprints</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Compare repeated execution outputs</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-018  Documentation Hallucination
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-018" queueIndex="18" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Documentation Hallucination</qtl:Title>
+    <qtl:ErrorDescription>Documentation describes systems that do not exist.</qtl:ErrorDescription>
+    <qtl:Category>VERIFICATION</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Fake architecture descriptions</qtl:Symptom>
+      <qtl:Symptom id="2">Missing referenced modules</qtl:Symptom>
+      <qtl:Symptom id="3">Nonexistent workflows</qtl:Symptom>
+      <qtl:Symptom id="4">Incorrect command documentation</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Generate docs from executable schemas</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Cross-reference documentation against source trees</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Add documentation validation cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Require executable examples</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Validate command references automatically</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Reject unverifiable documentation claims</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-019  Embedded Workflow Logic
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-019" queueIndex="19" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Embedded Workflow Logic</qtl:Title>
+    <qtl:ErrorDescription>Workflow definitions are hardcoded procedurally instead of externalized declaratively.</qtl:ErrorDescription>
+    <qtl:Category>CONFIGURATION</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Hardcoded pipelines</qtl:Symptom>
+      <qtl:Symptom id="2">Embedded command routing</qtl:Symptom>
+      <qtl:Symptom id="3">Static execution ordering</qtl:Symptom>
+      <qtl:Symptom id="4">Inflexible orchestration logic</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Move workflows into schema files</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Build runtime orchestration engines</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Implement XML/XSD validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add dynamic module loading</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Create declarative dependency graphs</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Validate workflow topology automatically</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-020  Scope Explosion
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-020" queueIndex="20" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Scope Explosion</qtl:Title>
+    <qtl:ErrorDescription>The model modifies too many systems simultaneously without controlled boundaries.</qtl:ErrorDescription>
+    <qtl:Category>GOVERNANCE</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Massive multi-file edits</qtl:Symptom>
+      <qtl:Symptom id="2">Cross-cutting refactors</qtl:Symptom>
+      <qtl:Symptom id="3">Unreviewable changes</qtl:Symptom>
+      <qtl:Symptom id="4">Architectural drift</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Enforce sip-size limits</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Require incremental execution</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Add scope gates</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Validate modification boundaries</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Require per-sip evidence</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Implement repository impact analysis</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-021  Tool Hallucination
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-021" queueIndex="21" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Tool Hallucination</qtl:Title>
+    <qtl:ErrorDescription>The model assumes unavailable build tools, CLIs, or frameworks.</qtl:ErrorDescription>
+    <qtl:Category>API_CORRECTNESS</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Fake compiler commands</qtl:Symptom>
+      <qtl:Symptom id="2">Imaginary package managers</qtl:Symptom>
+      <qtl:Symptom id="3">Invalid shell flags</qtl:Symptom>
+      <qtl:Symptom id="4">Unsupported runtime assumptions</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Implement tool discovery cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Validate executable existence</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Add PATH inspection systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Record toolchain facts</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Require version verification</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Add environment compatibility matrices</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-022  Poor Observability
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-022" queueIndex="22" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Poor Observability</qtl:Title>
+    <qtl:ErrorDescription>Runtime behavior cannot be inspected or audited effectively.</qtl:ErrorDescription>
+    <qtl:Category>OBSERVABILITY</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Missing logs</qtl:Symptom>
+      <qtl:Symptom id="2">No metrics</qtl:Symptom>
+      <qtl:Symptom id="3">No execution traces</qtl:Symptom>
+      <qtl:Symptom id="4">Opaque failures</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add structured logging</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Implement metric reporters</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Generate execution traces</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add introspection commands</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Create runtime audit systems</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Store benchmark and verification reports</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-023  Schema Drift
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-023" queueIndex="23" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Schema Drift</qtl:Title>
+    <qtl:ErrorDescription>Data formats evolve inconsistently across systems.</qtl:ErrorDescription>
+    <qtl:Category>SCHEMA</qtl:Category>
+    <qtl:Priority>HIGH</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Serialization mismatches</qtl:Symptom>
+      <qtl:Symptom id="2">Invalid config files</qtl:Symptom>
+      <qtl:Symptom id="3">Broken backward compatibility</qtl:Symptom>
+      <qtl:Symptom id="4">Divergent API contracts</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Introduce schema versioning</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Add serialization validation tests</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Use XSD/JSON Schema enforcement</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Implement migration validation</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Add compatibility audit cards</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Verify schema round-trip integrity</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-024  Unsafe Distributed Systems
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-024" queueIndex="24" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Unsafe Distributed Systems</qtl:Title>
+    <qtl:ErrorDescription>Distributed workflows are implemented without synchronization guarantees.</qtl:ErrorDescription>
+    <qtl:Category>DISTRIBUTED_SYSTEMS</qtl:Category>
+    <qtl:Priority>CRITICAL</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Inconsistent replicas</qtl:Symptom>
+      <qtl:Symptom id="2">Race-prone task dispatch</qtl:Symptom>
+      <qtl:Symptom id="3">Missing retry systems</qtl:Symptom>
+      <qtl:Symptom id="4">No conflict resolution</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Add distributed synchronization tests</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Implement durable queues</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Add retry and backoff policies</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Validate node consistency</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Introduce deterministic replication audits</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Add distributed failure injection testing</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TASK-025  Architectural Drift Over Time
+  ══════════════════════════════════════════════════════════ -->
+  <qtl:Task id="TASK-025" queueIndex="25" status="QUEUED" createdAt="2026-05-27">
+    <qtl:Title>Architectural Drift Over Time</qtl:Title>
+    <qtl:ErrorDescription>The repository gradually loses consistency and discipline over time.</qtl:ErrorDescription>
+    <qtl:Category>GOVERNANCE</qtl:Category>
+    <qtl:Priority>MEDIUM</qtl:Priority>
+    <qtl:Symptoms>
+      <qtl:Symptom id="1">Mixed patterns</qtl:Symptom>
+      <qtl:Symptom id="2">Inconsistent naming</qtl:Symptom>
+      <qtl:Symptom id="3">Multiple competing abstractions</qtl:Symptom>
+      <qtl:Symptom id="4">Growing technical debt</qtl:Symptom>
+    </qtl:Symptoms>
+    <qtl:RemediationTasks>
+      <qtl:RemediationTask id="1">Implement continuous structural audits</qtl:RemediationTask>
+      <qtl:RemediationTask id="2">Enforce architectural governance rules</qtl:RemediationTask>
+      <qtl:RemediationTask id="3">Run periodic repository health scans</qtl:RemediationTask>
+      <qtl:RemediationTask id="4">Add automated restriction enforcement</qtl:RemediationTask>
+      <qtl:RemediationTask id="5">Maintain dependency and complexity metrics</qtl:RemediationTask>
+      <qtl:RemediationTask id="6">Require ongoing checkout evidence for major changes</qtl:RemediationTask>
+    </qtl:RemediationTasks>
+  </qtl:Task>
+
+</qtl:QueuedTaskList>

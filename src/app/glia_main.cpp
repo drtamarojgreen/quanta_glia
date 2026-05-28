@@ -88,10 +88,14 @@ int main(int argc, char** argv) {
         }
     }
 
+    for (const auto& name : registry.listCommands()) {
+        registry.getCommand(name)->setRegistry(&registry);
+    }
+
     glia::cli::ArgumentParser parser;
     parser.parse(argc, argv);
     std::vector<std::string> pos = parser.getPositional();
-    std::string cmdName = pos.empty() ? "help" : pos[0];
+    std::string cmdName = pos.empty() ? "status" : pos[0];
 
     auto* cmd = registry.getCommand(cmdName);
     glia::core::CommandResult result;

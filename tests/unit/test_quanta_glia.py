@@ -135,11 +135,11 @@ section2:
         # Create a directory and a file within the cache to be pruned
         dir_to_prune = self.cache_dir / "repo_to_prune"
         dir_to_prune.mkdir()
-        (dir_to_prune / "file.txt").write_text("delete me")
+        (dir_to_prune / "file.txt").write_text(" "delete" me")
 
         # Create a loose file in the cache, which should NOT be pruned
         loose_file = self.cache_dir / "loose_file.txt"
-        loose_file.write_text("do not delete me")
+        loose_file.write_text("do not  "delete" me")
 
         with patch('quanta_glia.REPO_CACHE', self.cache_dir):
             quanta_glia.prune_cache(self.cache_dir)
