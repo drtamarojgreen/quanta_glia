@@ -47,6 +47,36 @@ void StatusCommand::renderDashboard() {
     }
 }
 
+void StatusCommand::renderBreadcrumbs(TuiView view, TuiMode mode) {
+    using glia::cli::Terminal;
+    Terminal::color("37;2"); // Dim white
+    std::cout << " Glia > ";
+    if (view == TuiView::Dashboard) std::cout << "Dashboard";
+    else if (view == TuiView::Workspace) std::cout << "Workspace";
+    else if (view == TuiView::Notifications) std::cout << "Notifications";
+
+    if (mode == TuiMode::Palette) std::cout << " > Palette";
+    std::cout << "\n\n";
+    Terminal::reset();
+}
+
+void StatusCommand::renderHelpPane(TuiView view) {
+    using glia::cli::Terminal;
+    Terminal::color("33"); // Yellow
+    std::cout << "\n--- Contextual Help ---\n";
+    if (view == TuiView::Dashboard) {
+        std::cout << " [1-3] Switch View  [H] Help  [P] Palette  [T] Theme  [Q] Quit\n";
+        std::cout << " Type any command name to execute it directly.\n";
+    } else if (view == TuiView::Workspace) {
+        std::cout << " [1-3] Switch View  [P] Palette  [Q] Quit\n";
+        std::cout << " Displays real-time status of all repositories in /workspace.\n";
+    } else if (view == TuiView::Notifications) {
+        std::cout << " [1-3] Switch View  [Q] Quit\n";
+        std::cout << " Shows a history of recent system actions and alerts.\n";
+    }
+    Terminal::reset();
+}
+
 void StatusCommand::renderStatusBar(TuiMode mode, double health, long long latency_ms) {
     using glia::util::Translator;
     using glia::cli::Terminal;
@@ -157,14 +187,16 @@ glia::core::CommandResult StatusCommand::execute(const std::vector<std::string>&
         health = calculateHealth();
         renderHeader();
         renderTabBar(view);
+        renderBreadcrumbs(view, mode);
 
         if (view == TuiView::Dashboard) renderDashboard();
         else if (view == TuiView::Workspace) renderWorkspaceView();
         else if (view == TuiView::Notifications) renderNotifications();
 
+        renderHelpPane(view);
         renderStatusBar(mode, health, lastLatency);
 
-        std::cout << "\n[1-3] Switch View  [T] Toggle Theme  [H] Help  [P] Palette  [Q] Quit\n";
+        std::cout << "\n Action: ";
         std::string input = Prompter::ask("Glia");
 
         auto start = std::chrono::steady_clock::now();

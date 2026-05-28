@@ -60,6 +60,8 @@ private:
     void renderNotifications();
     void renderTabBar(TuiView activeView);
     void renderWorkspaceView();
+    void renderBreadcrumbs(TuiView view, TuiMode mode);
+    void renderHelpPane(TuiView view);
     std::unique_ptr<NotificationCenter> m_notifications;
     std::unique_ptr<ThemeManager> m_themes;
 };

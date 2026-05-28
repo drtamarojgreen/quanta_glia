@@ -12,3 +12,4 @@
 - glia_tui_status_bar_sip: Implement always-visible status bar with mode and health indicators.
 - glia_tui_tabs_sip: Implement tab-based navigation for Dashboard and Workspace views.
 - glia_tui_theme_system_sip: Implement theme switching system (Default, High-Contrast) with state persistence.
+- glia_tui_help_breadcrumbs_sip: Implement contextual help pane and breadcrumb navigation.

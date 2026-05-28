@@ -107,4 +107,16 @@ void tui_verification() {
         if (line.find("m_themes") != std::string::npos) theme_marker = 1;
     }
     std::cout << "tui_theme_logic_marker = " << theme_marker << std::endl;
+
+    // Help Pane and Breadcrumbs Verification
+    f.clear();
+    f.seekg(0);
+    int help_marker = 0;
+    int breadcrumb_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("renderHelpPane") != std::string::npos) help_marker = 1;
+        if (line.find("renderBreadcrumbs") != std::string::npos) breadcrumb_marker = 1;
+    }
+    std::cout << "tui_help_pane_logic_marker = " << help_marker << std::endl;
+    std::cout << "tui_breadcrumbs_logic_marker = " << breadcrumb_marker << std::endl;
 }

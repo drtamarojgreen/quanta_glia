@@ -43,3 +43,7 @@
 - Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, src/core/state.h, src/core/state.cpp
 - Measurement: tui_tab_logic_marker = 1, tui_workspace_view_marker = 1, tui_theme_logic_marker = 1
 - Observation: glia_tui_tabs_sip = 1, glia_tui_theme_system_sip = 1
+
+- Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/WorkflowClass.cpp
+- Measurement: tui_help_pane_logic_marker = 1, tui_breadcrumbs_logic_marker = 1
+- Observation: glia_tui_help_breadcrumbs_sip = 1
