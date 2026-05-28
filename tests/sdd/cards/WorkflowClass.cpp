@@ -54,6 +54,7 @@ void tui_verification() {
         if (line.find("stringstream") != std::string::npos) marker_count++;
         if (line.find("targetArgs") != std::string::npos) marker_count++;
         if (line.find("tui_header") != std::string::npos) marker_count++;
+        if (line.find("auditTrail") != std::string::npos) marker_count++;
     }
     std::cout << "tui_logic_marker_count = " << marker_count << std::endl;
 
@@ -119,4 +120,40 @@ void tui_verification() {
     }
     std::cout << "tui_help_pane_logic_marker = " << help_marker << std::endl;
     std::cout << "tui_breadcrumbs_logic_marker = " << breadcrumb_marker << std::endl;
+
+    // Advanced TUI Verification
+    f.clear();
+    f.seekg(0);
+    int bookmark_marker = 0;
+    int keymap_marker = 0;
+    int export_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("bookmarks") != std::string::npos) bookmark_marker = 1;
+        if (line.find("m_keyMapper") != std::string::npos) keymap_marker = 1;
+        if (line.find("glia_export_") != std::string::npos) export_marker = 1;
+    }
+    std::cout << "tui_bookmark_logic_marker = " << bookmark_marker << std::endl;
+    std::cout << "tui_keymap_logic_marker = " << keymap_marker << std::endl;
+    std::cout << "tui_export_logic_marker = " << export_marker << std::endl;
+
+    // Advanced Core Logic Verification
+    f.clear();
+    f.seekg(0);
+    int undo_redo_marker = 0;
+    int macro_marker = 0;
+    int tree_marker = 0;
+    while (std::getline(f, line)) {
+        if (line.find("m_undoRedo") != std::string::npos) undo_redo_marker = 1;
+        if (line.find("m_macro") != std::string::npos) macro_marker = 1;
+        if (line.find("Data Tree Explorer") != std::string::npos) tree_marker = 1;
+        if (line.find("denseMode") != std::string::npos) marker_count++;
+        if (line.find("paneWidth") != std::string::npos) marker_count++;
+        if (line.find("selectionIndex") != std::string::npos) marker_count++;
+        if (line.find("tutorialStep") != std::string::npos) marker_count++;
+        if (line.find("aliases") != std::string::npos) marker_count++;
+        if (line.find("clipboardRing") != std::string::npos) marker_count++;
+    }
+    std::cout << "tui_undo_redo_logic_marker = " << undo_redo_marker << std::endl;
+    std::cout << "tui_macro_logic_marker = " << macro_marker << std::endl;
+    std::cout << "tui_tree_explorer_logic_marker = " << tree_marker << std::endl;
 }

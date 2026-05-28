@@ -16,6 +16,7 @@
 #include "DynamicCommandClass.h"
 #include "ScoringClass.h"
 #include "QtlClass.h"
+#include "TuiAdvancedClass.h"
 
 namespace fs = std::filesystem;
 
@@ -56,6 +57,7 @@ int main(int argc, char** argv) {
         dynamic_command_verification();
         scoring_verification();
         tui_verification();
+        advanced_tui_verification();
         glia::test::qtl_empirical_verification();
         return 0;
     }
@@ -75,6 +77,7 @@ int main(int argc, char** argv) {
     else if (cardName == "dynamic_command") dynamic_command_verification();
     else if (cardName == "scoring") scoring_verification();
     else if (cardName == "tui") tui_verification();
+    else if (cardName == "tui_advanced") advanced_tui_verification();
     else if (cardName == "qtl") glia::test::qtl_empirical_verification();
     else {
         std::cerr << "Unknown logical card: " << cardName << std::endl;

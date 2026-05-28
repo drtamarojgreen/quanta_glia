@@ -7,6 +7,8 @@ class Environment {
 public:
     static std::string getVar(const std::string& name);
     static bool isTerminal();
+    static long getMemoryUsage();
+    static double getCpuUsage();
 };
 
 class FileSystem {

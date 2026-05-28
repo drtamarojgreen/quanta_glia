@@ -17,6 +17,9 @@ set(SOURCES
     src/app/prune_cmd.cpp
     src/app/report_cmd.cpp
     src/app/status_cmd.cpp
+    src/app/tui/tui_core.cpp
+    src/app/tui/tui_widgets.cpp
+    src/app/tui/tui_input.cpp
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
@@ -64,6 +67,9 @@ set(GLIA_SOURCES_NO_MAIN
     src/app/prune_cmd.cpp
     src/app/report_cmd.cpp
     src/app/status_cmd.cpp
+    src/app/tui/tui_core.cpp
+    src/app/tui/tui_widgets.cpp
+    src/app/tui/tui_input.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
     src/app/annotate_cmd.cpp
@@ -105,6 +111,12 @@ target_include_directories(test_rules PRIVATE src)
 add_executable(glia ${GLIA_SOURCES})
 target_include_directories(glia PRIVATE src)
 
+add_executable(test_tui_core test/test_tui_core.cpp ${GLIA_SOURCES_NO_MAIN})
+target_include_directories(test_tui_core PRIVATE src)
+
+add_executable(test_tui_utils test/test_tui_utils.cpp ${GLIA_SOURCES_NO_MAIN})
+target_include_directories(test_tui_utils PRIVATE src)
+
 # SDD Test binary
 add_executable(sorrel_test
     tests/sdd/cards/GliaAppClass.cpp
@@ -115,6 +127,7 @@ add_executable(sorrel_test
     tests/sdd/cards/DynamicCommandClass.cpp
     tests/sdd/cards/ScoringClass.cpp
     tests/sdd/cards/QtlClass.cpp
+    tests/sdd/cards/TuiAdvancedClass.cpp
     src/app/command.cpp
     src/app/lifecycle.cpp
     src/app/feature_flags.cpp
@@ -125,6 +138,9 @@ add_executable(sorrel_test
     src/app/prune_cmd.cpp
     src/app/report_cmd.cpp
     src/app/status_cmd.cpp
+    src/app/tui/tui_core.cpp
+    src/app/tui/tui_widgets.cpp
+    src/app/tui/tui_input.cpp
     src/app/annotate_cmd.cpp
     src/app/audit_cmd.cpp
     src/app/config_cmd.cpp
