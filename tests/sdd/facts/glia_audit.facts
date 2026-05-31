@@ -26,7 +26,7 @@ Is glia_scoring_action = STABLE
 
 Is tui_name = status
 Is tui_desc_size = 28
-Is tui_logic_marker_count = 7
+Is tui_logic_marker_count = 20
 Is tui_command_palette_logic_marker = 1
 Is tui_status_bar_logic_marker = 1
 Is tui_modal_logic_marker = 1
@@ -36,3 +36,16 @@ Is tui_workspace_view_marker = 1
 Is tui_theme_logic_marker = 1
 Is tui_help_pane_logic_marker = 1
 Is tui_breadcrumbs_logic_marker = 1
+Is tui_bookmark_logic_marker = 1
+Is tui_keymap_logic_marker = 1
+Is tui_export_logic_marker = 1
+Is tui_undo_redo_logic_marker = 1
+Is tui_macro_logic_marker = 1
+Is tui_tree_explorer_logic_marker = 1
+
+Is tui_analytics_implemented = 1
+Is tui_alerts_implemented = 1
+Is tui_privacy_implemented = 1
+Is tui_benchmarks_implemented = 1
+Is tui_whatif_implemented = 1
+Is tui_tutorial_steps = 7

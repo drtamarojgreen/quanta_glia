@@ -56,12 +56,21 @@ namespace glia::util {
         return violations;
     }
 
-    inline bool fuzzyMatch(const std::string& query, const std::string& target) {
+    inline bool fuzzyMatch(const std::string& query, const std::string& target, bool caseSensitive = false) {
         if (query.empty()) return true;
+        if (query.size() > 2 && query.front() == '/' && query.back() == '/') {
+            try {
+                auto flags = caseSensitive ? std::regex::ECMAScript : std::regex::icase;
+                std::regex re(query.substr(1, query.size() - 2), flags);
+                return std::regex_search(target, re);
+            } catch (...) { return false; }
+        }
         size_t queryIdx = 0;
         size_t targetIdx = 0;
         while (queryIdx < query.length() && targetIdx < target.length()) {
-            if (std::tolower(query[queryIdx]) == std::tolower(target[targetIdx])) {
+            char qc = caseSensitive ? query[queryIdx] : std::tolower(query[queryIdx]);
+            char tc = caseSensitive ? target[targetIdx] : std::tolower(target[targetIdx]);
+            if (qc == tc) {
                 queryIdx++;
             }
             targetIdx++;

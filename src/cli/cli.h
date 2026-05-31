@@ -11,7 +11,8 @@ class Terminal {
 public:
     static void color(const std::string& code);
     static void reset();
-    static void printTable(const std::vector<std::string>& headers, const std::vector<std::vector<std::string>>& rows);
+    static void haptic();
+    static void printTable(const std::vector<std::string>& headers, const std::vector<std::vector<std::string>>& rows, bool sortRows = false, int maxRows = 100);
 };
 
 class ArgumentParser {

@@ -1,6 +1,7 @@
 #include "command.h"
 #include "command_loader.h"
 #include "command_factory.h"
+#include "../util/benchmark_utils.h"
 #include "glia_git_cmds.h"
 #include "glia_workspace_cmds.h"
 #include "glia_waste_cmds.h"
@@ -71,6 +72,8 @@ void registerAllCreators() {
 }
 
 int main(int argc, char** argv) {
+    using glia::util::BenchmarkTimer;
+    BenchmarkTimer::start("boot");
     registerAllCreators();
 
     Config appCfg;
@@ -81,6 +84,7 @@ int main(int argc, char** argv) {
     auto globals = CommandLoader::loadGlobals(appCfg.rulesPath);
     Translator::load(globals.uiStrings);
     State::load(appCfg.statePath);
+    BenchmarkTimer::stop("boot");
 
     for (const auto& meta : metaList) {
         auto cmd = CommandFactory::create(meta);
