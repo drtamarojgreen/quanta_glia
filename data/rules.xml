@@ -50,6 +50,9 @@
         <string key="init_boot" value="Bootstrapping system workspace"/>
         <string key="path_added" value="System environment updated"/>
         <string key="mesh_start" value="Integrating Research Mesh Tools"/>
+        <string key="tui_mode_normal" value="NORMAL"/>
+        <string key="tui_mode_palette" value="PALETTE"/>
+        <string key="tui_health_label" value="System Health: "/>
     </ui_strings>
   </globals>
 
@@ -154,6 +157,7 @@
   <command name="score" description="Aggregate SDD metrics and structural health index" type="internal" target="ScoreCommand">
     <param key="penalty_per_violation" value="10.0"/>
   </command>
+  <command name="qtl" description="Analyze repository for QTL violations and generate task list" type="internal" target="QtlCommand"/>
 
   <!-- External Governance -->
   <command name="git-version" description="Verify environment Git capability" type="external" target="git --version"/>

@@ -1,0 +1,7 @@
+# SDD Facts for QTL Command
+# Verified empirical results for QTL analysis
+
+Is qtl_tasks_loaded > 0
+Is qtl_violation_detection_active = 1
+Is qtl_output_file_created = 1
+Needs qtl_report_contains_task_id = 1

@@ -1,6 +1,7 @@
 #include "command.h"
 #include "command_loader.h"
 #include "command_factory.h"
+#include "../util/benchmark_utils.h"
 #include "glia_git_cmds.h"
 #include "glia_workspace_cmds.h"
 #include "glia_waste_cmds.h"
@@ -19,6 +20,7 @@
 #include "init.h"
 #include "capabilities.h"
 #include "genome_cmd.h"
+#include "glia_qtl_cmd.h"
 #include "../cli/cli.h"
 #include "../util/translator.h"
 #include "../core/state.h"
@@ -66,9 +68,12 @@ void registerAllCreators() {
     reg("GateCheckCommand", [](){ return std::make_unique<GateCheckCommand>(); });
     reg("RestrictionsCommand", [](){ return std::make_unique<RestrictionsCommand>(); });
     reg("ScoreCommand", [](){ return std::make_unique<ScoreCommand>(); });
+    reg("QtlCommand", [](){ return std::make_unique<QtlCommand>(); });
 }
 
 int main(int argc, char** argv) {
+    using glia::util::BenchmarkTimer;
+    BenchmarkTimer::start("boot");
     registerAllCreators();
 
     Config appCfg;
@@ -79,6 +84,7 @@ int main(int argc, char** argv) {
     auto globals = CommandLoader::loadGlobals(appCfg.rulesPath);
     Translator::load(globals.uiStrings);
     State::load(appCfg.statePath);
+    BenchmarkTimer::stop("boot");
 
     for (const auto& meta : metaList) {
         auto cmd = CommandFactory::create(meta);

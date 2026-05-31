@@ -1,38 +1,67 @@
 #include "command_loader.h"
 #include "../util/xml_parser.h"
+#include "../util/benchmark_utils.h"
 #include <sstream>
 #include <iostream>
+#include <filesystem>
 
 namespace glia::app {
 
 std::vector<CommandMetadata> CommandLoader::loadFromXml(const std::string& path) {
+    using glia::util::BenchmarkTimer;
+    BenchmarkTimer::start("xml_parse");
     std::vector<CommandMetadata> commands;
+
+    // Load from main rules file
     auto root = glia::util::XmlParser::parse(path);
-    if (!root) return commands;
+    BenchmarkTimer::stop("xml_parse");
+    if (root) {
+        for (const auto& child : root->children) {
+            if (child->name == "command") {
+                CommandMetadata meta;
+                meta.name = child->getAttribute("name");
+                meta.description = child->getAttribute("description");
+                meta.type = child->getAttribute("type");
+                meta.target = child->getAttribute("target");
 
-    for (const auto& child : root->children) {
-        if (child->name == "command") {
-            CommandMetadata meta;
-            meta.name = child->getAttribute("name");
-            meta.description = child->getAttribute("description");
-            meta.type = child->getAttribute("type");
-            meta.target = child->getAttribute("target");
-
-            for (const auto& sub : child->children) {
-                if (sub->name == "param") {
-                    meta.params[sub->getAttribute("key")] = sub->getAttribute("value");
-                } else if (sub->name == "list") {
-                    std::string listName = sub->getAttribute("name");
-                    for (const auto& item : sub->children) {
-                        if (item->name == "item") {
-                            meta.lists[listName].push_back(item->content);
+                for (const auto& sub : child->children) {
+                    if (sub->name == "param") {
+                        meta.params[sub->getAttribute("key")] = sub->getAttribute("value");
+                    } else if (sub->name == "list") {
+                        std::string listName = sub->getAttribute("name");
+                        for (const auto& item : sub->children) {
+                            if (item->name == "item") {
+                                meta.lists[listName].push_back(item->content);
+                            }
                         }
                     }
                 }
+                commands.push_back(meta);
             }
-            commands.push_back(meta);
         }
     }
+
+    // Load from plugins directory
+    namespace fs = std::filesystem;
+    if (fs::exists("plugins")) {
+        for (const auto& entry : fs::directory_iterator("plugins")) {
+            if (entry.path().extension() == ".xml") {
+                auto pRoot = glia::util::XmlParser::parse(entry.path().string());
+                if (!pRoot) continue;
+                for (const auto& child : pRoot->children) {
+                    if (child->name == "command") {
+                        CommandMetadata meta;
+                        meta.name = child->getAttribute("name");
+                        meta.description = child->getAttribute("description");
+                        meta.type = child->getAttribute("type");
+                        meta.target = child->getAttribute("target");
+                        commands.push_back(meta);
+                    }
+                }
+            }
+        }
+    }
+
     return commands;
 }
 

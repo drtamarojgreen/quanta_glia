@@ -2,6 +2,7 @@
 #include "../cli/cli.h"
 #include "../util/string_utils.h"
 #include "../util/translator.h"
+#include "../util/fs_utils.h"
 #include "command_loader.h"
 #include <iostream>
 #include <filesystem>
@@ -19,7 +20,7 @@ using glia::util::Translator;
 namespace glia::app {
 
 glia::core::CommandResult WasteScanCommand::execute(const std::vector<std::string>& args) {
-    auto globals = CommandLoader::loadGlobals("rules/rules.xml");
+    auto globals = CommandLoader::loadGlobals(glia::util::findRulesXml());
 
     std::vector<std::pair<std::string, std::regex>> patterns;
     if (m_meta.lists.count("patterns")) {
@@ -65,7 +66,7 @@ glia::core::CommandResult WasteScanCommand::execute(const std::vector<std::strin
 }
 
 glia::core::CommandResult VerifyStructureCommand::execute(const std::vector<std::string>& args) {
-    auto globals = CommandLoader::loadGlobals("rules/rules.xml");
+    auto globals = CommandLoader::loadGlobals(glia::util::findRulesXml());
     std::vector<std::pair<std::string, std::regex>> violations;
     if (m_meta.lists.count("violations")) {
         for (const auto& v : m_meta.lists.at("violations")) {
@@ -106,7 +107,7 @@ glia::core::CommandResult VerifyStructureCommand::execute(const std::vector<std:
 }
 
 glia::core::CommandResult AuditRepetitionCommand::execute(const std::vector<std::string>& args) {
-    auto globals = CommandLoader::loadGlobals("rules/rules.xml");
+    auto globals = CommandLoader::loadGlobals(glia::util::findRulesXml());
     std::map<std::string, std::vector<std::pair<std::string, int>>> blockMap;
     std::vector<std::string> headers = {Translator::t("col_hash"), Translator::t("col_files"), Translator::t("col_snippet")};
     std::vector<std::vector<std::string>> rows;
@@ -158,7 +159,7 @@ glia::core::CommandResult AuditRepetitionCommand::execute(const std::vector<std:
 }
 
 glia::core::CommandResult AuditCommitsCommand::execute(const std::vector<std::string>& args) {
-    auto globals = CommandLoader::loadGlobals("rules/rules.xml");
+    auto globals = CommandLoader::loadGlobals(glia::util::findRulesXml());
     std::vector<std::string> keywords;
     if (m_meta.lists.count("keywords")) keywords = m_meta.lists.at("keywords");
 
