@@ -1,12 +1,15 @@
 #include "glia_discovery_cmds.h"
 #include "../util/translator.h"
+#include "../util/shell_utils.h"
 #include <iostream>
 #include <filesystem>
 #include <vector>
 #include <string>
+#include <fstream>
 
 namespace fs = std::filesystem;
 using glia::util::Translator;
+using glia::util::exec;
 
 namespace glia::app {
 
@@ -28,13 +31,27 @@ glia::core::CommandResult DiscoverCommand::execute(const std::vector<std::string
 }
 
 glia::core::CommandResult GateCheckCommand::execute(const std::vector<std::string>& args) {
-    std::vector<std::string> gates = {"Interpretation", "Constraint", "Tool", "Strategy", "Scope", "Navigation"};
+    bool interpretation = fs::exists("data/rules.xml");
+    bool constraint = fs::exists("RESTRICTIONS.md") && fs::file_size("RESTRICTIONS.md") > 0;
+    bool tool = exec("git --version").exitCode == 0 &&
+                exec("cmake --version").exitCode == 0 &&
+                exec("g++ --version").exitCode == 0;
+    bool strategy = fs::exists("tests/sdd/sorrel_checkins.md");
+    bool scope = fs::exists("workspace") && fs::is_directory("workspace");
+    bool navigation = fs::exists(".git");
+
     std::cout << "REASONING\n";
-    for (const auto& gate : gates) {
-        std::cout << gate << "Gate = 1\n";
-    }
+    std::cout << "InterpretationGate = " << (interpretation ? 1 : 0) << "\n";
+    std::cout << "ConstraintGate = " << (constraint ? 1 : 0) << "\n";
+    std::cout << "ToolGate = " << (tool ? 1 : 0) << "\n";
+    std::cout << "StrategyGate = " << (strategy ? 1 : 0) << "\n";
+    std::cout << "ScopeGate = " << (scope ? 1 : 0) << "\n";
+    std::cout << "NavigationGate = " << (navigation ? 1 : 0) << "\n";
     std::cout << "END\n";
-    return {glia::core::ExitCode::Success, "Reasoning gates validated"};
+
+    bool allPassed = interpretation && constraint && tool && strategy && scope && navigation;
+    return {allPassed ? glia::core::ExitCode::Success : glia::core::ExitCode::InternalFailure,
+            allPassed ? "Reasoning gates validated" : "One or more reasoning gates failed"};
 }
 
 }

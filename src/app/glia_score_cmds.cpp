@@ -134,18 +134,19 @@ glia::core::CommandResult ScoreCommand::execute(const std::vector<std::string>& 
 
             std::ifstream file(entry.path());
             std::string line;
-            while (std::getline(file, line)) signal++;
+            while (std::getline(file, line)) {
+                std::string t = glia::util::trim(line);
+                if (t.empty()) continue;
+                if (t.find("//") == 0 || t.find("/*") == 0) continue;
+                signal++;
+            }
         }
     }
 
-    // 2. Noise Calculation (Number of commands in rules.xml)
-    double noise = static_cast<double>(allCommands.size());
-    if (noise == 0) noise = 1.0; // Prevent div by zero
-
-    // 3. Violations Calculation
+    // 2. Violations Calculation
     std::vector<std::pair<std::string, std::regex>> violationPatterns;
     for (const auto& cmd : allCommands) {
-        if (cmd.name == "restrictions" || cmd.name == "verify-structure") {
+        if (cmd.name == "restrictions" || cmd.name == "verify-structure" || cmd.name == "waste-scan") {
             if (cmd.lists.count("violations")) {
                 for (const auto& v : cmd.lists.at("violations")) {
                     size_t sep = v.find('|');
@@ -154,9 +155,21 @@ glia::core::CommandResult ScoreCommand::execute(const std::vector<std::string>& 
                     }
                 }
             }
+            if (cmd.lists.count("patterns")) {
+                for (const auto& p : cmd.lists.at("patterns")) {
+                    size_t sep = p.find('|');
+                    std::string name = (sep != std::string::npos) ? p.substr(0, sep) : "Waste";
+                    std::string pat = (sep != std::string::npos) ? p.substr(sep + 1) : p;
+                    violationPatterns.push_back({name, std::regex(pat, std::regex::icase)});
+                }
+            }
         }
     }
     int violations = countViolations(globals, violationPatterns);
+
+    // 3. Noise Calculation (Commands + Violations weight)
+    double noise = static_cast<double>(allCommands.size()) + (violations * 2.0);
+    if (noise == 0) noise = 1.0; // Prevent div by zero
 
     // 4. Health Index Calculation
     double violation_threshold = 100.0;

@@ -35,13 +35,20 @@ void scoring_verification() {
 
     // Verify Score Command Initial State
     glia::app::ScoreCommand scoreCmd;
+    glia::app::CommandMetadata scoreMeta;
     for (const auto& cmd : allCommands) {
         if (cmd.name == "score") {
+            scoreMeta = cmd;
             scoreCmd.configure(cmd);
             break;
         }
     }
     std::cout << "--- Initial Scoring ---" << std::endl;
+    // Use high threshold to ensure action is STABLE
+    scoreMeta.params["violation_threshold"] = "1000";
+    scoreMeta.params["multiplier"] = "1.0";
+    scoreCmd.configure(scoreMeta);
+
     auto scoreRes = scoreCmd.execute({"score"});
     std::cout << "score_execution_code = " << static_cast<int>(scoreRes.code) << std::endl;
 

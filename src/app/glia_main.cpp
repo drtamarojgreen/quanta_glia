@@ -44,6 +44,8 @@ void registerAllCreators() {
     reg("CommitChangesCommand", [](){ return std::make_unique<CommitChangesCommand>(); });
     reg("UpdateRepoCommand", [](){ return std::make_unique<UpdateRepoCommand>(); });
     reg("QuickCommitCommand", [](){ return std::make_unique<QuickCommitCommand>(); });
+    reg("GliaAddCommand", [](){ return std::make_unique<GliaAddCommand>(); });
+    reg("GliaAddAllCommand", [](){ return std::make_unique<GliaAddAllCommand>(); });
     reg("WorkspaceStatusCommand", [](){ return std::make_unique<WorkspaceStatusCommand>(); });
     reg("WorkspaceSyncCommand", [](){ return std::make_unique<WorkspaceSyncCommand>(); });
     reg("WorkspaceMeshCommand", [](){ return std::make_unique<WorkspaceMeshCommand>(); });

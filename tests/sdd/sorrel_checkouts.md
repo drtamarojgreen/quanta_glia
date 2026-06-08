@@ -51,3 +51,15 @@
 - Artifacts: src/app/status_cmd.cpp, src/app/status_cmd.h, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/WorkflowClass.cpp
 - Measurement: tui_help_pane_logic_marker = 1, tui_breadcrumbs_logic_marker = 1
 - Observation: glia_tui_help_breadcrumbs_sip = 1
+
+- Artifacts: src/app/glia_discovery_cmds.cpp
+- Measurement: interpretation_gate = 1, tool_gate = 1, navigation_gate = 1
+- Observation: glia_gate_check_empirical_sip = 1
+
+- Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/ScoringClass.cpp
+- Measurement: glia_signal_noise_ratio = 13.07, total_restrictions_violations = 163
+- Observation: glia_scoring_empirical_refinement_sip = 1
+
+- Artifacts: src/app/glia_git_cmds.cpp, src/app/glia_git_cmds.h, data/rules.xml, tests/sdd/cards/WorkflowClass.cpp, tests/sdd/facts/glia_audit.facts
+- Measurement: workflow_add_code = 0, workflow_add_all_code = 0
+- Observation: glia_interactive_add_sip = 1
