@@ -59,3 +59,7 @@
 - Artifacts: src/app/glia_score_cmds.cpp, tests/sdd/facts/glia_audit.facts, tests/sdd/cards/ScoringClass.cpp
 - Measurement: glia_signal_noise_ratio = 13.07, total_restrictions_violations = 163
 - Observation: glia_scoring_empirical_refinement_sip = 1
+
+- Artifacts: src/app/glia_git_cmds.cpp, src/app/glia_git_cmds.h, data/rules.xml, tests/sdd/cards/WorkflowClass.cpp, tests/sdd/facts/glia_audit.facts
+- Measurement: workflow_add_code = 0, workflow_add_all_code = 0
+- Observation: glia_interactive_add_sip = 1

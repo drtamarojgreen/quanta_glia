@@ -28,9 +28,21 @@ void workflow_verification() {
     auto oldPath = fs::current_path();
     fs::current_path(testRepo);
     auto res2 = quickCmd.execute({"quick-commit", "Test commit"});
-    fs::current_path(oldPath);
 
     std::cout << "workflow_quick_commit_code = " << static_cast<int>(res2.code) << std::endl;
+
+    // Test add and add-all (non-interactive in tests if possible, or just verify execution)
+    glia::app::GliaAddCommand addCmd;
+    std::ofstream f3("modified.txt"); f3 << "modified"; f3.close();
+    auto res3 = addCmd.execute({"add"});
+    std::cout << "workflow_add_code = " << static_cast<int>(res3.code) << std::endl;
+
+    glia::app::GliaAddAllCommand addAllCmd;
+    std::ofstream f4("untracked.txt"); f4 << "untracked"; f4.close();
+    auto res4 = addAllCmd.execute({"add-all"});
+    std::cout << "workflow_add_all_code = " << static_cast<int>(res4.code) << std::endl;
+
+    fs::current_path(oldPath);
 
     // Cleanup
     fs::remove_all(testRepo);

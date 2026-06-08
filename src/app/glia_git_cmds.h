@@ -33,6 +33,20 @@ public:
     glia::core::CommandResult execute(const std::vector<std::string>& args) override;
 };
 
+class GliaAddCommand : public Command {
+public:
+    std::string name() const override { return "add"; }
+    std::string description() const override { return "Interactively stage modified files"; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+};
+
+class GliaAddAllCommand : public Command {
+public:
+    std::string name() const override { return "add-all"; }
+    std::string description() const override { return "Interactively stage modified and untracked files"; }
+    glia::core::CommandResult execute(const std::vector<std::string>& args) override;
+};
+
 }
 
 #endif

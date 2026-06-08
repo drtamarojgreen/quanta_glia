@@ -58,4 +58,30 @@ glia::core::CommandResult QuickCommitCommand::execute(const std::vector<std::str
     return {glia::core::ExitCode::InternalFailure, ""};
 }
 
+glia::core::CommandResult GliaAddCommand::execute(const std::vector<std::string>& args) {
+    std::string changed = exec("git diff --name-only").output;
+    std::stringstream ss(changed);
+    std::string file;
+    while (std::getline(ss, file)) {
+        if (!file.empty() && glia::cli::Prompter::confirm("Stage " + file + "?")) {
+            run("git add " + file);
+        }
+    }
+    return {glia::core::ExitCode::Success, "Modified files added"};
+}
+
+glia::core::CommandResult GliaAddAllCommand::execute(const std::vector<std::string>& args) {
+    std::string status = exec("git status --porcelain").output;
+    std::stringstream ss(status);
+    std::string line;
+    while (std::getline(ss, line)) {
+        if (line.length() < 4) continue;
+        std::string file = line.substr(3);
+        if (glia::cli::Prompter::confirm("Stage " + file + "?")) {
+            run("git add " + file);
+        }
+    }
+    return {glia::core::ExitCode::Success, "Modified and untracked files added"};
+}
+
 }

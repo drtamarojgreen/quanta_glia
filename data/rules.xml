@@ -66,6 +66,8 @@
   <!-- Git Governance -->
   <command name="checkout-latest" description="Synchronize and navigate to recent development head" type="internal" target="CheckoutLatestCommand"/>
   <command name="commit-changes" description="Interactively audit and stage local mutations" type="internal" target="CommitChangesCommand"/>
+  <command name="add" description="Interactively confirm and stage modified files" type="internal" target="GliaAddCommand"/>
+  <command name="add-all" description="Interactively confirm and stage modified and untracked files" type="internal" target="GliaAddAllCommand"/>
   <command name="update-repo" description="Execute fetch-rebase-push synchronization pipeline" type="internal" target="UpdateRepoCommand"/>
   <command name="quick-commit" description="Automated staging and verified commit execution" type="internal" target="QuickCommitCommand">
     <param key="default_message" value="Standardize structural implementation"/>

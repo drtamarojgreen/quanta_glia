@@ -8,6 +8,8 @@ Is audit_commits_code = 0
 
 Is workflow_status_code = 0
 Is workflow_quick_commit_code = 0
+Is workflow_add_code = 0
+Is workflow_add_all_code = 0
 
 Is dynamic_cmds_loaded = 1
 Is dynamic_cmd_name = test-cmd
