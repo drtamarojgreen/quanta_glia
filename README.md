@@ -28,6 +28,110 @@ Get up and running with QuantaGlia in a few simple steps.
 
 ---
 
+## 🛠️ Build and Installation (QuantaGlia C++ Toolkit)
+
+The `glia` executable is compiled natively from C++ source files, ensuring extreme performance, low resource footprints, and platform-native integration.
+
+We provide automated installation tools and explicit manual guidelines for **Linux, macOS, and Windows**.
+
+### 📋 Prerequisites
+
+Ensure you have the following installed on your system:
+- **CMake** (v3.16 or newer)
+- **C++ Compiler** with C++17 support:
+  - **Linux:** GCC (g++ 9+) or Clang (clang++ 9+)
+  - **macOS:** Xcode Command Line Tools / Clang
+  - **Windows:** Visual Studio 2022 (with "Desktop development with C++" workload) or MinGW-w64
+
+---
+
+### 💻 1. Linux & macOS Installation
+
+You can build and install QuantaGlia using our automated bash script or manually.
+
+#### Option A: Automated Installation (Recommended)
+Run the unified C++ installer. This script compiles the executable, runs verification tests, and installs it to `$HOME/.local/bin`.
+
+```bash
+bash scripts/install.sh
+```
+
+#### Option B: Manual Compilation & Path Setup
+If you prefer to perform the compilation steps manually:
+
+1. **Compile the binary:**
+   ```bash
+   mkdir -p build && cd build
+   cmake -DCMAKE_BUILD_TYPE=Release ..
+   cmake --build . --config Release -j$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+   ```
+2. **Move the executable to your local bin directory:**
+   ```bash
+   mkdir -p $HOME/.local/bin
+   cp glia $HOME/.local/bin/glia
+   chmod +x $HOME/.local/bin/glia
+   ```
+3. **Configure your shell PATH:**
+   - **For Zsh (default on macOS):**
+     ```bash
+     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+     source ~/.zshrc
+     ```
+   - **For Bash (default on most Linux distros):**
+     ```bash
+     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+     source ~/.bashrc
+     ```
+
+---
+
+### 🪟 2. Windows Installation
+
+You can build and install QuantaGlia under Windows via PowerShell or Developer Command Prompt.
+
+#### Option A: Automated PowerShell Installation (Recommended)
+Run the automated installation script. This script automatically detects Visual Studio or MinGW, compiles the release binaries, copies the executable to `~/.glia/bin`, and permanently registers that folder in your User `PATH` environment variable.
+
+1. Open PowerShell as a standard user.
+2. Run the batch launcher:
+   ```cmd
+   scripts\install.bat
+   ```
+   *(Or run directly via PowerShell: `powershell -ExecutionPolicy Bypass -File scripts\install.ps1`)*
+
+#### Option B: Manual Command Prompt Compilation & Path Setup
+1. Open the **Developer Command Prompt for VS 2022** (or standard cmd if MinGW is in your path).
+2. **Compile the binary:**
+   ```cmd
+   mkdir build
+   cd build
+   cmake ..
+   cmake --build . --config Release
+   ```
+3. **Move the binary to an installation folder:**
+   ```cmd
+   mkdir "%USERPROFILE%\.glia\bin"
+   copy Release\glia.exe "%USERPROFILE%\.glia\bin\glia.exe"
+   ```
+4. **Append to your User PATH environment variable:**
+   ```cmd
+   setx PATH "%PATH%;%USERPROFILE%\.glia\bin"
+   ```
+   *(Restart your command prompt or IDE for changes to take effect).*
+
+---
+
+### 🔍 3. Verifying the Installation
+
+To confirm that `glia` is installed correctly and is accessible from any terminal, open a new shell window and run:
+
+```bash
+glia --help
+```
+If configured correctly, this will display the QuantaGlia interactive dashboard options and available commands!
+
+---
+
 QuantaGlia is a modular subsystem within the PrismQuanta framework designed to autonomously collect, curate, and evolve knowledge repositories through intelligent spawning and pruning. It ensures the knowledge base remains relevant, efficient, and focused on the mission at hand.
 
 ---
