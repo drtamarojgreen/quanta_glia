@@ -5,7 +5,14 @@
 #include <array>
 #include <cstdio>
 #include <stdexcept>
+
+#ifdef _WIN32
+#include <io.h>
+#define popen _popen
+#define pclose _pclose
+#else
 #include <sys/wait.h>
+#endif
 
 namespace glia::util {
 
@@ -23,7 +30,11 @@ inline ExecResult exec(const char* cmd, const std::string& cwd = "") {
     if (!pipe) throw std::runtime_error("popen");
     while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) result += buffer.data();
     int status = pclose(pipe);
+#ifdef _WIN32
+    int exitCode = status;
+#else
     int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+#endif
     return {result, exitCode};
 }
 
